@@ -1,0 +1,47 @@
+\documentclass[
+    10pt,
+    % b5paper,
+    % twoside,
+    % openright,
+    a4paper,
+]{report} % Template using the report document class.
+% 10 pt font size for b5 paper, twoside adjusts margins on left/right sides, and openright ensures that new chapters start on a right page.
+
+\usepackage{style} 
+
+% bibliography
+\usepackage[maxbibnames=99]{biblatex}
+\addbibresource{bib.bib}
+
+\begin{document}
+
+\input{tex/frontmatter/titlepage}
+% Kommenter ut når print bestilles -- egen forside genereres i NTNU Grafisk senter
+
+% disable page numbering
+\pagenumbering{gobble}
+
+% \input{tex/frontmatter/abstract}
+% \input{tex/frontmatter/sammendrag}
+% \input{tex/frontmatter/acknowledgements}
+
+
+\pagenumbering{arabic}
+\tableofcontents
+% \listoffigures
+% \listoftables
+\cleardoublepage
+
+
+\input{tex/intro}
+\input{tex/lorem}
+
+% add all refs to refernce list. TODO: remove this when done
+\nocite{*}
+\printbibliography[
+    heading=bibintoc,
+    title={References}
+]
+
+
+\end{document}
