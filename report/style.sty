@@ -4,7 +4,17 @@
 
 \usepackage{lipsum} % filltext
 
-\usepackage[bindingoffset=6mm]{geometry} % compensate for binding in twopage (for printing)
+% \usepackage[bindingoffset=20mm]{geometry} % compensate for binding in twopage (for printing)
+\usepackage[
+    twoside,
+    bindingoffset=6mm,
+    verbose,
+    marginratio={4:6,5:7},%
+    % textwidth=117.3mm,
+    % height=179.6mm, 
+    nofoot, 
+    % showframe
+]{geometry}
 \RequirePackage{ragged2e}
 
 \pdfminorversion = 7 % pdf version 1.7
