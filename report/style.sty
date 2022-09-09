@@ -4,23 +4,15 @@
 
 \usepackage{lipsum} % filltext
 
-% \usepackage[bindingoffset=20mm]{geometry} % compensate for binding in twopage (for printing)
-\usepackage[
-    twoside,
-    bindingoffset=6mm,
-    verbose,
-    marginratio={4:6,5:7},%
-    % textwidth=117.3mm,
-    % height=179.6mm, 
-    nofoot, 
-    % showframe
-]{geometry}
+
 \RequirePackage{ragged2e}
 
 \pdfminorversion = 7 % pdf version 1.7
 
 \RequirePackage[norsk,UKenglish]{babel}
 \RequirePackage[utf8]{inputenc}
+\RequirePackage[T1]{fontenc}
+\RequirePackage{bookmark}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -39,7 +31,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % % TIKZ
-% \RequirePackage{tikz}
+\RequirePackage{tikz}
+\usetikzlibrary{quantikz}
 % \usetikzlibrary{calc}
 % \usetikzlibrary{tikzmark}
 % \usetikzlibrary{decorations.markings}
@@ -53,6 +46,7 @@
 \captionsetup[figure]{labelfont=bf}
 \RequirePackage{subcaption}
 \RequirePackage{environ}
+\RequirePackage{bm}
 
 % refs
 \RequirePackage{hyperref}

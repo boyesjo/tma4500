@@ -1,17 +1,30 @@
 \documentclass[
     10pt,
     b5paper,
-    % twoside,
-    % openright,
+    twoside,
+    openright,
     % a4paper,
 ]{report} % Template using the report document class.
 % 10 pt font size for b5 paper, twoside adjusts margins on left/right sides, and openright ensures that new chapters start on a right page.
+% \usepackage[bindingoffset=20mm]{geometry} % compensate for binding in twopage (for printing)
+\usepackage[
+    twoside,
+    bindingoffset=20mm,
+    verbose,
+    marginratio={4:6,5:7},%
+    % textwidth=117.3mm,
+    % height=179.6mm, 
+    % nofoot, 
+    % showframe
+]{geometry}
+
 
 \usepackage{style} 
 
 % bibliography
-\usepackage[maxbibnames=99]{biblatex}
+\usepackage[maxbibnames=20, safeinputenc, backend=biber]{biblatex}
 \addbibresource{bib.bib}
+
 
 \begin{document}
 
