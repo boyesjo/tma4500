@@ -607,3 +607,6 @@ rsconnect/
 **/*.synctex.gz
 # refs
 references/
+
+# any folders named data
+data/

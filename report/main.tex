@@ -7,7 +7,8 @@
     % draft,
 ]{report} % Template using the report document class.
 % 10 pt font size for b5 paper, twoside adjusts margins on left/right sides, and openright ensures that new chapters start on a right page.
-% \usepackage[bindingoffset=20mm]{geometry} % compensate for binding in twopage (for printing)
+
+\input{preamble}
 \usepackage[
     % twoside,
     % bindingoffset=20mm,
@@ -19,12 +20,12 @@
     % showframe
 ]{geometry}
 
-
-\usepackage{style} 
-
 % bibliography
-\usepackage[maxbibnames=20, safeinputenc, backend=biber]{biblatex}
-\addbibresource{bib.bib}
+\usepackage[
+    % backend=biber,
+]{biblatex}
+\addbibresource{references.bib}
+
 
 
 \begin{document}
@@ -48,7 +49,10 @@
 \cleardoublepage
 
 
-\input{tex/intro}
+\input{tex/01_intro}
+\input{tex/02_ml}
+\input{tex/03_quantum}
+\input{tex/04_qml}
 \input{tex/lorem}
 
 % add all refs to refernce list. TODO: remove this when done

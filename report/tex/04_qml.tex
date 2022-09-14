@@ -1,0 +1,38 @@
+\chapter{Quantum machine learning}
+
+\section{Data encoding}
+
+\section{Quantum neural networks}
+
+\subsection{Quantum convolutional neural networks}
+Testing a QCNN on synthetic data shown in \cref{fig:qcnn_data}; classify pictures as either horizontal or vertical lines. The model without errors achieve 100\% accuracy on both training and test data, while the noisy model only managed around 90\% accuracy on the training data and 80\% on test data. The loss function of the noisy and exact model during training is shown in \cref{fig:qcnn_loss}.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{../code/qcnn/data.pdf}
+    \caption{Synthetic data for the QCNN.}
+    \label{fig:qcnn_data}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                width=0.8\textwidth,
+                xlabel={Iteration},
+                ylabel={Loss},
+                % legend pos=north west,
+                % legend style={at={(0.5,1.03)},anchor=north},
+                grid=major,
+            ]
+            \addplot[mark=none, color=blue] table[x index=0, y index=1, col sep=comma] {../code/qcnn/optim.csv};
+            \addplot[mark=none, color=red] table[x index=0, y index=2, col sep=comma] {../code/qcnn/optim.csv};
+            \legend{Noisy model, Exact model}
+        \end{axis}
+    \end{tikzpicture}
+    \caption{Loss function of QCNN model during training with both exact simulations and noisy.}
+    \label{fig:qcnn_loss}
+\end{figure}
+
