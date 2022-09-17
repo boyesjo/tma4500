@@ -33,6 +33,12 @@ The problem of barren plateaus plagues the optimisation of variational circuits 
 \subsection{Farhi et al. (2018)}
 Quantum neural networks (QNNs) are simply an abstraction of parametrised quantum circuits with some sort of data encoding. As with classical neural networks or supervised learning in general, the parameters are optimised by minimising a cost function. For QNNs, the output can be a single designated read-out qubit, where the states are interpreted as classes in a binary classification problem. This was shown to indeed be feasible for handwritten digit recognition, using downsampled MNIST data. With the qubit count on current quantum devices and the amount that can be easily simulated, the dimensionality of the data can not be much more than a dozen.
 
+
+\subsection{Abbas et al. (2021)}
+Whether quantum neural networks have inherent advantages is still an open question. Using the Fisher information of models, the authors calculate the effective dimension as a measure of expressibility. For models comparable in their input, output and parameter count, the effective dimension of particular quantum neural networks can be significantly higher. This advantage is empirically shown to be useful with a particular model on real quantum hardware, showing convergence in fewer steps than a similarly specced classical network.
+
+The importance of feature maps is remarked upon, affecting both the expressibility of the model and the risk of barren plateaus, which in turn determines trainability.
+
 \section{Quantikz}
 Admire \cref{fig:test}. It is a quantum circuit. It is drawn using the package \texttt{quantikz}.
 

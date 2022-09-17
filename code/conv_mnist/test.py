@@ -1,11 +1,14 @@
-# %%
+# %% https://medium.com/codex/hybrid-quantum-classical-neural-network-for-classification-of-images-in-fashionmnist-dataset-7274364f7dcd # noqa
+# https://github.com/Q-MAB/Qiskit-FashionMNIST-Case/blob/main/FashionMNIST%20case%20study.py # noqa
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torch.nn.functional as F
-from qiskit import Aer, QuantumCircuit
+from qiskit import Aer
 from qiskit.circuit.library import RealAmplitudes, ZZFeatureMap
 from qiskit.opflow import AerPauliExpectation
+from qiskit.providers.aer.noise import NoiseModel
+from qiskit.providers.fake_provider import FakeMontreal as FakeBackend
 from qiskit.utils import QuantumInstance
 from qiskit_machine_learning.connectors import TorchConnector
 from qiskit_machine_learning.neural_networks import TwoLayerQNN
@@ -15,6 +18,11 @@ from torchvision import datasets, transforms
 
 # %%
 qi = QuantumInstance(Aer.get_backend("qasm_simulator"), shots=1024)
+qi_noisy = QuantumInstance(
+    Aer.get_backend("qasm_simulator"),
+    shots=1024,
+    noise_model=NoiseModel.from_backend(FakeBackend()),
+)
 
 # %%
 training_data = datasets.MNIST(
@@ -31,26 +39,34 @@ test_data = datasets.MNIST(
     transform=transforms.ToTensor(),
 )
 
-# remove data with labels other than 0 and 1
-training_data.data = training_data.data[training_data.targets < 2]
-training_data.targets = training_data.targets[training_data.targets < 2]
-test_data.data = test_data.data[test_data.targets < 2]
-test_data.targets = test_data.targets[test_data.targets < 2]
+
+# only have targets 0  and 1
+def filter_data(data):
+    idx = np.where((data.targets == 0) | (data.targets == 1))[0]
+    data.data = data.data[idx]
+    data.targets = data.targets[idx]
 
 
-# only select first 512 samples
-training_data.data = training_data.data[:512]
-training_data.targets = training_data.targets[:512]
-test_data.data = test_data.data[:512]
-test_data.targets = test_data.targets[:512]
+filter_data(training_data)
+filter_data(test_data)
+
+num_samples = 512
+batch_size = 64
+
+training_data.data = training_data.data[:num_samples]
+training_data.targets = training_data.targets[:num_samples]
+test_data.data = test_data.data[:num_samples]
+test_data.targets = test_data.targets[:num_samples]
+
 train_loader = DataLoader(
     training_data,
-    batch_size=64,
+    batch_size=batch_size,
     shuffle=True,
 )
+
 test_loader = DataLoader(
     test_data,
-    batch_size=64,
+    batch_size=batch_size,
     shuffle=True,
 )
 
@@ -75,10 +91,19 @@ qnn = TwoLayerQNN(
     quantum_instance=qi,
 )
 
+qnn_noisy = TwoLayerQNN(
+    2,
+    feature_map,
+    ansatz,
+    input_gradients=True,
+    exp_val=AerPauliExpectation(),
+    quantum_instance=qi_noisy,
+)
+
 
 # %%
-class Net(nn.Module):
-    def __init__(self):
+class QuantumNet(nn.Module):
+    def __init__(self, qnn):
         super().__init__()
         self.conv1 = nn.Conv2d(1, 2, kernel_size=5)
         self.conv2 = nn.Conv2d(2, 16, kernel_size=5)
@@ -102,93 +127,109 @@ class Net(nn.Module):
         return torch.cat((x, 1 - x), -1)
 
 
+class ClassicalNet(nn.Module):
+    # same as QuantumNet but without the qnn
+    # instead 4 classical parameters are used
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(1, 2, kernel_size=5)
+        self.conv2 = nn.Conv2d(2, 16, kernel_size=5)
+        self.dropout = nn.Dropout2d()
+        self.fc1 = nn.Linear(256, 64)
+        self.fc2 = nn.Linear(64, 2)
+        self.fc3 = nn.Linear(2, 2, bias=True)
+        self.fc4 = nn.Linear(2, 1, bias=True)
+
+    def forward(self, x):
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(x, 2)
+        x = F.relu(self.conv2(x))
+        x = F.max_pool2d(x, 2)
+        x = self.dropout(x)
+        x = x.view(x.shape[0], -1)
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        x = self.fc3(x)
+        x = self.fc4(x)
+        return torch.cat((x, 1 - x), -1)
+
+
 # %%
-model = Net()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-loss_func = torch.nn.NLLLoss()
+def train(model: nn.Module, epochs: int = 20) -> np.ndarray:
 
-epochs = 20
-loss_list = []
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+    loss_func = nn.NLLLoss()
+    loss_list = np.zeros((epochs, len(train_loader)))
 
-model.train()
-for epoch in range(epochs):
-    total_loss = []
-    for batch_idx, (data, target) in enumerate(train_loader):
-        optimizer.zero_grad()
-        # Forward pass
-        output = model(data)
-        # Calculating loss
-        loss = loss_func(output, target)
-        # Backward pass
-        loss.backward()
-        # Optimize the weights
-        optimizer.step()
+    for epoch in range(epochs):
 
-        total_loss.append(loss.item())
-    loss_list.append(sum(total_loss) / len(total_loss))
-    print(
-        "Training [{:.0f}%]\tLoss: {:.4f}".format(
-            100.0 * (epoch + 1) / epochs, loss_list[-1]
+        for batch, (data, target) in enumerate(train_loader):
+            optimizer.zero_grad()
+            output = model(data)
+            loss = loss_func(output, target)
+            loss.backward()
+            optimizer.step()
+            loss_list[epoch, batch] = loss.item()
+
+        print(
+            f"Epoch: {epoch} ",
+            f"Loss: {loss_list[epoch].mean()} +- {loss_list[epoch].std()}",
         )
+
+    return np.array(loss_list)
+
+
+# %%
+model_qnn = QuantumNet(qnn)
+loss_qnn = train(model_qnn)
+
+# %%
+model_qnn_noisy = QuantumNet(qnn_noisy)
+loss_qnn_noisy = train(model_qnn_noisy)
+
+# %%
+model_classical = ClassicalNet()
+loss_classical = train(model_classical, epochs=100)
+
+
+# %%plot all losses with std dev
+def plot_loss(loss_list, label, color):
+    mean = loss_list.mean(axis=1)
+    std = loss_list.std(axis=1)
+    plt.plot(mean, label=label, color=color)
+    plt.fill_between(
+        np.arange(len(mean)),
+        mean - std,
+        mean + std,
+        alpha=0.2,
+        color=color,
     )
 
 
-# Loss convergence plot
-plt.plot(loss_list)
-plt.title("Hybrid NN Training Convergence")
-plt.xlabel("Training Iterations")
-plt.ylabel("Neg. Log Likelihood Loss")
+# plot_loss(loss_qnn, "QNN", "blue")
+plot_loss(loss_classical, "Classical", "red")
+plt.legend()
 plt.show()
+# %%
+torch.save(model_qnn.state_dict(), "qnn.pt")
+
 
 # %%
-torch.save(model.state_dict(), "model_mnist.pt")
-
-# %%
-model.eval()
-with torch.no_grad():
-
+# test the model
+def test(model: nn.Module) -> float:
     correct = 0
-    for batch_idx, (data, target) in enumerate(test_loader):
-        output = model(data)
+    total = 0
+    with torch.no_grad():
+        for data, target in test_loader:
+            output = model(data)
+            _, predicted = torch.max(output.data, 1)
+            total += target.size(0)
+            correct += (predicted == target).sum().item()
 
-        pred = output.argmax(dim=1, keepdim=True)
-        correct += pred.eq(target.view_as(pred)).sum().item()
+    return correct / total
 
-        loss = loss_func(output, target)
-        total_loss.append(loss.item())
 
-    print(
-        "Performance on test data:\n\t"
-        "Loss: {:.4f}\n\tAccuracy: {:.1f}%".format(
-            sum(total_loss) / len(total_loss),
-            (correct / len(test_loader) / 64) * 100,
-        )
-    )
-
-# %%
-n_samples_show = 5
-count = 0
-fig, axes = plt.subplots(nrows=1, ncols=n_samples_show, figsize=(15, 5))
-model.eval()
-with torch.no_grad():
-    for batch_idx, (data, target) in enumerate(test_loader):
-        if count == n_samples_show:
-            break
-        output = model(data[0:1])
-        if len(output.shape) == 1:
-            output = output.reshape(1, *output.shape)
-
-        pred = output.argmax(dim=1, keepdim=True)
-        axes[count].imshow(data[0].numpy().squeeze(), cmap="gray_r")
-
-        axes[count].set_xticks([])
-        axes[count].set_yticks([])
-
-        if pred.item() == 0:
-            axes[count].set_title("Predicted 0")
-        elif pred.item() == 1:
-            axes[count].set_title("Predicted 1")
-
-        count += 1
+print(test(model_qnn))
+print(test(model_classical))
 
 # %%
