@@ -36,6 +36,13 @@
 % \usetikzlibrary{decorations.markings}
 % \usetikzlibrary{backgrounds}
 % \usetikzlibrary{fadings}
+\pgfplotsset{
+    every axis plot/.append style={line width=1pt},
+    every axis plot post/.append style={
+            every mark/.append style={line width=2pt}
+        }
+}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{mathtools}
