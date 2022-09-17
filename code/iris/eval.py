@@ -56,17 +56,17 @@ def train(
 
 k = 10
 epochs = 100
+epochs_noisy = 10  # fewer cause slow af
 fold_len = len(x) // k
 test_nn = np.zeros((k, epochs))
 test_qnn = np.zeros((k, epochs))
+test_qnn_noisy = np.zeros((k, epochs_noisy))
 for i in range(k):
     # take k-th fold
     test_idx = list(range(i * fold_len, (i + 1) * fold_len))
     train_idx = list(range(0, i * fold_len)) + list(
         range((i + 1) * fold_len, k * fold_len)
     )
-
-    print(test_idx)
 
     test_nn[i] = train(
         NN(),
@@ -86,11 +86,24 @@ for i in range(k):
     #     epochs=epochs,
     # )
 
+    test_qnn_noisy[i] = train(
+        QNN(noisy=True),
+        x[train_idx],
+        y[train_idx],
+        x[test_idx],
+        y[test_idx],
+        epochs=epochs_noisy,
+    )
+
+
 # save as csv using pandas
 df_nn = pd.DataFrame(test_nn)
 df_nn.to_csv("test_nn2.csv", index=False)
 # df_qnn = pd.DataFrame(test_qnn)
 # df_qnn.to_csv("test_qnn.csv", index=False)
+
+df_qnn_noisy = pd.DataFrame(test_qnn_noisy)
+df_qnn_noisy.to_csv("test_qnn_noisy.csv", index=False)
 
 
 # model_nn = NN()
