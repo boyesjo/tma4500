@@ -5,7 +5,7 @@
 \section{Quantum neural networks}
 
 \subsection{QNN versus NN}
-Using the same data, model structure and optimiser as in \cite{abbas2021}, measuring instead performance using 10-fold cross validation, the quantum neural networks clearly outperform the classical. The mean accuracy during training is shown in \cref{fig:iris_training}. For simulation of noise, the 27-qubit IBM Montreal architecture was chosen, as it was the actual hardware used in \cite{abbas2021} The model with noise was only trained for ten epochs, due to the significant time required for the noisy simulation, but the results show that noise did not have a significant impact on the performance.
+Using the same data, model structure and optimiser as in \cite{abbas2021}, measuring instead performance using 10-fold cross validation, the quantum neural networks clearly outperform the classical. The mean accuracy during training is shown in \cref{fig:iris_training}. For simulation of noise, the 27-qubit IBM Montreal architecture was chosen, as it was the actual hardware used in \cite{abbas2021} The model with noise was only trained for ten epochs, due to the significant time required for the noisy simulation, but the results show that noise did not have a significant impact on the performance. While the QNNs always reached perfect accuracy, the classical NN occasionally got stuck in local minima, always predicting one of the classes.
 
 \begin{figure}
     \centering
