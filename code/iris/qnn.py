@@ -54,3 +54,14 @@ class QNN(nn.Module):
     def forward(self, x):
         x = self.qnn.forward(x)
         return x
+
+
+if __name__ == "__main__":
+
+    ZZFeatureMap(feature_dimension=NUM_QUBITS, reps=2).decompose().draw(
+        output="latex", filename="fm.pdf"
+    )
+
+    RealAmplitudes(num_qubits=NUM_QUBITS, reps=1).decompose().draw(
+        output="latex", filename="ansatz.pdf"
+    )
