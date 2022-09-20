@@ -4,10 +4,10 @@
 
 \section{Quantum neural networks}
 
-\subsection{QNN versus NN}
+\subsection{QNNs vs NNs}
 Fisher's iris dataset is perhaps the most used dataset for classification in statistics, containing samples of three different species of iris flowers. For each species, there are 50 samples, each with four features: sepal length, sepal width, petal length, and petal width. Like in \cite{abbas2021}, only the two first species are considered, which happen to be linearly separable in the feature space.
 
-To compare the performance of the QNN and the NN, architectures suited for binary classification parametrised by exactly 8 parameters are used. The QNN structure is shown in \cref{fig:qnn_vs_nn_models}. The four dimensional input data $\bm{x}$ is mapped to some quantum state $\ket{\psi{\bm{x}}}$ using the ZZFeatureMap with two repetitions, which is a second-order Pauli-Z evolution circuit. This feature map is essentially a mix of rotation around the Z axis parametrised by the input features or functions thereof and CNOT and Hadamard gates. The quantum state is then evolved by a the RealAmplitudes ansatz. All four qubits a rotated in the Y direction by some parameter before CNOT-gates are applied pairwise, for a final parametrised rotation in the Y direction, for a total of 8 parameters. For details on the components, see Qiskit's documentation \cite{qiskit} or the original paper \cite{abbas2021}. The parity of the output 4-bit string is interpreted as the prediction, and with 100 shots used, the model gave a probability for each of the two iris classes. Both exact simulations and noisy simulations were performed, with the latter using noise modelled after the 27-qubit IBM Montreal architecture, the actual hardware used in the original paper.
+To compare the performance of the QNN and the NN, architectures suited for binary classification parametrised by exactly 8 parameters are used. The QNN structure is shown in \cref{fig:qnn_vs_nn_models}. The four dimensional input data $\bm{x}$ is mapped to some quantum state $\ket{\psi{\bm{x}}}$ using the ZZFeatureMap with two repetitions, which is a second-order Pauli-Z evolution circuit. This feature map is essentially a mix of rotation around the Z axis parametrised by the input features or functions thereof and CNOT and Hadamard gates. The quantum state is then evolved by the RealAmplitudes ansatz. All four qubits a rotated in the Y direction by some parameter before CNOT-gates are applied pairwise, for a final parametrised rotation in the Y direction, for a total of 8 parameters. For details on the components, see Qiskit's documentation \cite{qiskit} or the original paper \cite{abbas2021}. The parity of the output 4-bit string is interpreted as the prediction, and with 100 shots used, the model gave a probability for each of the two iris classes. Both exact simulations and noisy simulations were performed, with the latter using noise modelled after the 27-qubit IBM Montreal architecture, the actual hardware used in the original paper.
 
 \begin{figure}
     \centering
@@ -17,7 +17,7 @@ To compare the performance of the QNN and the NN, architectures suited for binar
         & & & \meter{} \\
         & & & \meter{} \\
     \end{quantikz}
-    \caption{Structure of the QNN used for classification of the iris dataset. The first block maps the input data $\bm{x}$ to the quantum state $\ket{\psi(\bm{x})}$, before the second block is the variational circuit, parametrised by $\bm{\theta}$. Finally, all qubits are measured, where the parity is interpreted as the prediction.}
+    \caption{Structure of the QNN used for classification of the iris dataset. The first block maps the input data $\bm{x}$ to the quantum state $\ket{\psi(\bm{x})}$. The second block is the variational circuit, parametrised by $\bm{\theta}$, a vector with eight components. Finally, all qubits are measured, where the parity is interpreted as the prediction.}
     \label{fig:qnn_vs_nn_models}
 \end{figure}
 
@@ -30,7 +30,7 @@ The classical neural network was a standard feed-forward model, with a 4-1-1-1-2
 \end{equation}
 and the output layer used a softmax activation function.
 
-Both models were implemented using PyTorch, with the QNN being implemented using Qiskit's PyTorch interface. Consequently, the models could be trained in the exact same manner, using the Adam optimiser with a learning rate of 001. The models were trained for 100 epochs, with the loss function being cross-entropy.
+Both models were implemented using PyTorch, with the QNN being implemented using Qiskit's PyTorch interface. Consequently, the models could be trained in the exact same manner, using the Adam optimiser with a learning rate of 0,1. The models were trained for 100 epochs, with the loss function being cross-entropy.
 
 For validation, 10-fold cross-validation was used. That is, the dataset was split into 10 equal parts or \textit{folds}. Each fold us used as the validation set once, their accuracies being recorded during the training with the other nine folds. The mean accuracy over the 10 folds was used for the final performance metric, shown in \cref{fig:iris_training}.
 
@@ -64,6 +64,16 @@ As in the original paper, the QNN converges much quicker and more consistently, 
 \end{figure}
 
 \subsection{Quantum convolutional neural networks}
+Quantum convolutional neural networks work similarly to classical convolutional networks. Through iterated convolution and pooling layers where only 'near' features affect each other, the total amount of parameters is reduced relative to fully connected networks, and the CNN tends to learn more local features. This makes them well suited for image classification, where the significant features are often spatially correlated. The reduced amount of parameters also makes them suitable for quantum hardware, and they have shown desireable properties with regard to avoiding barren plateaus \cite{pesah2021}.
+
+To implement a quantum CNN, Qiskit's online tutorials was closely followed \cite{qiskit_qcnn}. Being limited to few qubits, images with resolution $3\times3$ were generated, containing either vertical or horizontal with some Gaussian noise. \Cref{fig:qcnn_data} shows examples thereof. The task of the QCNN was to classify the images as either vertical or horizontal lines.
+
+First, data is encoded using Qiskit's ZFeatureMap; each of the nine pixels of the image is mapped to a qubit through two repetitions of the Hadamard gate and Z-rotations parametrised by the pixel value being applied.
+
+The convolution layers act with pairwise parametrised rotations of neighbouring qubits.
+
+
+
 Testing a QCNN on synthetic data shown in \cref{fig:qcnn_data}; classify pictures as either horizontal or vertical lines. The model without errors achieve 100\% accuracy on both training and test data, while the noisy model only managed around 90\% accuracy on the training data and 80\% on test data. The loss function of the noisy and exact model during training is shown in \cref{fig:qcnn_loss}.
 
 

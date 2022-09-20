@@ -17,7 +17,7 @@ from qiskit_machine_learning.neural_networks import TwoLayerQNN
 # set up noise quantuminstance
 
 noise_model = NoiseModel.from_backend(FakeBackend())
-simulator = Aer.get_backend("qasm_simulator")
+simulator = Aer.get_backend("aer_simulator")
 qi = QuantumInstance(
     simulator,
     shots=256,
@@ -29,7 +29,7 @@ qi = QuantumInstance(
 def generate_data(n: int = 20):
     # generate 3x3 images with either vertical or horizontal lines
     # and labels 0 or 1
-    X = np.zeros((n, 3, 3))
+    X = np.zeros((n, 4, 4))
     y = np.zeros(n, dtype=int)
 
     for i in range(n):
@@ -62,9 +62,12 @@ x, y = generate_data(100)
 # show first 6 images
 fig, axes = plt.subplots(2, 3)
 for i, ax in enumerate(axes.flatten()):
-    ax.imshow(x[i].reshape(3, 3))  # , cmap="gray")
-    # ax.set_title(f"Label: {y[i]}")
-    ax.axis("off")
+    im = ax.imshow(x[i].reshape(4, 4), cmap="gray")
+    ax.patch.set_edgecolor("black")
+    ax.patch.set_linewidth("0")
+    # remove ticks
+    ax.set_xticks([])
+    ax.set_yticks([])
 plt.savefig("data.pdf")
 
 # %%
@@ -148,30 +151,41 @@ def pool_layer(sources, sinks, param_prefix):
 
 
 # %%
-feature_map = ZFeatureMap(feature_dimension=9)
+feature_map = ZFeatureMap(feature_dimension=16)
 feature_map.decompose().draw(output="mpl")
 
 # %%
-ansatz = QuantumCircuit(9)
-ansatz.compose(conv_layer(9, "conv1"), range(9), inplace=True)
+ansatz = QuantumCircuit(16)
+ansatz.compose(conv_layer(16, "conv1"), range(16), inplace=True)
 ansatz.compose(
-    pool_layer([0, 1, 2], [3, 4, 5, 6, 7, 8], "pool1"), range(9), inplace=True
+    pool_layer(list(range(0, 8)), list(range(8, 16)), "pool1"),
+    range(16),
+    inplace=True,
 )
-ansatz.compose(conv_layer(6, "conv2"), range(3, 9), inplace=True)
+ansatz.compose(conv_layer(8, "conv2"), range(8, 16), inplace=True)
 ansatz.compose(
-    pool_layer([0, 1, 2], [3, 4, 5], "pool2"), range(3, 9), inplace=True
+    pool_layer(list(range(0, 4)), list(range(4, 8)), "pool2"),
+    range(8, 16),
+    inplace=True,
 )
-ansatz.compose(conv_layer(3, "conv3"), range(6, 9), inplace=True)
-ansatz.compose(pool_layer([0, 1], [2], "pool3"), range(6, 9), inplace=True)
-
-circuit = QuantumCircuit(9)
-circuit.compose(feature_map, range(9), inplace=True)
-circuit.compose(ansatz, range(9), inplace=True)
-
-observable = PauliSumOp.from_list([("Z" + "I" * 8, 1)])
-
+ansatz.compose(conv_layer(4, "conv3"), range(12, 16), inplace=True)
+ansatz.compose(
+    pool_layer(list(range(0, 2)), list(range(2, 4)), "pool3"),
+    range(12, 16),
+    inplace=True,
+)
+ansatz.compose(conv_layer(2, "conv4"), range(14, 16), inplace=True)
+ansatz.compose(
+    pool_layer(list(range(0, 1)), list(range(1, 2)), "pool4"),
+    range(14, 16),
+    inplace=True,
+)
+observable = PauliSumOp.from_list([("Z" + "I" * 15, 1)])
+circuit = QuantumCircuit(16)
+circuit.compose(feature_map, range(16), inplace=True)
+circuit.compose(ansatz, range(16), inplace=True)
 qnn = TwoLayerQNN(
-    9,
+    16,
     feature_map=feature_map,
     ansatz=ansatz,
     observable=observable,
@@ -236,3 +250,5 @@ for i, ax in enumerate(axes.flatten()):
 # # save df to csv
 # df.to_csv("optim.csv", index=True)
 # # %%
+
+# %%
