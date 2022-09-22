@@ -38,17 +38,3 @@ Quantum neural networks (QNNs) are simply an abstraction of parametrised quantum
 Whether quantum neural networks have inherent advantages is still an open question. Using the Fisher information of models, the authors calculate the effective dimension as a measure of expressibility. For models comparable in their input, output and parameter count, the effective dimension of particular quantum neural networks can be significantly higher. This advantage is empirically shown to be useful with a particular model on real quantum hardware, showing convergence in fewer steps than a similarly specced classical network.
 
 The importance of feature maps is remarked upon, affecting both the expressibility of the model and the risk of barren plateaus, which in turn determines trainability.
-
-\section{Quantikz}
-Admire \cref{fig:test}. It is a quantum circuit. It is drawn using the package \texttt{quantikz}.
-
-\begin{figure}[bt]
-    \centering
-    \begin{quantikz}
-        \lstick{$\ket{\psi(\bm{\theta})}$}
-        & \gate{U(\bm{\theta})}
-        & \meter{}
-    \end{quantikz}
-    \caption{Test figure.}
-    \label{fig:test}
-\end{figure}

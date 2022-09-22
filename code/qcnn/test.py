@@ -4,80 +4,74 @@ import numpy as np
 from qiskit import Aer, QuantumCircuit
 from qiskit.algorithms.optimizers import COBYLA
 from qiskit.circuit import ParameterVector
-from qiskit.circuit.library import ZFeatureMap
+from qiskit.circuit.library import ZFeatureMap, ZZFeatureMap
 from qiskit.opflow import AerPauliExpectation, PauliSumOp
+from qiskit.providers import fake_provider
 from qiskit.providers.aer.noise import NoiseModel
-from qiskit.providers.fake_provider import FakeMontreal as FakeBackend
 from qiskit.utils import QuantumInstance, algorithm_globals
 from qiskit_machine_learning.algorithms.classifiers import (
     NeuralNetworkClassifier,
 )
 from qiskit_machine_learning.neural_networks import TwoLayerQNN
 
-# set up noise quantuminstance
+algorithm_globals.random_seed = 1337
 
-noise_model = NoiseModel.from_backend(FakeBackend())
+# %%
+# set up noise quantuminstance
+noise_model = NoiseModel.from_backend(fake_provider.FakeMontreal())
 simulator = Aer.get_backend("aer_simulator")
 qi = QuantumInstance(
     simulator,
-    shots=256,
+    shots=1024,
     # noise_model=noise_model,
 )
 
 
 # %%
-def generate_data(n: int = 20):
-    # generate 3x3 images with either vertical or horizontal lines
-    # and labels 0 or 1
-    X = np.zeros((n, 4, 4))
-    y = np.zeros(n, dtype=int)
+def generate_data(n: int = 32):
+    x = np.zeros((2 * n, 4, 2))
+    y = np.zeros(2 * n, dtype=int)
 
     for i in range(n):
+        x[i, i % 4] = 1
+        y[i] = 1
 
-        # horizontal line
-        if algorithm_globals.random.integers(0, 2):
-            col = algorithm_globals.random.integers(0, 3)
-            X[i, col] = 1
-            y[i] = 1
-
-        # vertical line
-        else:
-            row = algorithm_globals.random.integers(0, 3)
-            X[i, :, row] = 1
-            y[i] = -1
+    for i in range(n):
+        x[n + i][:, i % 2] = 1
+        y[n + i] = -1
 
     # flatten images
-    X = X.reshape(n, -1)
+    x = x.reshape(2 * n, 8)
+    # rescale to (0, pi/2)
+    x *= np.pi / 2
 
     # add gaussian noise
-    X += algorithm_globals.random.normal(0, 0.05, X.shape)
-    # rescale X
-    X = (X - X.min()) / (X.max() - X.min())
-    return X, y
+    x += algorithm_globals.random.normal(0, 0.1, x.shape)
+
+    # shuffle data
+    idx = np.arange(2 * n)
+    algorithm_globals.random.shuffle(idx)
+    x = x[idx]
+    y = y[idx]
+
+    return x, y
 
 
-x, y = generate_data(100)
+x_train, y_train = generate_data(32)
+x_test, y_test = generate_data(8)
+
 
 # %%
-# show first 6 images
-fig, axes = plt.subplots(2, 3)
+# plot first 8 images
+fig, axes = plt.subplots(2, 4, figsize=(6, 2))
 for i, ax in enumerate(axes.flatten()):
-    im = ax.imshow(x[i].reshape(4, 4), cmap="gray")
-    ax.patch.set_edgecolor("black")
-    ax.patch.set_linewidth("0")
+    ax.imshow(x_train[i].reshape(4, 2).T, cmap="gray")
+    # ax.set_title(f"Label: {y_train[i]}")
     # remove ticks
     ax.set_xticks([])
     ax.set_yticks([])
+plt.tight_layout()
 plt.savefig("data.pdf")
-
-# %%
-# split into test and train randomly
-idx = algorithm_globals.random.permutation(len(x))
-train_idx = idx[: int(len(x) * 0.7)]
-test_idx = idx[int(len(x) * 0.7) :]
-x_train, y_train = x[train_idx], y[train_idx]
-x_test, y_test = x[test_idx], y[test_idx]
-
 
 # %%
 def conv_circuit(params):
@@ -151,41 +145,25 @@ def pool_layer(sources, sinks, param_prefix):
 
 
 # %%
-feature_map = ZFeatureMap(feature_dimension=16)
+feature_map = ZFeatureMap(feature_dimension=8)
 feature_map.decompose().draw(output="mpl")
 
 # %%
-ansatz = QuantumCircuit(16)
-ansatz.compose(conv_layer(16, "conv1"), range(16), inplace=True)
+ansatz = QuantumCircuit(8)
+ansatz.compose(conv_layer(8, "conv1"), range(8), inplace=True)
 ansatz.compose(
-    pool_layer(list(range(0, 8)), list(range(8, 16)), "pool1"),
-    range(16),
-    inplace=True,
+    pool_layer([0, 1, 2, 3], [4, 5, 6, 7], "pool1"), range(8), inplace=True
 )
-ansatz.compose(conv_layer(8, "conv2"), range(8, 16), inplace=True)
-ansatz.compose(
-    pool_layer(list(range(0, 4)), list(range(4, 8)), "pool2"),
-    range(8, 16),
-    inplace=True,
-)
-ansatz.compose(conv_layer(4, "conv3"), range(12, 16), inplace=True)
-ansatz.compose(
-    pool_layer(list(range(0, 2)), list(range(2, 4)), "pool3"),
-    range(12, 16),
-    inplace=True,
-)
-ansatz.compose(conv_layer(2, "conv4"), range(14, 16), inplace=True)
-ansatz.compose(
-    pool_layer(list(range(0, 1)), list(range(1, 2)), "pool4"),
-    range(14, 16),
-    inplace=True,
-)
-observable = PauliSumOp.from_list([("Z" + "I" * 15, 1)])
-circuit = QuantumCircuit(16)
-circuit.compose(feature_map, range(16), inplace=True)
-circuit.compose(ansatz, range(16), inplace=True)
+ansatz.compose(conv_layer(4, "conv2"), range(4, 8), inplace=True)
+ansatz.compose(pool_layer([0, 1], [2, 3], "pool2"), range(4, 8), inplace=True)
+ansatz.compose(conv_layer(2, "conv3"), range(6, 8), inplace=True)
+ansatz.compose(pool_layer([0], [1], "pool3"), range(6, 8), inplace=True)
+observable = PauliSumOp.from_list([("Z" + "I" * 7, 1)])
+circuit = QuantumCircuit(8)
+circuit.compose(feature_map, range(8), inplace=True)
+circuit.compose(ansatz, range(8), inplace=True)
 qnn = TwoLayerQNN(
-    16,
+    8,
     feature_map=feature_map,
     ansatz=ansatz,
     observable=observable,
@@ -197,30 +175,41 @@ circuit.draw("mpl")
 
 
 # %%
-def callback_graph(_, obj_func_eval):
-    objective_func_vals.append(obj_func_eval)
-    print(f"Objective function value: {obj_func_eval}")
+def score(weights, x, y):
+    y_pred = qnn.forward(x, weights=weights)
+    y_pred = np.where(y_pred > 0, 1, -1).flatten()
+    return np.mean(y_pred == y)
 
+
+def callback(weights, loss):
+    stats = {
+        "iteration": len(history),
+        "loss": loss,
+        "training_acc": score(weights, x_train, y_train),
+        "test_acc": score(weights, x_test, y_test),
+    }
+    # print stats with 2 decimal places
+    print(
+        f"iteration: {stats['iteration']:4}, "
+        f"loss: {stats['loss']:4.3f}, "
+        f"training_acc: {stats['training_acc']:3.2f}, "
+        f"test_acc: {stats['test_acc']:3.2f}"
+    )
+    history.append(stats)
+
+
+init_weights = algorithm_globals.random.random(qnn.num_weights)
 
 opflow_classifier = NeuralNetworkClassifier(
     qnn,
+    loss="absolute_error",
     optimizer=COBYLA(maxiter=400),
-    callback=callback_graph,
-    initial_point=algorithm_globals.random.random(qnn.num_weights),
+    callback=callback,
+    initial_point=init_weights,
 )
 
-x = np.asarray(x_train)
-y = np.asarray(y_train)
-
-objective_func_vals: list[float] = []
-opflow_classifier.fit(x, y)
-
-# score classifier
-print(
-    "Accuracy from the train data: "
-    f"{np.round(100 * opflow_classifier.score(x, y), 2)}%"
-)
-
+history = []
+opflow_classifier.fit(x_train, y_train)
 # %%
 y_predict = opflow_classifier.predict(x_test)
 x = np.asarray(x_test)
@@ -233,7 +222,7 @@ print(
 # plot 6 test images
 fig, axes = plt.subplots(2, 3, figsize=(10, 10))
 for i, ax in enumerate(axes.flatten()):
-    ax.imshow(x_test[i].reshape(3, 3), cmap="gray")
+    ax.imshow(x_test[i].reshape(4, 2), cmap="gray")
     ax.set_title(
         "predicted horizontal" if y_predict[i] == 1 else "predicted vertical"
     )
