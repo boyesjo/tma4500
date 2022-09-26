@@ -5,9 +5,9 @@
 \section{Quantum neural networks}
 
 \subsection{QNNs vs NNs}\label{sec:qnn-vs-nn}
-Fisher's iris dataset is perhaps the most used dataset for classification in statistics, containing samples of three different species of iris flowers. For each species, there are 50 samples, each with four features: sepal length, sepal width, petal length, and petal width. Like in \cite{abbas2021}, only the two first species are considered, which happen to be linearly separable in the feature space.
+Fisher's iris dataset is perhaps the most used dataset for studying classification in statistics, containing samples of three different species of iris flowers. For each species, there are 50 samples, each with four features: sepal length, sepal width, petal length, and petal width. Like in \cite{abbas2021}, only the two first species are considered, which happen to be linearly separable in the feature space.
 
-To compare the performance of the QNN and the NN, architectures suited for binary classification parametrised by exactly 8 parameters are used. The QNN structure is shown in \cref{fig:qnn_vs_nn_models}. The four dimensional input data $\bm{x}$ is mapped to some quantum state $\ket{\psi{\bm{x}}}$ using the ZZFeatureMap with two repetitions, which is a second-order Pauli-Z evolution circuit. This feature map is essentially a mix of rotation around the Z axis parametrised by the input features or functions thereof and CNOT and Hadamard gates. The quantum state is then evolved by the RealAmplitudes ansatz. All four qubits a rotated in the Y direction by some parameter before CNOT-gates are applied pairwise, for a final parametrised rotation in the Y direction, for a total of 8 parameters. For details on the components, see Qiskit's documentation \cite{qiskit} or the original paper \cite{abbas2021}. The parity of the output 4-bit string is interpreted as the prediction, and with 100 shots used, the model gave a probability for each of the two iris classes. Both exact simulations and noisy simulations were performed, with the latter using noise modelled after the 27-qubit IBM Montreal architecture, the actual hardware used in the original paper.
+To compare the performance of the QNN and the NN, architectures suited for binary classification with exactly 8 parameters are used. The QNN structure is shown in \cref{fig:qnn_vs_nn_models}. The four dimensional input data $\bm{x}$ is mapped to some quantum state $\ket{\psi{\bm{x}}}$ using the ZZFeatureMap with two repetitions, which is a second-order Pauli-Z evolution circuit. This feature map is essentially a mix of rotation around the Z axis parametrised by the input features or functions thereof and CNOT and Hadamard gates. Thus, the features get highly entangled and embedded in some higher-dimensional space. The quantum state is then evolved by the RealAmplitudes ansatz. All four qubits a rotated in the Y direction by some parameter before CNOT-gates are applied pairwise, for a final parametrised rotation in the Y direction, for a total of 8 parameters. For details on the circuit components, see Qiskit's documentation \cite{qiskit} or the original paper \cite{abbas2021} \todo{Nødvendig å ha med detaljer her? Kanskje i appendix?}. The parity of the output 4-bit string is interpreted as the prediction, and with 100 shots used, the model gave a probability for each of the two iris classes. Both exact simulations and noisy simulations were performed, with the latter using noise modelled after the 27-qubit IBM Montreal architecture, the actual hardware used in the original paper.
 
 \begin{figure}
     \centering
@@ -21,7 +21,7 @@ To compare the performance of the QNN and the NN, architectures suited for binar
     \label{fig:qnn_vs_nn_models}
 \end{figure}
 
-The classical neural network was a standard feed-forward model, with a 4-1-1-1-2 layered structure without biases, giving a total of 8 parameters. The activation functions were leaky ReLUs,
+The classical neural network was a standard dense feed-forward model, with a 4-1-1-1-2 layered structure without biases, giving a total of 8 parameters. The activation functions were leaky ReLUs,
 \begin{equation}
     \text{LeakyReLU}(x) = \begin{cases}
         x     & x \geq 0 \\
@@ -34,7 +34,7 @@ Both models were implemented using PyTorch, with the QNN being implemented using
 
 For validation, 10-fold cross-validation was used. That is, the dataset was split into 10 equal parts or \textit{folds}. Each fold us used as the validation set once, their accuracies being recorded during the training with the other nine folds. The mean accuracy over the 10 folds was used for the final performance metric, shown in \cref{fig:iris_training}.
 
-As in the original paper, the QNN converges much quicker and more consistently, with an out-of-fold accuracy of 100\% for all ten folds. The NN, on the other hand, requires more iterations to converge and does not always do so. In some cases, the model diverges and only predicts one class, which is why the out-of-fold accuracy is not 100\% for all folds.
+As in the original paper, the QNN converges much quicker and more consistently, with an out-of-fold accuracy of 100\% for all ten folds. The NN, on the other hand, requires more iterations to converge and does not always do so. In some cases, the model did not converge, only predicting one class, which is why the out-of-fold accuracy was not 100\% for all folds.
 
 
 \begin{figure}
@@ -64,7 +64,7 @@ As in the original paper, the QNN converges much quicker and more consistently, 
 \end{figure}
 
 \subsection{Quantum convolutional neural networks}
-Quantum convolutional neural networks work similarly to classical convolutional networks. Through iterated convolution and pooling layers where only 'near' features affect each other, the total amount of parameters is reduced relative to fully connected networks, and the CNN tends to learn more local features. This makes them well suited for image classification, where the significant features are often spatially correlated. The reduced amount of parameters also makes them suitable for quantum hardware, and they have shown desireable properties with regard to avoiding barren plateaus \cite{pesah2021}.
+Quantum convolutional neural networks work similarly to classical convolutional networks. Through iterated convolution and pooling layers where only spatially 'near' features affect each other in the first layers, the total amount of parameters is reduced relative to fully connected networks, and the CNN tends to learn more local features. This makes them well suited for image classification, where the significant features are often spatially correlated and global features such as the local of the subject in the image does not matter. The reduced amount of parameters also makes them suitable for quantum hardware, and they have shown desireable properties with regard to avoiding barren plateaus \cite{pesah2021}.
 
 To implement a quantum CNN, Qiskit's online tutorials was closely followed \cite{qiskit_qcnn}. Being limited to few qubits, images with resolution $2\times4$ were generated, containing either vertical or horizontal with some Gaussian noise. \Cref{fig:qcnn_data} shows examples thereof. The task of the QCNN was to classify the images as either vertical or horizontal lines.
 
@@ -131,6 +131,7 @@ As in Qiskit's guide, training was done using thee COBYLA optimiser\footnote{Con
                     % legend pos=north west,
                     % legend style={at={(0.5,1.03)},anchor=north},
                     grid=major,
+                    xtick distance=200,
                 ]
                 \addplot[mark=none, color=red] table[x=iteration, y=loss, col sep=comma] {../code/qcnn/noisy.csv};
                 \addplot[mark=none, color=blue] table[x=iteration, y=loss, col sep=comma] {../code/qcnn/exact.csv};
@@ -152,6 +153,7 @@ As in Qiskit's guide, training was done using thee COBYLA optimiser\footnote{Con
                     % legend style={at={(0.5,1.03)},anchor=north},
                     grid=major,
                     legend pos=south east,
+                    xtick distance=200,
                 ]
                 \addplot[mark=none, color=red] table[x=iteration, y=training_acc, col sep=comma] {../code/qcnn/noisy.csv};
                 \addplot[mark=none, color=red, dashed] table[x=iteration, y=test_acc, col sep=comma] {../code/qcnn/noisy.csv};
