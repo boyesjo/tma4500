@@ -1,8 +1,37 @@
 \chapter{Quantum machine learning}
+\label{ch:qml}
+How to combine quantum computing and machine learning is not easily answered. In the discussion of quantum machine learning, it is standard practice to reference the four quadrants of \cref{tab:qml_quadrants}, first concieved of by Schuld and Petruccione \cite{textbook}.
+
+\begin{table}[]
+    \centering
+    % increase padding
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{cc|cc}
+        \begin{tabular}{cc|cc}
+                                           &                    & \multicolumn{2}{c}{\textbf{Computer}}                      \\
+                                           &                    & \multicolumn{1}{c|}{\textit{Classical}} & \textit{Quantum} \\ \hline
+            \multirow{2}{*}{\textbf{Data}} & \textit{Classical} & \multicolumn{1}{c|}{CC}                 & CQ               \\ \cline{2-4}
+                                           & \textit{Quantum}   & \multicolumn{1}{c|}{QC}                 & QQ
+        \end{tabular}\end{tabular}
+    \caption{The four fundamental ways in which quantum computing and machine learning can be combined. CC: classical computer and classical data. CQ: classical computer and quantum data. QC: quantum computer and classical data. QQ: quantum computer and quantum data. Lifted from \cite{textbook}.}
+    \label{tab:qml_quadrants}
+\end{table}
+
+
+Classical data being processed on classical computers is classical machine learning. Though not explicitly linked to quantum computing, there are some ways in which quantum computing influence classical machine learning. For example, the quantum inspired application of tensor networks in \cite{felser2020}.
+
+Using classical machine learning for quantum computing is used to improve quantum computers general performance. For example, with machine learning algorithms, the variance of the measurements can be reduced, as shown in \cite{torlai2020}. Alternatively, advanced machine learning models like neural networks can be employed to describe quantum states more efficiently.
+
+How to use quantum algorithms to solve machine learning problems is the main topic of this thesis and is what will be meant when quantum machine learning (QML) is mentioned. QML concerns itself with how better to do what classical machine learning already does. Quantum algorithms are most often advertised with speed-ups contra classical algorithms, often exponentially so as with Shor's algorithm. While this is true, there are major difficulties in achieving these speed-ups. However, there may be other advantages to be had, in terms of the amount of data needed to how much training has to be done.
+
+The last quadrant of quantum computing handling quantum data includes quantum machine learning from for example quantum experiments or machine learning when the data is inherently quantum states. With NISQ hardware, fully quantum procedures are difficult, so this field is not of immediate interest. There is obviously much overlap with CQ as the data is quantum once encoded into the quantum computer, but as will be made clear, the encoding is such a big part of CQ that results thence are not necessarily applicable QQ.
+
+
+
 
 \section{Data encoding}
 \label{sec:data_encoding}
-In order for quantum computers to use data, it must first be encoded in a way that is compatible with the quantum hardware. How this is done has major implications on both the computational performance and the model expressibility. While naive techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance.
+In order for quantum computers to use classical data, it must first be encoded in a way that is compatible with the quantum hardware. How this is done has major implications on both the computational performance and the model expressibility. While naive techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance.
 
 \subsection{Basis encoding}
 The perhaps simplest way to encode data is to use the computational basis states of the qubits. This is done in much the way that classical computers use binary numbers. For example, some data $x$ can be expressed as a bit-string $x = \{x_1, x_2, \dots, x_n\}$, where each $x_i$ is either 0 or 1, where any continuous variables are encoded as floating point numbers. For multidimensional data, the bit-strings are simply concatenated.
@@ -79,7 +108,7 @@ The structure of most quantum neural networks follow classical feed-forward netw
         \lstick{\vdots}  & & &   &  & \\
         \lstick{$\ket{0}$} & & & \ \ldots\ \qw &  & \meter{}
     \end{quantikz}
-    \caption{The structure of a quantum neural network. First, the data $\bm{x}$ is encoded into a state $\ket{\psi(\bm{x})}$ using some encoding strategy. Then, the state is transformed by a parametrised quantum circuit $\hat{U}(\theta)$. This variational circuit can often be decomposed into a sequence of gates, making the QNN structure more akin to the layered classical neural networks. Finally, measurements are made and used to calculate the model output.}
+    \caption{The structure of a quantum neural network. First, the data $\bm{x}$ is encoded into a state $\ket{\psi(\bm{x})}$ using some encoding strategy. Then, the state is transformed by a parametrised quantum circuit $U(\theta)$. This variational circuit can often be decomposed into a sequence of gates $U_1,\dots, U_n$, making the QNN structure more akin to the layered classical neural networks. Finally, measurements are made and used to calculate the model output.}
     \label{fig:qnn}
 \end{figure}
 
@@ -199,7 +228,7 @@ The convolution layers act with pairwise parametrised rotations of neighbouring 
 \end{center}
 
 
-As in Qiskit's guide, training was done using thee COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients. The accuracies and loss (mean square error) during training is shown in \cref{fig:qcnn_loss}. Like in \cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware. The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions. Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training.
+As in Qiskit's guide, training was done using thee COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients. The accuracies and loss (mean square error) during training is shown in \cref{fig:qcnn_training}. Like in \cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware. The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions. Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training. It seems that the noiseless QCNN is overfitting to the training data, while the noisy QCNN generalises better.
 
 
 \begin{figure}
@@ -261,8 +290,8 @@ As in Qiskit's guide, training was done using thee COBYLA optimiser\footnote{Con
         \caption{}
         \label{fig:qcnn_acc}
     \end{subfigure}
-    \caption{Training of the QCNN. (a) loss (mean square error) during training. (b) accuracy on the training and test sets (running mean with a 100 iteration window). The red curves are for the noisy model, while the blue curves are for the exact model. The dashed curves are for the test set.}
-    \label{fig:qcnn_loss}
+    \caption{Training of the QCNN. The red curves are for the noisy model (modelled after IBM's Montreal hardware), while the blue curves are for the exact model. The dashed curves are for the test set. (a) loss (mean square error) during training. (b) accuracy on the training and test sets (running mean with a 100 iteration window).}
+    \label{fig:qcnn_training}
 \end{figure}
 
 
