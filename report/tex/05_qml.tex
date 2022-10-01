@@ -1,8 +1,8 @@
 \chapter{Quantum machine learning}
 \label{ch:qml}
-How to combine quantum computing and machine learning is not easily answered. In the discussion of quantum machine learning, it is standard practice to reference the four quadrants of \cref{tab:qml_quadrants}, first concieved of by Schuld and Petruccione \cite{textbook}.
+How to combine quantum computing and machine learning is not easily answered. In the discussion of quantum machine learning, it is standard practice to reference the four quadrants of \cref{tab:qml_quadrants}, first described by Schuld and Petruccione \cite{textbook}.
 
-\begin{table}[]
+\begin{table}[hbt]
     \centering
     % increase padding
     \renewcommand{\arraystretch}{1.5}
@@ -47,7 +47,7 @@ A more efficient way to encode data is to use amplitude encoding, exploiting the
 \begin{equation}
     \ket{\psi(\bm{x})} = \sum_{i=1}^{N} x_i \ket{i},
 \end{equation}
-where $x_i$ is the $i$th component of the data point and $\ket{i}$ is the $i$th computational basis state. This has the advantage of being able to encode any numeric type natively, and perhaps more importantly, only needing logarithmically many qubits. For $N$-dimensional data points, only $\lceil \log_2 N \rceil$ qubits are needed. This is a significant improvement over the basis encoding, which requires $N$ qubits.
+where $x_i$ is the $i$th component of the data point and $\ket{i}$ is the $i$th computational basis state. This has the advantage of being able to encode any numeric type natively, and perhaps more importantly, only needing logarithmically many qubits. For $N$-dimensional data points, only $\lceil \log_2 N \rceil$ qubits are needed. This is a significant improvement over the basis encoding, which requires $N$ qubits (or more if integers and floats are to be binarised).
 
 An insignificant drawback is that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant. Also, some padding may be needed if the number of qubits is not a power of two.
 
@@ -59,7 +59,7 @@ where $x_i^{(m)}$ is the $i$-th component of the $m$-th data point. For such enc
 
 The main drawback of amplitude encoding is the practical difficulties of preparing such states. Any state of the form
 \begin{equation}
-    \ket{\psi} = \sum_{i} a_i \ket{i},
+    \ket{\psi} = \sum_{i} a_i \ket{i}
 \end{equation}
 must be efficiently and correctly prepared, which is not trivial. Unless some very specific assumptions are made, this is not possible in polynomial time (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{textbook}. In general, for classical data, circuits must be linearly deep in the size of the data and ergo exponentially deep in the amount of qubits, which makes it beyond the reach of NISQ hardware.
 
@@ -113,8 +113,22 @@ The structure of most quantum neural networks follow classical feed-forward netw
 \end{figure}
 
 
+\subsection{Architectures and their applications}
+\subsubsection{Quantum convolutional neural networks}
+Originally introduced by Cong et al. in \cite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before the output is made. In the quantum convolutional layers, neighbouring qubits are entangled with some parametrised gates. After that, pooling layers halve the active qubit count by yet a parametrised gate. When pooling, the qubits to be discarded could be measured and used to determine the operations on the still active qubits. Otherwise, the unused qubits are simply ignored. After several iterations, a gate can be employed on the remaining qubits, analogous to a fully connected layer in classical CNNs, before the final measurement and output.
+
+Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count is only of order logarithm of the network depth, making them easier to train than dense networks of similar input size. In \cite{cong2019}, QCNNs were shown to be able to classify topological phases of matter, and since then, it has been shown that they have inherited they classical counterparts' ability to classify images \cite{oh2020}. They have shown desirable properties with regard to avoiding barren plateaus \cite{pesah2021}.
+
+\subsubsection{Quantum generative adversarial networks}
+Quantum generative models have been shown to potentially have an exponential advantage over their peers \cite{gao2018}. Due to the inherent probabilistic nature of quantum machines, it should not be surprising that they more naturally learn difficult distributions than classical computers do. For instance, real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images \cite{huang2021}.
 
 
+\subsubsection{Hybrid quantum-classical neural networks}
+Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure. Because parametrised quantum circuits are differentiable, they can easily be handled using the chain rule when back propagating a hybrid model.
+
+% Use quantum layer in bigger model. Maybe beneficial? Use 'late' so diemnsions can be reduced and feasible for NISQ
+
+\section{Benchmarks}
 \subsection{QNNs vs NNs}\label{sec:qnn-vs-nn}
 In order to compare the performance of the QNN and the NN, architectures suited for binary classification with exactly 8 parameters are used. The QNN structure is shown in \cref{fig:qnn_vs_nn_models}. The data used is Fisher's iris dataset, perhaps the most used dataset for studying classification in statistics, containing samples of three different species of iris flowers. For each species, there are 50 samples, each with four features: sepal length, sepal width, petal length, and petal width. Like in \cite{abbas2021}, only the two first species are considered, which happen to be linearly separable in the feature space.
 
@@ -176,9 +190,9 @@ As in the original paper, the QNN converges much quicker and more consistently, 
 
 
 \subsection{Quantum convolutional neural networks}
-Quantum convolutional neural networks work similarly to classical convolutional networks. Through iterated convolution and pooling layers where only spatially 'near' features affect each other in the first layers, the total amount of parameters is reduced relative to fully connected networks, and the CNN tends to learn more local features. This makes them well suited for image classification, where the significant features are often spatially correlated and global features such as the local of the subject in the image does not matter. The reduced amount of parameters also makes them suitable for quantum hardware, and they have shown desireable properties with regard to avoiding barren plateaus \cite{pesah2021}.
+% Quantum convolutional neural networks work similarly to classical convolutional networks. Through iterated convolution and pooling layers where only spatially 'near' features affect each other in the first layers, the total amount of parameters is reduced relative to fully connected networks, and the CNN tends to learn more local features. This makes them well suited for image classification, where the significant features are often spatially correlated and global features such as the local of the subject in the image does not matter.
 
-To implement a quantum CNN, Qiskit's online tutorials was closely followed \cite{qiskit_qcnn}. Being limited to few qubits, images with resolution $2\times4$ were generated, containing either vertical or horizontal with some Gaussian noise. \Cref{fig:qcnn_data} shows examples thereof. The task of the QCNN was to classify the images as either vertical or horizontal lines.
+To implement and test a quantum CNN, Qiskit's online tutorials were closely followed \cite{qiskit_qcnn}. Being limited to few qubits, images with resolution $2\times4$ were generated, containing either vertical or horizontal with some Gaussian noise. \Cref{fig:qcnn_data} shows examples thereof. The task of the QCNN was to classify the images as either vertical or horizontal lines.
 
 \begin{figure}
     \centering
@@ -188,7 +202,7 @@ To implement a quantum CNN, Qiskit's online tutorials was closely followed \cite
 \end{figure}
 
 
-First, data is encoded using Qiskit's ZFeatureMap; each of the nine pixels of the image is mapped to a qubit through two repetitions of the Hadamard gate and Z-rotations parametrised by the pixel value being applied, in circuit notation:
+First, data is encoded using Qiskit's ZFeatureMap; each of the eight pixels of the image is mapped to a qubit through two repetitions of the Hadamard gate and Z-rotations parametrised by the pixel value being applied, in circuit notation:
 
 \begin{center}
     \begin{quantikz}
