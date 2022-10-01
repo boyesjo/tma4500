@@ -1,6 +1,6 @@
 \chapter{Quantum machine learning}
 \label{ch:qml}
-How to combine quantum computing and machine learning is not easily answered. In the discussion of quantum machine learning, it is standard practice to reference the four quadrants of \cref{tab:qml_quadrants}, first described by Schuld and Petruccione \cite{textbook}.
+How to combine quantum computing and machine learning is not easily answered. In the discussion of quantum machine learning, it is standard practice to reference the four quadrants of \cref{tab:qml_quadrants}, first described by \textcite{textbook}.
 
 \begin{table}
     \centering
@@ -18,7 +18,7 @@ How to combine quantum computing and machine learning is not easily answered. In
 \end{table}
 
 
-Classical data being processed on classical computers is classical machine learning. Though not explicitly linked to quantum computing, there are some ways in which quantum computing influence classical machine learning. For example, the quantum inspired application of tensor networks in \cite{felser2020}.
+Classical data being processed on classical computers is classical machine learning. Though not explicitly linked to quantum computing, there are some ways in which quantum computing influence classical machine learning, such as the quantum-inspired application of tensor networks in \cite{felser2020}.
 
 Using classical machine learning for quantum computing is used to improve quantum computers general performance. For example, with machine learning algorithms, the variance of the measurements can be reduced, as shown in \cite{torlai2020}. Alternatively, advanced machine learning models like neural networks can be employed to describe quantum states more efficiently.
 
@@ -79,7 +79,7 @@ depending on which rotation is used. For Z-rotations, a Hadamard gate is needed 
 
 
 \subsection{Second order angle encoding}
-Havlicek et al. propose in \Cite{havlicek2018} a second-order angle encoding, which they conjecture to be hard to simulate classically. First, angles are encoded as above, but then the qubits are entangled and rotated further based on second order terms. In circuit notation, such an encoding with Z-rotations reads
+\textcite{havlicek2018} propose a second-order angle encoding, which they conjecture to be hard to simulate classically. First, angles are encoded as above, but then the qubits are entangled and rotated further based on second order terms. In circuit notation, such an encoding with Z-rotations reads
 \begin{equation}
     \begin{quantikz}
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^1} & \ctrl{1} & \qw & \ctrl{1} & \ctrl{2} & \qw & \ctrl{2} & \qw & \qw & \qw & \qw & \dots \\
@@ -92,7 +92,7 @@ Havlicek et al. propose in \Cite{havlicek2018} a second-order angle encoding, wh
 where $R_Z^i = R_Z(x_i)$ and $R_Z^{i,j} = R_Z((\pi-x_i)(\pi-x_j))$ and with the entanglements and second-order rotations being applied pairwise for all $N$ qubits. This increases the circuit depth to order $N^2$ and full connectivity is needed. Nonetheless, it may be feasible for data of moderate dimensionality on NISQ hardware, and were it indeed classically hard to simulate, it could provide quantum advantage.
 
 \subsection{Repeats}
-The expressive power of models heavily rely on the encoding strategy. For instance, a single qubit rotation only allows the model to learn sine functions, where the frequency is determined by the scaling of the data. Generally, quantum models will learn periodic functions, and thus Fourier analysis is a useful tool. Schuld et al. study in \cite{schuld2021} the implications of this, and they show that simply repeating basic encoding blocks allows for learning of more frequencies and thus more complex functions. Asymptotically, such repeats lets a quantum model learn arbitrary functions.
+The expressive power of models heavily rely on the encoding strategy. For instance, a single qubit rotation only allows the model to learn sine functions, where the frequency is determined by the scaling of the data. Generally, quantum models will learn periodic functions, and thus Fourier analysis is a useful tool. \textcite{schuld2021} study the implications of this, and they show that simply repeating basic encoding blocks allows for learning of more frequencies and thus more complex functions. Asymptotically, such repeats lets a quantum model learn arbitrary functions.
 
 
 \section{Quantum neural networks}
@@ -115,7 +115,7 @@ The structure of most quantum neural networks follow classical feed-forward netw
 
 \subsection{Architectures and their applications}
 \subsubsection{Quantum convolutional neural networks}
-Originally introduced by Cong et al. in \cite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before the output is made. In the quantum convolutional layers, neighbouring qubits are entangled with some parametrised gates. After that, pooling layers halve the active qubit count by yet a parametrised gate. When pooling, the qubits to be discarded could be measured and used to determine the operations on the still active qubits. Otherwise, the unused qubits are simply ignored. After several iterations, a gate can be employed on the remaining qubits, analogous to a fully connected layer in classical CNNs, before the final measurement and output.
+Originally introduced by \textcite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before the output is made. In the quantum convolutional layers, neighbouring qubits are entangled with some parametrised gates. After that, pooling layers halve the active qubit count by yet a parametrised gate. When pooling, the qubits to be discarded could be measured and used to determine the operations on the still active qubits. Otherwise, the unused qubits are simply ignored. After several iterations, a gate can be employed on the remaining qubits, analogous to a fully connected layer in classical CNNs, before the final measurement and output.
 
 Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count is only of order logarithm of the network depth, making them easier to train than dense networks of similar input size. In \cite{cong2019}, QCNNs were shown to be able to classify topological phases of matter, and since then, it has been shown that they have inherited they classical counterparts' ability to classify images \cite{oh2020}. They have shown desirable properties with regard to avoiding barren plateaus \cite{pesah2021}.
 
@@ -124,10 +124,9 @@ Quantum generative models have been shown to potentially have an exponential adv
 
 
 \subsubsection{Hybrid quantum-classical neural networks}
-Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure. Because parametrised quantum circuits are differentiable, they can easily be handled using the chain rule when back propagating a hybrid model. Killoran et al. describe and test in \cite{killoran2019} several such models. They note that for the NISQ era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial. As quantum hardware develops, they can take over more and more of the hybrid models.
+Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure. Because parametrised quantum circuits are differentiable, they can easily be handled using the chain rule when back propagating a hybrid model. \textcite{killoran2019} describe and test several such models. They note that for the NISQ era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial. As quantum hardware develops, they can take over more and more of the hybrid models.
 
-More recently, Zeng et al. have explored a hybrid model to multi-class classification on real world datasets using a CNN-inspired structure \cite{zeng2022}. There it is shown that the hybrid model outperforms a classical CNN of similar parameter size.
-% Use quantum layer in bigger model. Maybe beneficial? Use 'late' so diemnsions can be reduced and feasible for NISQ
+More recently, \textcite{zeng2022} have explored a hybrid model to multi-class classification on real world datasets using a CNN-inspired structure. There it is shown that the hybrid model outperforms a classical CNN of similar parameter size.
 
 \section{Benchmarks}
 \subsection{QNNs vs NNs}\label{sec:qnn-vs-nn}
@@ -156,7 +155,7 @@ The classical neural network was a standard dense feed-forward model, with a 4-1
 \end{equation}
 and the output layer used a softmax activation function.
 
-Both models were implemented using PyTorch, with the QNN being implemented using Qiskit's PyTorch interface. Consequently, the models could be trained in the exact same manner, using the Adam optimiser with a learning rate of 0,1. The models were trained for 100 epochs, with the loss function being cross-entropy.
+Both models were implemented using PyTorch, with the QNN being implemented using Qiskit's PyTorch interface. Consequently, the models could be trained in the exact same manner, using the Adam optimiser with a learning rate of 0.1. The models were trained for 100 epochs, with the loss function being cross-entropy.
 
 For validation, 10-fold cross-validation was used. That is, the dataset was split into 10 equal parts or \textit{folds}. Each fold us used as the validation set once, their accuracies being recorded during the training with the other nine folds. The mean accuracy over the 10 folds was used for the final performance metric, shown in \cref{fig:iris_training}.
 
@@ -243,7 +242,7 @@ The convolution layers act with pairwise parametrised rotations of neighbouring 
 \end{center}
 
 
-As in Qiskit's guide, training was done using thee COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients. The accuracies and loss (mean square error) during training is shown in \cref{fig:qcnn_training}. Like in \cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware. The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions. Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training. It seems that the noiseless QCNN is overfitting to the training data, while the noisy QCNN generalises better.
+As in Qiskit's guide, training was done using the COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients. The accuracies and loss (mean square error) during training is shown in \cref{fig:qcnn_training}. Like in \cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware. The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions. Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training. It seems that the noiseless QCNN is overfitting to the training data, while the noisy QCNN generalises better.
 
 
 \begin{figure}
