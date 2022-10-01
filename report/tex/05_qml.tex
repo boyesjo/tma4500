@@ -2,7 +2,7 @@
 \label{ch:qml}
 How to combine quantum computing and machine learning is not easily answered. In the discussion of quantum machine learning, it is standard practice to reference the four quadrants of \cref{tab:qml_quadrants}, first described by Schuld and Petruccione \cite{textbook}.
 
-\begin{table}[hbt]
+\begin{table}
     \centering
     % increase padding
     \renewcommand{\arraystretch}{1.5}
@@ -124,8 +124,9 @@ Quantum generative models have been shown to potentially have an exponential adv
 
 
 \subsubsection{Hybrid quantum-classical neural networks}
-Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure. Because parametrised quantum circuits are differentiable, they can easily be handled using the chain rule when back propagating a hybrid model.
+Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure. Because parametrised quantum circuits are differentiable, they can easily be handled using the chain rule when back propagating a hybrid model. Killoran et al. describe and test in \cite{killoran2019} several such models. They note that for the NISQ era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial. As quantum hardware develops, they can take over more and more of the hybrid models.
 
+More recently, Zeng et al. have explored a hybrid model to multi-class classification on real world datasets using a CNN-inspired structure \cite{zeng2022}. There it is shown that the hybrid model outperforms a classical CNN of similar parameter size.
 % Use quantum layer in bigger model. Maybe beneficial? Use 'late' so diemnsions can be reduced and feasible for NISQ
 
 \section{Benchmarks}
