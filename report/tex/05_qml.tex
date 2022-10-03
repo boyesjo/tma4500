@@ -31,7 +31,24 @@ The last quadrant of quantum computing handling quantum data includes quantum ma
 
 \section{Data encoding}
 \label{sec:data_encoding}
-In order for quantum computers to use classical data, it must first be encoded in a way that is compatible with the quantum hardware. How this is done has major implications on both the computational performance and the model expressibility. While naive techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance.
+In order for quantum computers to use classical data, it must first be encoded in a way that is compatible with the quantum hardware. How this is done has major implications on both the computational performance and the model expressibility. While naive techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance. The four methods that will be discussed in this section are summarised in \cref{tab:data_encoding}.
+
+\begin{table}
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{l|c|c|c}
+
+                                    & Qubits needed           & Circuit depth       & Hard to simulate classically \\
+        \hline
+        Basis encoding              & $b(N)$                  & $\mathcal{O}(b(N))$ & No                           \\
+        Amplitude encoding          & $\lceil\log_2{N}\rceil$ & $\mathcal{O}(N)$    & Yes                          \\
+        Angle encoding              & $N$                     & $\mathcal{O}(N)$    & No                           \\
+        Second order angle encoding & $N$                     & $\mathcal{O}(N^2)$  & Yes? (Conjectured)
+    \end{tabular}
+    \caption{Properties of different data encodings for an $N$-dimensional data set of $M$ data points. $b(N)>N$ is the number of bits needed to represent an $N$-dimensional data point.}
+    \label{tab:data_encoding}
+\end{table}
+
 
 \subsection{Basis encoding}
 The perhaps simplest way to encode data is to use the computational basis states of the qubits. This is done in much the way that classical computers use binary numbers. For example, some data $x$ can be expressed as a bit-string $x = \{x_1, x_2, \dots, x_n\}$, where each $x_i$ is either 0 or 1, where any continuous variables are encoded as floating point numbers. For multidimensional data, the bit-strings are simply concatenated.
