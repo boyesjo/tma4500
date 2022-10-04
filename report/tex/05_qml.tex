@@ -1,6 +1,7 @@
 \chapter{Quantum machine learning}
 \label{ch:qml}
-How to combine quantum computing and machine learning is not easily answered. In the discussion of quantum machine learning, it is standard practice to reference the four quadrants of \cref{tab:qml_quadrants}, first described by \textcite{textbook}.
+How to combine quantum computing and machine learning is not easily answered.
+In the discussion of quantum machine learning, it is standard practice to reference the four quadrants of \cref{tab:qml_quadrants}, first described by \textcite{textbook}.
 
 \begin{table}
     \centering
@@ -13,25 +14,44 @@ How to combine quantum computing and machine learning is not easily answered. In
             \multirow{2}{*}{\textbf{Data}} & \textit{Classical} & \multicolumn{1}{c|}{CC}                 & CQ               \\ \cline{2-4}
                                            & \textit{Quantum}   & \multicolumn{1}{c|}{QC}                 & QQ
         \end{tabular}\end{tabular}
-    \caption{The four fundamental ways in which quantum computing and machine learning can be combined. CC: classical computer and classical data. CQ: classical computer and quantum data. QC: quantum computer and classical data. QQ: quantum computer and quantum data. Lifted from \cite{textbook}.}
+    \caption{
+        The four fundamental ways in which quantum computing and machine learning can be combined.
+        CC: classical computer and classical data.
+        CQ: classical computer and quantum data.
+        QC: quantum computer and classical data.
+        QQ: quantum computer and quantum data.
+        Lifted from \cite{textbook}.
+    }
     \label{tab:qml_quadrants}
 \end{table}
 
 
-Classical data being processed on classical computers is classical machine learning. Though not explicitly linked to quantum computing, there are some ways in which quantum computing influence classical machine learning, such as the quantum-inspired application of tensor networks in \cite{felser2020}.
+Classical data being processed on classical computers is classical machine learning.
+Though not explicitly linked to quantum computing, there are some ways in which quantum computing influence classical machine learning, such as the quantum-inspired application of tensor networks in \cite{felser2020}.
 
-Using classical machine learning for quantum computing is used to improve quantum computers general performance. For example, with machine learning algorithms, the variance of the measurements can be reduced, as shown in \cite{torlai2020}. Alternatively, advanced machine learning models like neural networks can be employed to describe quantum states more efficiently.
+Using classical machine learning for quantum computing is used to improve quantum computers general performance.
+For example, with machine learning algorithms, the variance of the measurements can be reduced, as shown in \cite{torlai2020}.
+Alternatively, advanced machine learning models like neural networks can be employed to describe quantum states more efficiently.
 
-How to use quantum algorithms to solve machine learning problems is the main topic of this thesis and is what will be meant when quantum machine learning (QML) is mentioned. QML concerns itself with how better to do what classical machine learning already does. Quantum algorithms are most often advertised with speed-ups contra classical algorithms, often exponentially so as with Shor's algorithm. While this is true, there are major difficulties in achieving these speed-ups. However, there may be other advantages to be had, in terms of the amount of data needed to how much training has to be done.
+How to use quantum algorithms to solve machine learning problems is the main topic of this thesis and is what will be meant when quantum machine learning (QML) is mentioned.
+QML concerns itself with how better to do what classical machine learning already does.
+Quantum algorithms are most often advertised with speed-ups contra classical algorithms, often exponentially so as with Shor's algorithm.
+While this is true, there are major difficulties in achieving these speed-ups.
+However, there may be other advantages to be had, in terms of the amount of data needed to how much training has to be done.
 
-The last quadrant of quantum computing handling quantum data includes quantum machine learning from for example quantum experiments or machine learning when the data is inherently quantum states. With NISQ hardware, fully quantum procedures are difficult, so this field is not of immediate interest. There is obviously much overlap with CQ as the data is quantum once encoded into the quantum computer, but as will be made clear, the encoding is such a big part of CQ that results thence are not necessarily applicable QQ.
+The last quadrant of quantum computing handling quantum data includes quantum machine learning from for example quantum experiments or machine learning when the data is inherently quantum states.
+With NISQ hardware, fully quantum procedures are difficult, so this field is not of immediate interest.
+There is obviously much overlap with CQ as the data is quantum once encoded into the quantum computer, but as will be made clear, the encoding is such a big part of CQ that results thence are not necessarily applicable QQ.
 
 
 
 
 \section{Data encoding}
 \label{sec:data_encoding}
-In order for quantum computers to use classical data, it must first be encoded in a way that is compatible with the quantum hardware. How this is done has major implications on both the computational performance and the model expressibility. While naive techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance. The four methods that will be discussed in this section are summarised in \cref{tab:data_encoding}.
+In order for quantum computers to use classical data, it must first be encoded in a way that is compatible with the quantum hardware.
+How this is done has major implications on both the computational performance and the model expressibility.
+While naive techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance.
+The four methods that will be discussed in this section are summarised in \cref{tab:data_encoding}.
 
 \begin{table}
     \centering
@@ -45,43 +65,70 @@ In order for quantum computers to use classical data, it must first be encoded i
         Angle encoding              & $N$                     & $\mathcal{O}(N)$    & No                           \\
         Second order angle encoding & $N$                     & $\mathcal{O}(N^2)$  & Yes? (Conjectured)
     \end{tabular}
-    \caption{Properties of different data encodings for an $N$-dimensional data set of $M$ data points. $b(N)>N$ is the number of bits needed to represent an $N$-dimensional data point.}
+    \caption{
+        Properties of different data encodings for an $N$-dimensional data set of $M$ data points.
+        $b(N)>N$ is the number of bits needed to represent an $N$-dimensional data point.
+    }
     \label{tab:data_encoding}
 \end{table}
 
 
 \subsection{Basis encoding}
-The perhaps simplest way to encode data is to use the computational basis states of the qubits. This is done in much the way that classical computers use binary numbers. For example, some data $x$ can be expressed as a bit-string $x = \{x_1, x_2, \dots, x_n\}$, where each $x_i$ is either 0 or 1, where any continuous variables are encoded as floating point numbers. For multidimensional data, the bit-strings are simply concatenated.
+The perhaps simplest way to encode data is to use the computational basis states of the qubits.
+This is done in much the way that classical computers use binary numbers.
+For example, some data $x$ can be expressed as a bit-string $x = \{x_1, x_2, \dots, x_n\}$, where each $x_i$ is either 0 or 1, where any continuous variables are encoded as floating point numbers.
+For multidimensional data, the bit-strings are simply concatenated.
 
-If for instance the data point $010101$ is to be encoded in a quantum computer, it is simply mapped to the computational basis state $\ket{010101}$. This allows for multiple data points to be encoded in parallel as
+If for instance the data point $010101$ is to be encoded in a quantum computer, it is simply mapped to the computational basis state $\ket{010101}$.
+This allows for multiple data points to be encoded in parallel as
 \begin{equation}
     \ket{\mathcal{D}} = \frac{1}{\sqrt M} \sum_{m=1}^M \ket{\bm{x}^{(m)}},
 \end{equation}
-where $\mathcal{D}$ is the data set, $M$ the total number of data points and $\bm{x}^{(m)}$ the $m$-th binarised data point. This is a simple encoding and has some significant disadvantages. There must be at least as many qubits as there are bits in the binarised data. For $N$ bits, there are $2^N$ possible states, but at most $M$ are used, which means that the embedding will be sparse. This means that the computational resources required to encode the data will in some sense wasted, and that the quantum computer will not be able to exploit the full power of the quantum hardware. To utilise the entire Hilbert space, amplitude encoding is better suited.
+where $\mathcal{D}$ is the data set, $M$ the total number of data points and $\bm{x}^{(m)}$ the $m$-th binarised data point.
+This is a simple encoding and has some significant disadvantages.
+There must be at least as many qubits as there are bits in the binarised data.
+For $N$ bits, there are $2^N$ possible states, but at most $M$ are used, which means that the embedding will be sparse.
+This means that the computational resources required to encode the data will in some sense wasted, and that the quantum computer will not be able to exploit the full power of the quantum hardware.
+To utilise the entire Hilbert space, amplitude encoding is better suited.
 
 \subsection{Amplitude encoding}
-A more efficient way to encode data is to use amplitude encoding, exploiting the exponentially large Hilbert space of quantum computers. This is done by mapping the bits in the bit-string to individual qubits, but to individual amplitudes in the exponentially large Hilbert space. Mathematically, for some $N$-dimensional data point $\bm{x}$, this reads
+A more efficient way to encode data is to use amplitude encoding, exploiting the exponentially large Hilbert space of quantum computers.
+This is done by mapping the bits in the bit-string to individual qubits, but to individual amplitudes in the exponentially large Hilbert space.
+Mathematically, for some $N$-dimensional data point $\bm{x}$, this reads
 \begin{equation}
     \ket{\psi(\bm{x})} = \sum_{i=1}^{N} x_i \ket{i},
 \end{equation}
-where $x_i$ is the $i$th component of the data point and $\ket{i}$ is the $i$th computational basis state. This has the advantage of being able to encode any numeric type natively, and perhaps more importantly, only needing logarithmically many qubits. For $N$-dimensional data points, only $\lceil \log_2 N \rceil$ qubits are needed. This is a significant improvement over the basis encoding, which requires $N$ qubits (or more if integers and floats are to be binarised).
+where $x_i$ is the $i$th component of the data point and $\ket{i}$ is the $i$th computational basis state.
+This has the advantage of being able to encode any numeric type natively, and perhaps more importantly, only needing logarithmically many qubits.
+For $N$-dimensional data points, only $\lceil \log_2 N \rceil$ qubits are needed.
+This is a significant improvement over the basis encoding, which requires $N$ qubits (or more if integers and floats are to be binarised).
 
-An insignificant drawback is that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant. Also, some padding may be needed if the number of qubits is not a power of two.
+An insignificant drawback is that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant.
+Also, some padding may be needed if the number of qubits is not a power of two.
 
-Furthermore, amplitude encoding can easily be extended to cover the entire dataset. This is done by concatenating the data points, and then normalising the resulting state at the low cost of a single additional bit. Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
+Furthermore, amplitude encoding can easily be extended to cover the entire dataset.
+This is done by concatenating the data points, and then normalising the resulting state at the low cost of a single additional bit.
+Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
 \begin{equation}
     \ket{\mathcal{D}} = \sum_{m=1}^M \sum_{i=1}^{N} x_i^{(m)} \ket{i} \ket{m},
 \end{equation}
-where $x_i^{(m)}$ is the $i$-th component of the $m$-th data point. For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.
+where $x_i^{(m)}$ is the $i$-th component of the $m$-th data point.
+For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.
 
-The main drawback of amplitude encoding is the practical difficulties of preparing such states. Any state of the form
+The main drawback of amplitude encoding is the practical difficulties of preparing such states.
+Any state of the form
 \begin{equation}
     \ket{\psi} = \sum_{i} a_i \ket{i}
 \end{equation}
-must be efficiently and correctly prepared, which is not trivial. Unless some very specific assumptions are made, this is not possible in polynomial time (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{textbook}. In general, for classical data, circuits must be linearly deep in the size of the data and ergo exponentially deep in the amount of qubits, which makes it beyond the reach of NISQ hardware.
+must be efficiently and correctly prepared, which is not trivial.
+Unless some very specific assumptions are made, this is not possible in polynomial time (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{textbook}.
+In general, for classical data, circuits must be linearly deep in the size of the data and ergo exponentially deep in the amount of qubits, which makes it beyond the reach of NISQ hardware.
 
 \subsection{Angle encoding}
-A third option is angle encoding. Here, the potentially continuous components of the data are mapped to rotations of the qubits. For the rotations to be meaningful angles and not loop around, the data needs be normalised. An $N$-dimensional data point $\bm{x}$ is then encoded as
+A third option is angle encoding.
+Here, the potentially continuous components of the data are mapped to rotations of the qubits.
+For the rotations to be meaningful angles and not loop around, the data needs be normalised.
+An $N$-dimensional data point $\bm{x}$ is then encoded as
 \begin{equation}
     \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_X(x) \ket{0},
 \end{equation}
@@ -92,11 +139,18 @@ or
 \begin{equation}
     \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_Z(x) H \ket{0},
 \end{equation}
-depending on which rotation is used. For Z-rotations, a Hadamard gate is needed for the operation to do something. $N$ qubits are still required, but with native support for continuous variables, angle encoding can be more efficient than basis encoding. A constant number of gates are needed to prepare the state, which is a significant advantage over amplitude encoding. Still, being a product state, it offers no inherent quantum advantage.
+depending on which rotation is used.
+For Z-rotations, a Hadamard gate is needed for the operation to do something.
+$N$ qubits are still required, but with native support for continuous variables, angle encoding can be more efficient than basis encoding.
+A constant number of gates are needed to prepare the state, which is a significant advantage over amplitude encoding.
+Still, being a product state, it offers no inherent quantum advantage.
 
 
 \subsection{Second order angle encoding}
-\textcite{havlicek2018} propose a second-order angle encoding, which they conjecture to be hard to simulate classically. First, angles are encoded as above, but then the qubits are entangled and rotated further based on second order terms. In circuit notation, such an encoding with Z-rotations reads
+\label{sec:second_order_angle_encoding}
+\textcite{havlicek2018} propose a second-order angle encoding, which they conjecture to be hard to simulate classically.
+First, angles are encoded as above, but then the qubits are entangled and rotated further based on second order terms.
+In circuit notation, such an encoding with Z-rotations reads
 \begin{equation}
     \begin{quantikz}
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^1} & \ctrl{1} & \qw & \ctrl{1} & \ctrl{2} & \qw & \ctrl{2} & \qw & \qw & \qw & \qw & \dots \\
@@ -106,64 +160,190 @@ depending on which rotation is used. For Z-rotations, a Hadamard gate is needed 
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^N} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \dots
     \end{quantikz}
 \end{equation}
-where $R_Z^i = R_Z(x_i)$ and $R_Z^{i,j} = R_Z((\pi-x_i)(\pi-x_j))$ and with the entanglements and second-order rotations being applied pairwise for all $N$ qubits. This increases the circuit depth to order $N^2$ and full connectivity is needed. Nonetheless, it may be feasible for data of moderate dimensionality on NISQ hardware, and were it indeed classically hard to simulate, it could provide quantum advantage.
+where $R_Z^i = R_Z(x_i)$ and $R_Z^{i,j} = R_Z((\pi-x_i)(\pi-x_j))$ and with the entanglements and second-order rotations being applied pairwise for all $N$ qubits.
+This increases the circuit depth to order $N^2$ and full connectivity is needed.
+Nonetheless, it may be feasible for data of moderate dimensionality on NISQ hardware, and were it indeed classically hard to simulate, it could provide quantum advantage.
 
 \subsection{Repeats}
-The expressive power of models heavily rely on the encoding strategy. For instance, a single qubit rotation only allows the model to learn sine functions, where the frequency is determined by the scaling of the data. Generally, quantum models will learn periodic functions, and thus Fourier analysis is a useful tool. \textcite{schuld2021} study the implications of this, and they show that simply repeating basic encoding blocks allows for learning of more frequencies and thus more complex functions. Asymptotically, such repeats lets a quantum model learn arbitrary functions.
+The expressive power of models heavily rely on the encoding strategy.
+For instance, a single qubit rotation only allows the model to learn sine functions, where the frequency is determined by the scaling of the data.
+Generally, quantum models will learn periodic functions, and thus Fourier analysis is a useful tool.
+\textcite{schuld2021} study the implications of this, and they show that simply repeating basic encoding blocks allows for learning of more frequencies and thus more complex functions.
+Asymptotically, such repeats lets a quantum model learn arbitrary functions.
 
 
 \section{Quantum neural networks}
-Quantum neural networks (QNNs) are simply an abstraction of parametrised quantum circuits with some sort of data encoding. As classical artificial neural networks have made classical machine learning into a powerful tool, QNNs are envisioned as a quantum counterpart, inheriting some classical theory, nomenclature and perhaps unfounded hype. The main goal of QNNs is to do what classical NNs do, but with some quantum advantage, be it in terms of generalisability, training required or something else.
+Quantum neural networks (QNNs) are simply an abstraction of parametrised quantum circuits with some sort of data encoding.
+As classical artificial neural networks have made classical machine learning into a powerful tool, QNNs are envisioned as a quantum counterpart, inheriting some classical theory, nomenclature and perhaps unfounded hype.
+The main goal of QNNs is to do what classical NNs do, but with some quantum advantage, be it in terms of generalisability, training required or something else.
 
-The structure of most quantum neural networks follow classical feed-forward networks. \Cref{fig:qnn} shows the general circuit layout. In the first step or layer, data is encoded into the qubits, typically using a method discussed in \cref{sec:data_encoding}. Next, the data is passed through a sequence of parametrised quantum gates which often can be interpreted as layers. Lastly, an output is produced, which is typically a measurement of some observable. Usually, the observable is a combination of Pauli operators on every qubit. Thence, a cost function can be evaluated, and the variational circuit can be optimised.
+The structure of most quantum neural networks follow classical feed-forward networks.
+\Cref{fig:qnn} shows the general circuit layout.
+In the first step or layer, data is encoded into the qubits, typically using a method discussed in \cref{sec:data_encoding}.
+Next, the data is passed through a sequence of parametrised quantum gates which often can be interpreted as layers.
+Lastly, an output is produced, which is typically a measurement of some observable.
+Usually, the observable is a combination of Pauli operators on every qubit.
+Thence, a cost function can be evaluated.
+Often, methods like parameter-shift allows for computation of gradients, which makes it possible to train the network using classical methods.
 
 \begin{figure}
     \centering
     \begin{quantikz}
-        \lstick{$\ket{0}$} & \gate[wires=4, nwires=3]{Encoding} & \gate[wires=4, nwires=3]{U_1(\bm{\theta})} \gategroup[wires=4,steps=3,style={dashed, rounded corners, inner sep=2pt}, label style={label position=below, anchor = north, yshift=-0.2cm}]{Variational circuit $U(\bm{\theta})$} & \ \ldots\ \qw &   \gate[wires=4, nwires=3]{U_n(\bm{\theta})} & \meter{} \\
-        \lstick{$\ket{0}$} & & & \ \ldots\ \qw &  & \meter{} \\
-        \lstick{\vdots}  & & &   &  & \\
-        \lstick{$\ket{0}$} & & & \ \ldots\ \qw &  & \meter{}
+        \lstick{$\ket{0}$} &
+        \gate[wires=4, nwires=3]{\text{Encoding}(\bm{x})} &
+        \gate[wires=4, nwires=3]{U_1(\bm{\theta})}
+        \gategroup[
+            wires=4,
+            steps=3,
+            style={dashed, rounded corners, inner sep=2pt},
+            label style={label position=below, anchor=north, yshift=-0.2cm}
+        ]{Variational circuit $U(\bm{\theta})$} &
+        \ \ldots\ \qw &
+        \gate[wires=4, nwires=3]{U_n(\bm{\theta})} &
+        \meter{}
+        \\
+        \lstick{$\ket{0}$} & & & \ \ldots\ \qw & & \meter{}
+        \\
+        \lstick{\vdots} & & & & &
+        \\
+        \lstick{$\ket{0}$} & & & \ \ldots\ \qw & & \meter{}
     \end{quantikz}
-    \caption{The structure of a quantum neural network. First, the data $\bm{x}$ is encoded into a state $\ket{\psi(\bm{x})}$ using some encoding strategy. Then, the state is transformed by a parametrised quantum circuit $U(\theta)$. This variational circuit can often be decomposed into a sequence of gates $U_1,\dots, U_n$, making the QNN structure more akin to the layered classical neural networks. Finally, measurements are made and used to calculate the model output.}
+    \caption{
+        The structure of a quantum neural network.
+        First, the data $\bm{x}$ is encoded into a state $\ket{\psi(\bm{x})}$ using some encoding strategy.
+        Then, the state is transformed by a parametrised quantum circuit $U(\theta)$.
+        This variational circuit can often be decomposed into a sequence of gates $U_1,\dots, U_n$, making the QNN structure more akin to the layered classical neural networks.
+        These gates or layers do not need to use all qubits, but can be restricted to a subset, mimicking the classical concept of differently sized hidden layers.
+        Finally, measurements are made and used to calculate the model output.
+    }
     \label{fig:qnn}
 \end{figure}
 
 
 \subsection{Architectures and their applications}
 \subsubsection{Quantum convolutional neural networks}
-Originally introduced by \textcite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before the output is made. In the quantum convolutional layers, neighbouring qubits are entangled with some parametrised gates. After that, pooling layers halve the active qubit count by yet a parametrised gate. When pooling, the qubits to be discarded could be measured and used to determine the operations on the still active qubits. Otherwise, the unused qubits are simply ignored. After several iterations, a gate can be employed on the remaining qubits, analogous to a fully connected layer in classical CNNs, before the final measurement and output.
+Originally introduced by \textcite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before the output is made.
+In the quantum convolutional layers, neighbouring qubits are entangled with some parametrised gates.
+After that, pooling layers halve the active qubit count by yet a parametrised gate.
+When pooling, the qubits to be discarded could be measured and used to determine the operations on the still active qubits.
+Otherwise, the unused qubits are simply ignored.
+After several iterations, a gate can be employed on the remaining qubits, analogous to a fully connected layer in classical CNNs, before the final measurement and output.
 
-Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count is only of order logarithm of the network depth, making them easier to train than dense networks of similar input size. In \cite{cong2019}, QCNNs were shown to be able to classify topological phases of matter, and since then, it has been shown that they have inherited they classical counterparts' ability to classify images \cite{oh2020}. They have shown desirable properties with regard to avoiding barren plateaus \cite{pesah2021}.
+Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count is only of order logarithm of the network depth, making them easier to train than dense networks of similar input size.
+In \cite{cong2019}, QCNNs were shown to be able to classify topological phases of matter, and since then, it has been shown that they have inherited they classical counterparts' ability to classify images \cite{oh2020}.
+They have shown desirable properties with regard to avoiding barren plateaus \cite{pesah2021}, which could be essential in training at for problems of interesting size.
 
 \subsubsection{Quantum generative adversarial networks}
-Quantum generative models have been shown to potentially have an exponential advantage over their peers \cite{gao2018}. Due to the inherent probabilistic nature of quantum machines, it should not be surprising that they more naturally learn difficult distributions than classical computers do. For instance, real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images \cite{huang2021}.
+Quantum generative models have been shown to potentially have an exponential advantage over their peers \cite{gao2018}.
+Due to the inherent probabilistic nature of quantum machines, it should not be surprising that they more naturally learn difficult distributions than classical computers do.
+For instance, real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images \cite{huang2021}.
 
 
 \subsubsection{Hybrid quantum-classical neural networks}
-Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure. Because parametrised quantum circuits are differentiable, they can easily be handled using the chain rule when back propagating a hybrid model. \textcite{killoran2019} describe and test several such models. They note that for the NISQ era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial. As quantum hardware develops, they can take over more and more of the hybrid models.
+Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure.
+Because parametrised quantum circuits are differentiable, they can easily be handled using the chain rule when back propagating a hybrid model.
+\textcite{killoran2019} describe and test several such models.
+They note that for the NISQ era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial.
+As quantum hardware develops, they can take over more and more of the hybrid models.
 
-More recently, \textcite{zeng2022} have explored a hybrid model to multi-class classification on real world datasets using a CNN-inspired structure. There it is shown that the hybrid model outperforms a classical CNN of similar parameter size.
+More recently, \textcite{zeng2022} have explored a hybrid model to multi-class classification on real world datasets using a CNN-inspired structure.
+There it is shown that the hybrid model outperforms a classical CNN of similar parameter size.
 
-\section{Benchmarks}
+\section{Comparisons}
 \subsection{QNNs vs NNs}\label{sec:qnn-vs-nn}
-In order to compare the performance of the QNN and the NN, architectures suited for binary classification with exactly 8 parameters are used. The QNN structure is shown in \cref{fig:qnn_vs_nn_models}. The data used is Fisher's iris dataset, perhaps the most used dataset for studying classification in statistics, containing samples of three different species of iris flowers. For each species, there are 50 samples, each with four features: sepal length, sepal width, petal length, and petal width. Like in \cite{abbas2021}, only the two first species are considered, which happen to be linearly separable in the feature space.
+In order to compare the performance of the QNN and the NN, architectures suited for binary classification with exactly 8 parameters are used.
+The QNN structure is shown in \cref{fig:qnn_vs_nn_models}.
+The data used is Fisher's iris dataset, perhaps the most used dataset for studying classification in statistics, containing samples of three different species of iris flowers.
+For each species, there are 50 samples, each with four features: sepal length, sepal width, petal length, and petal width.
+Like in \cite{abbas2021}, only the two first species are considered, which happen to be linearly separable in the feature space.
 
-The four dimensional input data $\bm{x}$ is mapped to some quantum state $\ket{\psi(\bm{x})}$ using the ZZFeatureMap from Qiskit with two repetitions, which is a second-order Pauli-Z evolution circuit. This feature map is essentially a mix of rotation around the Z axis parametrised by the input features or functions thereof and CNOT and Hadamard gates. Thus, the features get highly entangled and embedded in some higher-dimensional space. The quantum state is then evolved by the RealAmplitudes ansatz. All four qubits a rotated in the Y direction by some parameter before CNOT-gates are applied pairwise, for a final parametrised rotation in the Y direction, for a total of 8 parameters. For details on the circuit components, see Qiskit's documentation \cite{qiskit} or the original paper \cite{abbas2021}. The parity of the output 4-bit string is interpreted as the prediction, and with 100 shots used, the model gave a probability for each of the two iris classes. Both exact simulations and noisy simulations were performed, with the latter using noise modelled after the 27-qubit IBM Montreal architecture, the actual hardware used in the original paper.
+The four-dimensional input data is first scaled to have zero mean and unit variance.
+Then, it is encoded into a quantum state a second order angle encoding with Z rotations, discussed in \cref{sec:second_order_angle_encoding}, with two repetitions.
+In the Qiskit framework, this is implemented in the \texttt{ZZFeatureMap} class.
+This entangles the qubits and embeds them in higher dimensional space.
+
+Next, the state is evolved by the parametrised circuit.
+It consists of initial parametrised Y-rotations, then full entanglement using controlled not-gates, and lastly final parametrised Y-rotations.
+The different rotation direction ensures the gates do not commute.
+There are in total 8 parameters.
+This is implemented in Qiskit as the \texttt{RealAmplitudes} ansatz.
+
+Finally, all four qubits are measured and the parity of the four bit output is interpreted as the prediction of the class label.  \Cref{fig:qnn_vs_nn_models} shows the structure of the QNN used.
+
+Both exact simulations and noisy simulations were performed, with the latter using noise modelled after the 27-qubit IBM Montreal architecture, the actual hardware used in the original paper.
 
 \begin{figure}
     \centering
     \begin{quantikz}
-        \lstick[wires=4]{$\ket{0}^{\otimes 4}$} & \gate[wires=4]{\text{ZZFeatureMap}(\bm{x})} & \gate[wires=4]{\text{RealAmplitudes}(\bm{\theta})} & \meter{} \\
-        & & & \meter{} \\
-        & & & \meter{} \\
-        & & & \meter{} \\
+        \lstick{$\ket{0}$} &
+        \gate[wires=4, disable auto height]{{\rotatebox{90}{\texttt{ZZFeatureMap}$(\bm{x})$}}} &
+        \gate{R_Y(\theta_1)}
+        \gategroup[
+            wires=4,
+            steps=8,
+            style={dashed, rounded corners, inner sep=2pt},
+            label style={label position=below, anchor=north, yshift=-0.2cm},
+        ]{
+            \texttt{RealAmplitudes}$(\bm{\theta})$
+        }
+        &
+        \ctrl{1} &
+        \ctrl{2} &
+        \ctrl{3} &
+        \qw &
+        \qw &
+        \qw &
+        \gate{R_Y(\theta_5)} &
+        \meter{}
+        \\
+        \lstick{$\ket{0}$} &
+        \qw &
+        \gate{R_Y (\theta_2)} &
+        \octrl{-1} &
+        \qw &
+        \qw &
+        \ctrl{1} &
+        \ctrl{2} &
+        \qw &
+        \gate{R_Y(\theta_6)} &
+        \meter{}
+        \\
+        \lstick{$\ket{0}$} &
+        \qw &
+        \gate{R_Y (\theta_3)} &
+        \qw &
+        \octrl{-2} &
+        \qw &
+        \octrl{-1} &
+        \qw &
+        \ctrl{1} &
+        \gate{R_Y(\theta_7)} &
+        \meter{}
+        \\
+        \lstick{$\ket{0}$} &
+        \qw &
+        \gate{R_Y (\theta_4)} &
+        \qw &
+        \qw &
+        \octrl{-3} &
+        \qw &
+        \octrl{-2} &
+        \octrl{-1} &
+        \gate{R_Y(\theta_8)} &
+        \meter{}
     \end{quantikz}
-    \caption{Structure of the QNN used for classification of the iris dataset. The first block maps the input data $\bm{x}$ to the quantum state $\ket{\psi(\bm{x})}$. The second block is the variational circuit, parametrised by $\bm{\theta}$, a vector with eight components. Finally, all qubits are measured, where the parity is interpreted as the prediction.}
+    \caption{
+        Structure of the QNN used for classification of the iris dataset.
+        The first block maps the input data $\bm{x}$ to the quantum state $\ket{\psi(\bm{x})}$ using a second order Z rotation feature map.
+        The second block is the variational circuit, parametrised by $\bm{\theta}$, a vector with eight components.
+        Finally, all qubits are measured, where the parity is interpreted as the prediction.
+    }
     \label{fig:qnn_vs_nn_models}
 \end{figure}
 
-The classical neural network was a standard dense feed-forward model, with a 4-1-1-1-2 layered structure without biases, giving a total of 8 parameters. The activation functions were leaky ReLUs,
+The classical neural network was a standard dense feed-forward model.
+To make in comparable to the QNN, it used a 4-1-1-1-2 layered structure without biases, giving a total of 8 parameters.
+The activation functions were leaky ReLUs,
 \begin{equation}
     \text{LeakyReLU}(x) = \begin{cases}
         x     & x \geq 0 \\
@@ -172,9 +352,15 @@ The classical neural network was a standard dense feed-forward model, with a 4-1
 \end{equation}
 and the output layer used a softmax activation function.
 
-Both models were implemented using PyTorch, with the QNN being implemented using Qiskit's PyTorch interface. Consequently, the models could be trained in the exact same manner, using the Adam optimiser with a learning rate of 0.1. The models were trained for 100 epochs, with the loss function being cross-entropy.
+Both models were implemented using PyTorch, with code partly taken from the original paper\footnote{Available at \url{https://github.com/amyami187/effective_dimension}}.
+The QNN was adapted to use Qiskit's PyTorch interface.
+Consequently, the models could be trained in the exact same manner, using the Adam optimiser with a learning rate of 0.1 and cross-entropy loss.
+The classical and noiseless models were trained for 100 epochs, while the noisy model was only trained for 10, as simulating the noise severely impacted training time.
 
-For validation, 10-fold cross-validation was used. That is, the dataset was split into 10 equal parts or \textit{folds}. Each fold us used as the validation set once, their accuracies being recorded during the training with the other nine folds. The mean accuracy over the 10 folds was used for the final performance metric, shown in \cref{fig:iris_training}.
+For validation, 10-fold cross-validation was used.
+That is, the dataset was split into 10 equal parts or \textit{folds}.
+Each fold us used as the validation set once, their accuracies being recorded during the training with the other nine folds.
+The mean accuracy over the 10 folds was used for the final performance metric, shown in \cref{fig:iris_training}.
 
 \begin{figure}
     \centering
@@ -198,23 +384,37 @@ For validation, 10-fold cross-validation was used. That is, the dataset was spli
             }
         \end{axis}
     \end{tikzpicture}
-    \caption{Mean accuracy during training for the iris dataset using 10-fold cross validation. All models have 8 parameters and are trained using the Adam optimiser with a learning rate of 0.1, using cross-entropy as the loss function. Due to the computational cost, the noisy (simulated IBM Montreal backend) QNN was only trained for 10 epochs.}
+    \caption{
+        Mean accuracy during training for the iris dataset using 10-fold cross validation.
+        All models have 8 parameters and are trained using the Adam optimiser with a learning rate of 0.1, using cross-entropy as the loss function.
+        Due to the computational cost, the noisy (simulated IBM Montreal backend) QNN was only trained for 10 epochs.
+    }
     \label{fig:iris_training}
 \end{figure}
 
 
-As in the original paper, the QNN converges much quicker and more consistently, with an out-of-fold accuracy of 100\% for all ten folds. The NN, on the other hand, requires more iterations to converge and does not always do so. In some cases, the model did not converge, only predicting one class, which is why the out-of-fold accuracy was not 100\% for all folds.
+As in the original paper, the QNN converges much quicker and more consistently, with an out-of-fold accuracy of 100\% for all ten folds.
+The classical network, on the other hand, requires more iterations to converge and does not always do so.
+In some cases, the model did not converge, only predicting one class, which is why the out-of-fold accuracy was not 100\% for all folds.
+This is in line with the original paper, underlining the potential advantage of quantum neural networks.
 
 
 \subsection{Quantum convolutional neural networks}
 % Quantum convolutional neural networks work similarly to classical convolutional networks. Through iterated convolution and pooling layers where only spatially 'near' features affect each other in the first layers, the total amount of parameters is reduced relative to fully connected networks, and the CNN tends to learn more local features. This makes them well suited for image classification, where the significant features are often spatially correlated and global features such as the local of the subject in the image does not matter.
 
-To implement and test a quantum CNN, Qiskit's online tutorials were closely followed \cite{qiskit_qcnn}. Being limited to few qubits, images with resolution $2\times4$ were generated, containing either vertical or horizontal with some Gaussian noise. \Cref{fig:qcnn_data} shows examples thereof. The task of the QCNN was to classify the images as either vertical or horizontal lines.
+To implement and test a quantum CNN, Qiskit's online tutorials were closely followed \cite{qiskit_qcnn}.
+Being limited to few qubits, images with resolution $2\times4$ were generated, containing either vertical or horizontal with some Gaussian noise.
+\Cref{fig:qcnn_data} shows examples thereof.
+The task of the QCNN was to classify the images as either vertical or horizontal lines.
 
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{../code/qcnn/data.pdf}
-    \caption{Data for the QCNN. With a total of 64 training images and 16 for testing, they form balanced dataset of $2\times4$ pixels, with either a vertical or horizontal line encoded as $1$ and $-1$. The images are generated with some Gaussian noise.}
+    \caption{
+        Data for the QCNN.
+        With a total of 64 training images and 16 for testing, they form balanced dataset of $2\times4$ pixels, with either a vertical or horizontal line encoded as $1$ and $-1$.
+        The images are generated with some Gaussian noise.
+    }
     \label{fig:qcnn_data}
 \end{figure}
 
@@ -232,7 +432,10 @@ First, data is encoded using Qiskit's ZFeatureMap; each of the eight pixels of t
 
 
 
-The convolution layers act with pairwise parametrised rotations of neighbouring qubits, also wrapping around, entangling the first and last qubits through various CNOT gates and both parametrised and fixed Z and Y rotations. Thereafter, pooling layers halve the active qubit counts by parametrised rotations and CNOT gates. For the final layer, the sole remaining qubit is measured, and the result is interpreted as the prediction. In total, the circuit appears as
+The convolution layers act with pairwise parametrised rotations of neighbouring qubits, also wrapping around, entangling the first and last qubits through various CNOT gates and both parametrised and fixed Z and Y rotations.
+Thereafter, pooling layers halve the active qubit counts by parametrised rotations and CNOT gates.
+For the final layer, the sole remaining qubit is measured, and the result is interpreted as the prediction.
+In total, the circuit appears as
 
 \begin{center}
     \begin{quantikz}
@@ -259,7 +462,12 @@ The convolution layers act with pairwise parametrised rotations of neighbouring 
 \end{center}
 
 
-As in Qiskit's guide, training was done using the COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients. The accuracies and loss (mean square error) during training is shown in \cref{fig:qcnn_training}. Like in \cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware. The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions. Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training. It seems that the noiseless QCNN is overfitting to the training data, while the noisy QCNN generalises better.
+As in Qiskit's guide, training was done using the COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients.
+The accuracies and loss (mean square error) during training is shown in \cref{fig:qcnn_training}.
+Like in \cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware.
+The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions.
+Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training.
+It seems that the noiseless QCNN is overfitting to the training data, while the noisy QCNN generalises better.
 
 
 \begin{figure}
@@ -321,7 +529,13 @@ As in Qiskit's guide, training was done using the COBYLA optimiser\footnote{Cons
         \caption{}
         \label{fig:qcnn_acc}
     \end{subfigure}
-    \caption{Training of the QCNN. The red curves are for the noisy model (modelled after IBM's Montreal hardware), while the blue curves are for the exact model. The dashed curves are for the test set. (a) loss (mean square error) during training. (b) accuracy on the training and test sets (running mean with a 100 iteration window).}
+    \caption{
+        Training of the QCNN.
+        The red curves are for the noisy model (modelled after IBM's Montreal hardware), while the blue curves are for the exact model.
+        The dashed curves are for the test set.
+        (a) loss (mean square error) during training.
+        (b) accuracy on the training and test sets (running mean with a 100 iteration window).
+    }
     \label{fig:qcnn_training}
 \end{figure}
 
