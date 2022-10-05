@@ -3,8 +3,16 @@ import matplotlib.pyplot as plt
 import pennylane as qml
 from pennylane import numpy as np
 from pennylane.optimize import AdamOptimizer
+from qiskit.providers import fake_provider
+from qiskit.providers.aer.noise import NoiseModel
 
-dev = qml.device("default.qubit", wires=10)
+noise_model = NoiseModel.from_backend(fake_provider.FakeMontreal())
+dev = qml.device(
+    "default.qubit",
+    # "qiskit.aer",
+    wires=8,
+    # noise_model=noise_model,
+)
 
 
 # %%
@@ -145,12 +153,22 @@ def cost(var, features, labels):
     return square_loss(labels, preds)
 
 
+def accuracy(var, features, labels):
+    preds = [np.sign(circuit(var, x)) for x in features]
+    return np.mean(preds == labels)
+
+
 params = init_params
 for i in range(100):
     (params, _, _), loss = opt.step_and_cost(cost, params, x_train, y_train)
     # get test loss
     test_loss = cost(params, x_test, y_test)
-    print(f"Loss: {loss}, Test loss: {test_loss}")
+    print(
+        f"Loss: {loss}"
+        f"Test loss: {test_loss}"
+        f"Accuracy: {accuracy(params, x_train, y_train)}"
+        f"Test accuracy: {accuracy(params, x_test, y_test)}"
+    )
 
 
 # %%
