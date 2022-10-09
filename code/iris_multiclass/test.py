@@ -30,7 +30,7 @@ def load_data() -> tuple[Tensor, Tensor]:
     x = x[idx]
     y = y[idx]
 
-    return tensor(x).double(), tensor(y).long()
+    return tensor(x).float(), tensor(y).long()
 
 
 x, y = load_data()
