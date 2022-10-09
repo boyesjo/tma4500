@@ -610,3 +610,7 @@ references/
 
 # any folders named data
 data/
+
+#
+maxcut_qml.ipynb
+kladd.ipynb

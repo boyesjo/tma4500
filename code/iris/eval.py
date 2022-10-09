@@ -1,3 +1,4 @@
+# %%
 import numpy as np
 import pandas as pd
 from load_data import load_data
@@ -5,12 +6,14 @@ from nn import NN
 from qnn import QNN
 from torch import Tensor, nn, optim
 
-np.random.seed(0)
+# %%
+# np.random.seed(0)
 x, y = load_data()
 idx = list(np.random.permutation(len(x)))
 x, y = x[idx], y[idx]
 
 
+# %%
 def train(
     model: nn.Module,
     x: Tensor,
@@ -36,7 +39,7 @@ def train(
         output = model(x)  # Forward pass
         loss = loss_func(output, y)  # Calculate loss
         loss.backward()  # Backward pass
-        optimizer.step()  # Optimize weights
+        optimizer.step()  # Optimise weights
 
         y_pred = model(x).argmax(dim=1)
         acc = (y_pred == y).sum().item() / len(y)
@@ -54,6 +57,7 @@ def train(
     return test_list
 
 
+# %%
 k = 10
 epochs = 100
 epochs_noisy = 10  # fewer cause slow af
@@ -68,17 +72,8 @@ for i in range(k):
         range((i + 1) * fold_len, k * fold_len)
     )
 
-    test_nn[i] = train(
-        NN(),
-        x[train_idx],
-        y[train_idx],
-        x[test_idx],
-        y[test_idx],
-        epochs=epochs,
-    )
-
-    # test_qnn[i] = train(
-    #     QNN(),
+    # test_nn[i] = train(
+    #     NN(),
     #     x[train_idx],
     #     y[train_idx],
     #     x[test_idx],
@@ -86,24 +81,31 @@ for i in range(k):
     #     epochs=epochs,
     # )
 
-    test_qnn_noisy[i] = train(
-        QNN(noisy=True),
+    test_qnn[i] = train(
+        QNN(),
         x[train_idx],
         y[train_idx],
         x[test_idx],
         y[test_idx],
-        epochs=epochs_noisy,
+        epochs=epochs,
     )
 
+    # test_qnn_noisy[i] = train(
+    #     QNN(noisy=True),
+    #     x[train_idx],
+    #     y[train_idx],
+    #     x[test_idx],
+    #     y[test_idx],
+    #     epochs=epochs_noisy,
+    # )
 
-# save as csv using pandas
-df_nn = pd.DataFrame(test_nn)
-df_nn.to_csv("test_nn2.csv", index=False)
-# df_qnn = pd.DataFrame(test_qnn)
-# df_qnn.to_csv("test_qnn.csv", index=False)
-
-df_qnn_noisy = pd.DataFrame(test_qnn_noisy)
-df_qnn_noisy.to_csv("test_qnn_noisy.csv", index=False)
+# %%
+# df_nn = pd.DataFrame(test_nn)
+# df_nn.to_csv("test_nn.csv", index=False)
+df_qnn = pd.DataFrame(test_qnn)
+df_qnn.to_csv("test_qnn_parity.csv", index=False)
+# df_qnn_noisy = pd.DataFrame(test_qnn_noisy)
+# df_qnn_noisy.to_csv("test_qnn_noisy.csv", index=False)
 
 
 # model_nn = NN()

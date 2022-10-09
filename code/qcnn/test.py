@@ -73,6 +73,7 @@ for i, ax in enumerate(axes.flatten()):
 plt.tight_layout()
 plt.savefig("data.pdf")
 
+
 # %%
 def conv_circuit(params):
     target = QuantumCircuit(2)

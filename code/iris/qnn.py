@@ -10,13 +10,20 @@ from qiskit_machine_learning.connectors import TorchConnector
 NUM_QUBITS = 4
 
 
-def parity(bitstring: str) -> int:
-    return sum([int(bit) for bit in str(bitstring)]) % 2
+def parity(i: int) -> int:
+    return bin(i).count("1") % 2
 
 
-def create_qnn(noisy: bool = False) -> neural_networks.NeuralNetwork:
+def last_bit(i: int) -> int:
+    return int(bin(i)[-1])
+
+
+def create_qnn(
+    noisy: bool = False,
+    interpret: str = "parity",
+) -> neural_networks.NeuralNetwork:
     backend = Aer.get_backend("aer_simulator")
-    shots = 100
+    shots = 1024
 
     if noisy:
         noise_model = NoiseModel.from_backend(FakeMontreal())
@@ -28,6 +35,13 @@ def create_qnn(noisy: bool = False) -> neural_networks.NeuralNetwork:
     else:
         qi = QuantumInstance(backend=backend, shots=shots)
 
+    if interpret == "parity":
+        interpret_func = parity
+    elif interpret == "last_bit":
+        interpret_func = last_bit
+    else:
+        raise ValueError(f"Unknown interpretation: {interpret}")
+
     fm = ZZFeatureMap(feature_dimension=NUM_QUBITS, reps=2)
     ansatz = RealAmplitudes(num_qubits=NUM_QUBITS, reps=1)
     qc = QuantumCircuit(NUM_QUBITS)
@@ -38,7 +52,7 @@ def create_qnn(noisy: bool = False) -> neural_networks.NeuralNetwork:
         qc,
         input_params=fm.parameters,
         weight_params=ansatz.parameters,
-        interpret=parity,
+        interpret=interpret_func,
         output_shape=2,
         quantum_instance=qi,
     )
@@ -47,9 +61,9 @@ def create_qnn(noisy: bool = False) -> neural_networks.NeuralNetwork:
 
 
 class QNN(nn.Module):
-    def __init__(self, noisy: bool = False):
+    def __init__(self, **kwargs):
         super().__init__()
-        self.qnn = TorchConnector(create_qnn(noisy=noisy))
+        self.qnn = TorchConnector(create_qnn(**kwargs))
 
     def forward(self, x):
         x = self.qnn.forward(x)
