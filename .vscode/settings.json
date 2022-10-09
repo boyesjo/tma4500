@@ -1,0 +1,23 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        "**/.ipynb_checkpoints": true,
+        "**/.mypy_cache": true,
+        "**/*.bcf": true,
+        "**/*.run.xml": true,
+        "**/*.synctex.gz": true,
+        "**/indent.log": true,
+        "**/*.toc": true,
+        "**/*.aux": true,
+        "**/*.log": true,
+        "**/*.bbl": true,
+        "**/*.blg": true,
+        "**/*.fls": true,
+        "**/*.fdb_latexmk": true,
+    }
+}

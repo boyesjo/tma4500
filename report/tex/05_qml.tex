@@ -58,12 +58,12 @@ The four methods that will be discussed in this section are summarised in \cref{
     \renewcommand{\arraystretch}{1.5}
     \begin{tabular}{l|c|c|c}
 
-                                    & Qubits needed           & Circuit depth       & Hard to simulate classically \\
+                                    & Qubits needed           & Circuit depth       & Hard to simulate classically    \\
         \hline
-        Basis encoding              & $b(N)$                  & $\mathcal{O}(b(N))$ & No                           \\
-        Amplitude encoding          & $\lceil\log_2{N}\rceil$ & $\mathcal{O}(N)$    & Yes                          \\
-        Angle encoding              & $N$                     & $\mathcal{O}(N)$    & No                           \\
-        Second order angle encoding & $N$                     & $\mathcal{O}(N^2)$  & Yes? (Conjectured)
+        Basis encoding              & $b(N)$                  & $\mathcal{O}(b(N))$ & No                              \\
+        Amplitude encoding          & $\lceil\log_2{N}\rceil$ & $\mathcal{O}(N)$    & Yes                             \\
+        Angle encoding              & $N$                     & $\mathcal{O}(N)$    & No                              \\
+        Second order angle encoding & $N$                     & $\mathcal{O}(N^2)$  & Yes\tablefootnote{Conjectured.}
     \end{tabular}
     \caption{
         Properties of different data encodings for an $N$-dimensional data set of $M$ data points.
@@ -352,7 +352,7 @@ The activation functions were leaky ReLUs,
 \end{equation}
 and the output layer used a softmax activation function.
 
-Both models were implemented using PyTorch, with code partly taken from the original paper\footnote{Available at \url{https://github.com/amyami187/effective_dimension}}.
+Both models were implemented using PyTorch, with code partly taken from the original paper\footnote{Available at \url{https://github.com/amyami187/effective_dimension}.}.
 The QNN was adapted to use Qiskit's PyTorch interface.
 Consequently, the models could be trained in the exact same manner, using the Adam optimiser with a learning rate of 0.1 and cross-entropy loss.
 The classical and noiseless models were trained for 100 epochs, while the noisy model was only trained for 10, as simulating the noise severely impacted training time.
