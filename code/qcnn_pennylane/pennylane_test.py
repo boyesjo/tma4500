@@ -1,18 +1,21 @@
 # %%
-import matplotlib.pyplot as plt
+import pandas as pd
 import pennylane as qml
 from pennylane import numpy as np
 from pennylane.optimize import AdamOptimizer
 from qiskit.providers import fake_provider
 from qiskit.providers.aer.noise import NoiseModel
 
-noise_model = NoiseModel.from_backend(fake_provider.FakeMontreal())
 dev = qml.device(
     "default.qubit",
     # "qiskit.aer",
+    # "lightning.qubit",
     wires=8,
-    # noise_model=noise_model,
+    # noise_model=NoiseModel.from_backend(fake_provider.FakeMontreal())
+    # shots=1000,
 )
+
+np.random.seed(1337)
 
 
 # %%
@@ -133,16 +136,16 @@ def generate_data(n: int = 32):
 
 
 x_train, y_train = generate_data(64)
-x_test, y_test = generate_data(8)
+x_test, y_test = generate_data(64)
 
 # %%
-opt = AdamOptimizer(0.1)
+opt = AdamOptimizer(0.01)
 
 
 def square_loss(labels, predictions):
     loss = 0
-    for l, p in zip(labels, predictions):
-        loss = loss + (l - p) ** 2
+    for label, prediction in zip(labels, predictions):
+        loss = loss + (label - prediction) ** 2
 
     loss = loss / len(labels)
     return loss
@@ -158,17 +161,21 @@ def accuracy(var, features, labels):
     return np.mean(preds == labels)
 
 
+history = []
+
 params = init_params
 for i in range(100):
     (params, _, _), loss = opt.step_and_cost(cost, params, x_train, y_train)
-    # get test loss
     test_loss = cost(params, x_test, y_test)
-    print(
-        f"Loss: {loss}"
-        f"Test loss: {test_loss}"
-        f"Accuracy: {accuracy(params, x_train, y_train)}"
-        f"Test accuracy: {accuracy(params, x_test, y_test)}"
+    history.append(
+        {
+            "Loss": float(loss),
+            "Test loss": float(test_loss),
+            "Accuracy": float(accuracy(params, x_train, y_train)),
+            "Test accuracy": float(accuracy(params, x_test, y_test)),
+        }
     )
+    print(history[-1])
 
 
 # %%
@@ -178,4 +185,11 @@ print(preds)
 print(y_test)
 # %%
 cost(params, x_test, y_test)
+# %%
+pd.DataFrame(
+    history,
+    index=range(1, len(history) + 1),
+).to_csv("results.csv", index_label="Iteration")
+
+
 # %%

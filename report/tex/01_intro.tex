@@ -1,4 +1,34 @@
 \chapter{Introduction}
+Quantum computing offers a new paradigm for computation.
+Using quantum properties such as superposition and entanglement, quantum computers can solve problems that are intractable for classical computers.
+While they were first conceived of by the famous Richard Feynman in 1982 \cite{feynman} to simulate difficult quantum mechanical problems it was only really with the discovery of Shor's algorithm \cite{shor} in 1994 that the potential of quantum computers gained widespread attention.
+Shor's algorithm is a quantum algorithm that can factor large numbers in polynomial time, a problem that is believed to be exponentially hard and therefore intractable for classical computers.
+Since then, the search has continued for what other problems can be solved more efficiently on quantum computers.
+
+How actually to construct a quantum computer is still an open question, and perhaps a more pressing one.
+There are several types of hardware being developed and researched, such as superconducting circuits used by IBM, Google and more, trapped ions used by IonQ and Honeywell, photonic quantum computers developed by Xanadu and Psi Quantum in addition to many other types.
+Common for all current approaches are problems of noise and decoherence.
+Theoretically, with computers of great enough scale, errors can be mitigated, but for the near future, the systematic errors of quantum computers will be a limiting factor and something to be taken into account when designing algorithms.
+Hence, the focus of much current quantum computing research considers noisy intermediate scale quantum (NISQ) devices.
+How to overcome the difficulties of NISQ hardware and be able to extract the full potential of quantum computers is a current research topic.
+
+Variational quantum algorithms (VQAs) have been seen as a promising approach to achieve quantum advantage on NISQ devices.
+Such algorithms use a classical optimiser to find the best parameters for a general algorithm.
+In this way, the quantum hardware is only used for a small part of the algorithm, and the rest is done classically.
+Consequently, there is less time for noise and decoherence to compound, ruining the computation, and the efficiency of classical hardware can still be utilised.
+VQAs are in a sense a very natural approach, as most quantum hardware are inherently parametrised; microwave pulses for superconducting circuits, laser pulses for trapped ions and so on have to use a particular pulse length, frequency and so on.
+Applications of VQAs are numerous.
+A typical example is finding the ground state of a Hamiltonian for a molecule.
+Such problems are exponential in the particle count, and thus intractable on classical hardware for larger molecules, while the problem of evaluating the Hamiltonian on quantum hardware is typically polynomial.
+VQAs are also well suited for general mathematical problems and optimisation.
+
+Machine learning (ML) and VQAs are a natural fit, as the optimisation of parameters is a common task in machine learning.
+With some way of encoding data into quantum hardware, VQAs are easily interpreted as a machine learning models.
+The output of the quantum algorithm can be seen as a prediction in a supervised learning problem, and so the quantum model can be trained to predict.
+With gate based quantum computers, the quantum model can show some similarities to classical neural networks, bringing forth the notion of quantum neural nets, while the idea of encoding data into to high-dimensional quantum state is reminiscent of classical kernel methods.
+Research indicate some advantages of using quantum machine learning models over classical ones, such as requiring fewer training iterations, but the field of quantum machine learning (QML) is still in its infancy and much work remains to be done.
+In particular, whether any quantum advantage for ML can be achieved with NISQ devices is not certain.
+
 
 \section{Relevant work}
 

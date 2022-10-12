@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from qiskit import Aer, QuantumCircuit
-from qiskit.algorithms.optimizers import COBYLA
+from qiskit.algorithms import optimizers
 from qiskit.circuit import ParameterVector
 from qiskit.circuit.library import ZFeatureMap, ZZFeatureMap
 from qiskit.opflow import AerPauliExpectation, PauliSumOp
@@ -204,7 +204,9 @@ init_weights = algorithm_globals.random.random(qnn.num_weights)
 opflow_classifier = NeuralNetworkClassifier(
     qnn,
     loss="absolute_error",
-    optimizer=COBYLA(maxiter=400),
+    optimizer=optimizers.COBYLA(maxiter=400),
+    # optimizer=optimizers.ADAM(lr=0.01, maxiter=100, snapshot_dir="garbage"),
+    # optimizer=optimizers.GradientDescent(learning_rate=0.1),
     callback=callback,
     initial_point=init_weights,
 )

@@ -368,7 +368,7 @@ The mean accuracy over the 10 folds was used for the final performance metric, s
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-                width=0.6\textwidth,
+                width=0.8\textwidth,
                 height=0.5\textwidth,
                 xlabel={Iteration},
                 ylabel={Out of fold accuracy},
@@ -376,8 +376,8 @@ The mean accuracy over the 10 folds was used for the final performance metric, s
                 legend pos=south east,
                 legend cell align={left},
             ]
-            \addplot[mark=none, color=blue] table[x expr=\coordindex+1, y index=3, col sep=comma] {../code/iris/results/mean.csv};
-            \addplot[mark=none, color=red] table[x expr=\coordindex+1, y index=2, col sep=comma] {../code/iris/results/mean.csv};
+            \addplot[mark=none, color=red] table[x expr=\coordindex+1, y index=3, col sep=comma] {../code/iris/results/mean.csv};
+            \addplot[mark=none, color=blue] table[x expr=\coordindex+1, y index=2, col sep=comma] {../code/iris/results/mean.csv};
             \addplot[mark=none, color=green] table[x expr=\coordindex+1, y index=1, col sep=comma] {../code/iris/results/mean.csv};
             \legend{
                 Noisy QNN,
@@ -402,6 +402,7 @@ This is in line with the original paper, underlining the potential advantage of 
 
 
 \subsection{Quantum convolutional neural networks}
+\label{sec:qcnn}
 % Quantum convolutional neural networks work similarly to classical convolutional networks. Through iterated convolution and pooling layers where only spatially 'near' features affect each other in the first layers, the total amount of parameters is reduced relative to fully connected networks, and the CNN tends to learn more local features. This makes them well suited for image classification, where the significant features are often spatially correlated and global features such as the local of the subject in the image does not matter.
 
 To implement and test a quantum CNN, Qiskit's online tutorials were closely followed \cite{qiskit_qcnn}.
@@ -442,7 +443,7 @@ In total, the circuit appears as
 \begin{center}
     \begin{quantikz}
         \lstick[wires=8]{$\ket{0}^{\otimes 8}$} &
-        \gate[wires=8, disable auto height]{{\rotatebox{90}{\text{ZFeatureMap}}}} &
+        \gate[wires=8, disable auto height]{{\rotatebox{90}{\texttt{ZFeatureMap}$(\bm{x})$}}} &
         \gate[wires=8, disable auto height]{{\rotatebox{90}{\text{Convolution}}}} &
         \gate[wires=8, disable auto height]{{\rotatebox{90}{\text{Pooling}}}} & \qw{}& \qw{}& \qw{}& \qw{} & \qw{}
         \\
@@ -455,16 +456,18 @@ In total, the circuit appears as
         \\
         & \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}\\
         & & & & & &
-        \gate[wires=2, disable auto height]{{\rotatebox{90}{\text{Conv}}}} &
+        \gate[wires=2, disable auto height]{{\rotatebox{90}{\text{Conv.}}}} &
         \gate[wires=2, disable auto height]{{\rotatebox{90}{\text{Pooling}}}} & \qw{}
 
         \\
         & & & & & & & & \meter{} \\
     \end{quantikz}
 \end{center}
+with a total of 63 parameters.
 
 
 As in Qiskit's guide, training was done using the COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients.
+Why this optimiser was chosen is not clear, but testing shows that simulations using gradient based methods such as Adam or simple gradient descent is significantly slower.
 The accuracies and loss (mean square error) during training is shown in \cref{fig:qcnn_training}.
 Like in \cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware.
 The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions.
@@ -523,7 +526,7 @@ It seems that the noiseless QCNN is overfitting to the training data, while the 
                 \legend{
                     Noisy training,
                     Noisy test,
-                    Exact trainin,
+                    Exact training,
                     Exact test,
                 }
             \end{axis}
@@ -542,3 +545,148 @@ It seems that the noiseless QCNN is overfitting to the training data, while the 
 \end{figure}
 
 
+\subsection{QCNN with intermediate measurements}
+A more complex QCNN structure was described by \textcite{pesah2021}, where the pooling modules measure a qubit and use the result to control a unitary gate on its neighbour.
+The use of mid-circuit measurements complicates the circuit and its implementation, but allows for a non-linear and potentially more powerful model.
+
+Following the description in \cite{pesah2021}, a QCNN was implemented with structure as shown in \cref{fig:qcnnm}.
+First, the data was encoded using angle encoding in the $X$ direction.
+The convolutional layers consisted of pairwise $W$ gates, a mix of parametrised rotations and CNOTs, with total of 15 parameters per gate.
+The pooling layers consisted of a measurement and a conditional single-qubit unitary gate.
+Without any particular recommendation in the original paper, a simple $X$-gate was used.
+Like in \cref{sec:qcnn}, the network used 8 qubits to handle the 8-dimensional data.
+Three convolutional and pooling layers were used, reducing the data from 8 to 2 dimensions
+Lastly, a final general two-qubit ansatz was used, and a single qubit was measured and interpreted as a prediction.
+This was a simple parametrised entangler, similar to the \texttt{RealAmplitudes} in \cref{sec:qnn-vs-nn}, but with $X$ rotations.
+In total, the network had 154 parameters.
+
+\begin{figure}
+    \centering
+    \begin{quantikz}
+        % \lstick[wires=4]{$\ket{\psi(\bm{x})}$}
+        &
+        \qw
+        \gategroup[
+            wires=4,
+            steps=2,
+            style={dashed, rounded corners, inner sep=2pt},
+            label style={label position=below, anchor=north, yshift=-0.2cm},
+        ]{Convolution}
+        &
+        \gate[wires=2]{W}
+        &
+        \qw
+        &
+        \meter{}
+        \gategroup[
+            wires=4,
+            steps=2,
+            style={dashed, rounded corners, inner sep=2pt},
+            label style={label position=below, anchor=north, yshift=-0.2cm},
+        ]{Pooling}
+        &
+        \cwbend{1}
+        \\
+        &
+        \gate[wires=2]{W}
+        &
+        \qw
+        &
+        \qw
+        &
+        \qw
+        &
+        \gate{X}
+        &
+        \qw
+        \\
+        &
+        \qw
+        &
+        \gate[wires=2]{W}
+        &
+        \qw
+        &
+        \qw
+        &
+        \gate{X}
+        &
+        \qw
+        \\
+        &
+        \qw
+        &
+        \qw
+        &
+        \qw
+        &
+        \meter{}
+        &
+        \cwbend{-1}
+    \end{quantikz}
+    \caption{
+        QCNN convolution and pooling layer structure with intermediate measurements.
+        Some encoded data or already pooled data enter the convolution layer where parametrised gates $W$ entangle the qubits.
+        The pooling modules measure a qubit and use the result to control a unitary gate on a neighbour (here the $X$ gate).
+    }
+    \label{fig:qcnnm}
+\end{figure}
+
+The QCNN was implemented using the PennyLane framework and trained with the Adam optimiser with a learning rate of 0.01.
+With the PennyLane implementation, there were no problems using gradient based optimisation.
+The results are shown in \cref{fig:qcnnm_training}.
+The training loss was lower than for the QCNN in \cref{sec:qcnn}, despite the fewer iterations.
+Furthermore, this model achieves a perfect accuracy on both the training and test sets.
+Better performance is to be expected with the higher-order information used in the optimisation and the higher parameter count.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                    width=\textwidth,
+                    height=\textwidth,
+                    xlabel={Iteration},
+                    ylabel={Loss (MSE)},
+                    % legend pos=north west,
+                    % legend style={at={(0.5,1.03)},anchor=north},
+                    grid=major,
+                ]
+                \addplot[mark=none, color=blue] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results.csv};
+            \end{axis}
+        \end{tikzpicture}
+        \caption{}
+        \label{fig:qcnnm_loss}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                    width=\textwidth,
+                    height=\textwidth,
+                    xlabel={Iteration},
+                    ylabel={Accuracy},
+                    % legend pos=north west,
+                    % legend style={at={(0.5,1.03)},anchor=north},
+                    grid=major,
+                    legend pos=south east,
+                ]
+                \addplot[mark=none, color=blue] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results.csv};
+                \addplot[mark=none, color=blue, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results.csv};
+                \legend{
+                    Training,
+                    Test,
+                }
+            \end{axis}
+        \end{tikzpicture}
+        \caption{}
+        \label{fig:qcnnm_acc}
+    \end{subfigure}
+    \caption{
+        Training of the QCNN with intermediate measurements.
+        (a) loss (mean square error) during training.
+        (b) accuracy on the training and test sets.
+    }
+    \label{fig:qcnnm_training}
+\end{figure}
