@@ -1,9 +1,126 @@
 \chapter{Quantum computing}
 
-\section{Quantum states}
-
 \section{The qubit}
+The quantum bit, the qubit, is the building block of quantum computing.
+Like the classical binary digit it can be either 0 or 1.
+But being quantum, these are quantum states, $\ket{0}$ and $\ket{1}$, and the qubit can be in any superposition of these states.
+The state of the qubit lies in a two-dimensional vector space, and the states $\ket{0}$ and $\ket{1}$ are basis vectors, known as the computational basis states.
+Thus, the state of a qubit can be expressed as
+\begin{equation}
+    \ket{\psi} = \alpha \ket{0} + \beta \ket{1} = \begin{pmatrix} \alpha \\ \beta \end{pmatrix}
+    \label{eq:qubit}
+\end{equation}
+where $\alpha$ and $\beta$ are any numbers, even complex ones.
+The only requirement is that the state is normalised, i.e. $\vert\alpha\vert^2 + \vert\beta\vert^2 = 1$.
+In particular, the qubit state lies in the Hilbert space $\mathcal{H} = \mathbb{C}^2$.
 
-\section{Quantum circuits}
+
+\subsection{The Bloch sphere}
+A useful tool for visualising the state of a qubit is the Bloch sphere.
+First, it should be noted for states on the form \cref{eq:qubit} are not unique, only the relative complex phase matters.
+There is a global phase which is not measurable, and thus not relevant for the state of the qubit.
+Therefore, taking also the normalisation requirement into account, the state of the qubit can be expressed as
+\begin{equation}
+    \ket{\psi} = \cos\left(\frac{\theta}{2}\right) \ket{0} + e^{i\phi} \sin\left(\frac{\theta}{2}\right) \ket{1}
+    \label{eq:bloch}
+\end{equation}
+where $\theta, \phi \in \mathbb{R}$.
+Interpreting $\theta$ as the polar angle and $\phi$ the azimuthal angle, the state of the qubit can be identified with a point a sphere, the Bloch sphere.
+There, the state $\ket{0}$ is typically thought of as the north pole, and $\ket{1}$ as the south pole.
+\Cref{fig:bloch} shows the Bloch sphere, and the state of the qubit in \cref{eq:bloch}.
+
+% insert figure place holder
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{example-image-a}
+    \caption{The Bloch sphere figure placeholder.}
+    \label{fig:bloch}
+\end{figure}
+
+\subsection{Multiple qubits}
+Although the continuous nature of the qubit is indeed useful, the true power of quantum computers lie in how multiple qubits interact.
+Having multiple qubits allows for the creation of entanglement, which is a key feature of quantum computing.
+The state of multiple qubits can be expressed using the tensor product as
+\begin{equation}
+    \ket{\psi_1 \psi_2 \cdots  \psi_n} = \ket{\psi_1} \otimes \ket{\psi_2} \otimes \cdots \otimes \ket{\psi_n}.
+    \label{eq:tensor}
+\end{equation}
+What makes this so powerful is that the state of a multi-qubit system does not have to be a product state. In can be anything on the form
+\begin{equation}
+    \ket{\psi_1 \psi_2 \cdots  \psi_n}
+    = c_1 \ket{0\dots 00} + c_2 \ket{0\dots 01} + \cdots + c_{2^n} \ket{1\dots 11}
+    = \begin{pmatrix}
+        c_1 \\ c_2 \\ \vdots \\ c_{2^n}
+    \end{pmatrix}
+    \in \mathbb{C}^{2^n},
+    \label{eq:superposition}
+\end{equation}
+which means that with $n$ qubits, the system can be in any superposition of the $2^n$ basis states.
+Operating on several qubits then, one can do linear algebra in an exponentially large space.
+
+\section{Operating with qubits}
+\subsection{Single-qubit gates}
+To do an operation on one or more qubits, a unitary matrix is applied to the state, where the unitarity is needed for states to remain normalised.
+These operations are often thought of as gates, paralleling the classical gates in digital logic.
+The most basic gates are the Pauli gates, which are the $X$, $Y$ and $Z$ gates:
+\begin{align}
+    X =\ket{0}\bra{1} + \ket{1}\bra{0} & = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix},  \\
+    Y =\ket{0}\bra{1} - \ket{1}\bra{0} & = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}, \\
+    Z =\ket{0}\bra{0} - \ket{1}\bra{1} & = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}.
+\end{align}
+These gates are half turns around the $x$, $y$ and $z$ axes of the Bloch sphere, respectively. The $X$ gate is also known as the NOT gate, as it mirrors the classical NOT gate by mapping $\ket{0}$ to $\ket{1}$ and vice versa.
+
+The Hadamard gate
+\begin{equation}
+    H = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}
+\end{equation}
+is a rotation around the $x$-axis by $\pi/2$. It may be the most important gate in quantum computing, and is used to create superpositions of the computational basis states.
+
+The $R_X$, $R_Y$ and $R_Z$ gates are rotations around the $x$, $y$ and $z$ axes, respectively, by an arbitrary angle $\theta$:
+\begin{align*}
+    R_X(\theta) & = \begin{pmatrix} \cos\left(\frac{\theta}{2}\right) & -i \sin\left(\frac{\theta}{2}\right) \\ -i \sin\left(\frac{\theta}{2}\right) & \cos\left(\frac{\theta}{2}\right) \end{pmatrix}, \\
+    R_Y(\theta) & = \begin{pmatrix} \cos\left(\frac{\theta}{2}\right) & -\sin\left(\frac{\theta}{2}\right) \\ \sin\left(\frac{\theta}{2}\right) & \cos\left(\frac{\theta}{2}\right) \end{pmatrix},      \\
+    R_Z(\theta) & = \begin{pmatrix} e^{-i\frac{\theta}{2}} & 0 \\ 0 & e^{i\frac{\theta}{2}} \end{pmatrix}.
+\end{align*}
+These parametrised gates will be useful in \cref{sec:vqa}.
+
+\subsection{Multi-qubit gates}
+The most important multi-qubit gate is the controlled-$X$ gate, also known as the CNOT, which is a controlled version of the $X$ gate.
+Being controlled means that it only acts on the second qubit if the first qubit is in the state $\ket{1}$.
+Of course, the first qubit may be in a superposition, and the CNOT this way allows for the creation of entanglement between the two qubits.
+The CNOT gate is defined as
+\begin{equation}
+    \text{CNOT} = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0 \end{pmatrix}.
+\end{equation}
+
+\subsection{Quantum circuits}
+The operations on qubits are often described using quantum circuits, which are a graphical representation of the operations on the qubits, the quantum algorithms.
+They are read from left to right.
+It is standard procedure to assume all qubits start in the state $\ket{0}$.
+For instance, using an $H$-gate to create a superposition before applying a CNOT gate, can be expressed as
+\begin{equation}
+    \begin{quantikz}
+        \lstick{$\ket{0}$} & \gate{H} & \ctrl{1} & \qw \\
+        \lstick{$\ket{0}$} & \qw & \targ{} & \qw
+    \end{quantikz}
+\end{equation}
 
 \section{Limitations of NISQ hardware}
+Quantum hardware have been physically realised and even outperforms classical computers in very contrived situations, but the hardware is still very limited.
+The hardware is limited in the number of qubits, the connectivity between the qubits, and the noise and decoherence of the qubits.
+It is believed that quantum hardware will continue to improve and eventually perform demanding algorithms like Shor's for large numbers.
+Still, the era dubbed NISQ (Noisy Intermediate-Scale Quantum) is the first step, and to make use of the hardware, algorithms must take these limitations into consideration.
+
+Noise and decoherence severely limits how large circuits can be run on the hardware.
+Decoherence refers to the fact that the qubits are not isolated from the environment, and may be ruined by the environment, e.g. electrical noise from the control electronics.
+Furthermore, with the continuous nature of quantum states, minor errors can compound.
+If for instance a qubit is to be rotated many times, a small error in the rotation may cause the qubit to be rotated by a large angle.
+Because of this, NISQ algorithms must be shallow, meaning that the amount of gates applied before measurement is small.
+
+Another limiting factor is the amount of qubits.
+Current hardware has around 10-100 qubits, which though still may be enough to express states too large to be expressed on classical computers, is not enough to perform the most demanding algorithms.
+With more qubits, error correction could be used to mitigate the effects of noise and decoherence, but this would require many more qubits than are currently available.
+Another current limitation is the connectivity between the qubits.
+Not all qubits are directly linked, which means that applying a multi-qubit gate may require intermediate swapping of qubits.
+This increases circuit depth which in turn increases the error rate.
+

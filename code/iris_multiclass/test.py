@@ -36,12 +36,9 @@ def load_data() -> tuple[Tensor, Tensor]:
 x, y = load_data()
 
 
-def interpret(i: int) -> int:
-    # return 0 if last two bits are 00, 1 if 01, 2 if 10, 0 if 11
-    last_two_bits = i & 0b11
-    if last_two_bits == 0b11:
-        return 0
-    return last_two_bits
+def interpret(i: int) -> tuple[int, int, int]:
+    ret = (i & 1, (i >> 1) & 1, (i >> 2) & 1)
+    return ret
 
 
 def create_qnn():
@@ -60,8 +57,10 @@ def create_qnn():
         input_params=fm.parameters,
         weight_params=ansatz.parameters,
         interpret=interpret,
-        output_shape=3,
+        # output_shape=(2, 2, 2),
+        sampling=100,
         quantum_instance=qi,
+        input_gradients=True,
     )
 
     return qnn
@@ -74,7 +73,12 @@ class QNN(nn.Module):
 
     def forward(self, x):
         x = self.qnn.forward(x)
+        x = x.sum(dim=0)
+        x = F.softmax(x, dim=-1)
         return x
+
+
+QNN()(x[0])
 
 
 # %%
