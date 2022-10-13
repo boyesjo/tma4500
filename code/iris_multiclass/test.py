@@ -36,11 +36,16 @@ def load_data() -> tuple[Tensor, Tensor]:
 x, y = load_data()
 
 
-def create_qnn():
-    backend = Aer.get_backend("aer_simulator")
-    shots = 1024
+def interpret(i: int) -> int:
+    # return 0 if last two bits are 00, 1 if 01, 2 if 10, 0 if 11
+    last_two_bits = i & 0b11
+    if last_two_bits == 0b11:
+        return 0
+    return last_two_bits
 
-    qi = QuantumInstance(backend=backend, shots=shots)
+
+def create_qnn():
+    qi = QuantumInstance(backend=Aer.get_backend("aer_simulator"))
 
     fm = ZZFeatureMap(feature_dimension=NUM_QUBITS, reps=2)
 
@@ -54,7 +59,7 @@ def create_qnn():
         qc,
         input_params=fm.parameters,
         weight_params=ansatz.parameters,
-        interpret=lambda x: x % 3,
+        interpret=interpret,
         output_shape=3,
         quantum_instance=qi,
     )
@@ -144,7 +149,7 @@ for i in range(k):
     )
 
     test_list[i] = train(
-        NN(),
+        QNN(),
         x[train_idx],
         y[train_idx],
         x[test_idx],
