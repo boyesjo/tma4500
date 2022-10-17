@@ -634,10 +634,11 @@ In total, the network had 154 parameters.
 
 The QCNN was implemented using the PennyLane framework and trained with the Adam optimiser with a learning rate of 0.01.
 With the PennyLane implementation, there were no problems using gradient based optimisation.
+This prompted the reimplementation of the former QCNN, which was here also trained with the same Adam optimiser.
 The results are shown in \cref{fig:qcnnm_training}.
-The training loss was lower than for the QCNN in \cref{sec:qcnn}, despite the fewer iterations.
-Furthermore, this model achieves a perfect accuracy on both the training and test sets.
-Better performance is to be expected with the higher-order information used in the optimisation and the higher parameter count.
+The training loss was lower than for the QCNN in \cref{sec:qcnn}, despite the fewer iterations, showing expected advantages of using gradient based optimisation.
+Furthermore, the new model with intermediate measurements achieves a perfect accuracy on both the training and test sets in only 10 iterations.
+Looking at the loss curves, it is clear that the new model converges much faster than the old one.
 
 \begin{figure}
     \centering
@@ -652,8 +653,14 @@ Better performance is to be expected with the higher-order information used in t
                     % legend pos=north west,
                     % legend style={at={(0.5,1.03)},anchor=north},
                     grid=major,
+                    legend pos=north east,
                 ]
-                \addplot[mark=none, color=blue] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results.csv};
+                \addplot[mark=none, color=blue] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
+                \addplot[mark=none, color=red] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
+                % \legend{
+                %     New,
+                %     Old,
+                % }
             \end{axis}
         \end{tikzpicture}
         \caption{}
@@ -671,22 +678,30 @@ Better performance is to be expected with the higher-order information used in t
                     % legend style={at={(0.5,1.03)},anchor=north},
                     grid=major,
                     legend pos=south east,
+                    xmax=50,
                 ]
-                \addplot[mark=none, color=blue] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results.csv};
-                \addplot[mark=none, color=blue, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results.csv};
-                \legend{
-                    Training,
-                    Test,
-                }
+                \addplot[mark=none, color=blue] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
+                \addplot[mark=none, color=blue, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
+                \addplot[mark=none, color=red] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
+                \addplot[mark=none, color=red, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
+                % \legend{
+                %     New training,
+                %     New test,
+                %     Old training,
+                %     Old test,
+                % }
             \end{axis}
         \end{tikzpicture}
         \caption{}
         \label{fig:qcnnm_acc}
     \end{subfigure}
     \caption{
-        Training of the QCNN with intermediate measurements.
+        Training of the QCNNs.
+        Blue lines refer to the network with intermediate measurements, while the red are for the network without.
         (a) loss (mean square error) during training.
         (b) accuracy on the training and test sets.
+        Solid lines are for the training set, dashed lines for the test set.
+        (Note the different range of the $x$ axis.)
     }
     \label{fig:qcnnm_training}
 \end{figure}
