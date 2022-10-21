@@ -422,21 +422,95 @@ The task of the QCNN was to classify the images as either vertical or horizontal
 \end{figure}
 
 
-First, data is encoded using Qiskit's ZFeatureMap; each of the eight pixels of the image is mapped to a qubit through two repetitions of the Hadamard gate and Z-rotations parametrised by the pixel value being applied, in circuit notation:
+First, data is encoded using two repetitions of $Z$ angle encoding, implemented in Qiskit as the \texttt{ZFeatureMap}.
+Each of the eight pixels of the image is mapped to a qubit through two repetitions of the Hadamard gate and Z-rotations parametrised by the pixel value being applied, in circuit notation:
 
-\begin{center}
+\begin{equation}
     \begin{quantikz}
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z(x_1)} & \gate{H} & \gate{R_Z(x_1)}  \\
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z(x_2)} & \gate{H} & \gate{R_Z(x_2)}  \\
         \lstick{\vdots} \\
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z(x_n)} & \gate{H} & \gate{R_Z(x_n)}  \\
     \end{quantikz}
-\end{center}
+\end{equation}
 
 
 
 The convolution layers act with pairwise parametrised rotations of neighbouring qubits, also wrapping around, entangling the first and last qubits through various CNOT gates and both parametrised and fixed Z and Y rotations.
+Effectively, each consecutive pair of qubits were entangled by
+\begin{equation}
+    \begin{quantikz}
+        &
+        \qw
+        &
+        \targ{}
+        &
+        \gate{R_Z(\theta_{0})}
+        &
+        \ctrl{1}
+        &
+        \qw
+        &
+        \targ{}
+        &
+        \gate{R_Z(\pi/2)}
+        &
+        \qw
+        \\
+        &
+        \gate{R_Z(-\pi/2)}
+        &
+        \ctrl{-1}
+        &
+        \gate{R_Y(\theta_{1})}
+        &
+        \targ{}
+        &
+        \gate{R_Y(\theta_{3})}
+        &
+        \ctrl{-1}
+        &
+        \qw
+        &
+        \qw
+    \end{quantikz}
+\end{equation}
+giving $3n$ parameters for each convolution layer of $n$ qubits.
+
+
 Thereafter, pooling layers halve the active qubit counts by parametrised rotations and CNOT gates.
+This is done by acting on the first and fifth, second and sixth et cetera with the following circuit:
+\begin{equation}
+    \begin{quantikz}
+        &
+        \qw
+        &
+        \targ{}
+        &
+        \gate{R_Z(\theta_{0})}
+        &
+        \ctrl{1}
+        &
+        \qw
+        &
+        \qw
+        \\
+        &
+        \gate{R_Z(-\pi/2)}
+        &
+        \ctrl{-1}
+        &
+        \gate{R_Y(\theta_{1})}
+        &
+        \targ{}
+        &
+        \gate{R_Y(\theta_{3})}
+        &
+        \qw
+    \end{quantikz}
+\end{equation}
+giving $3n/2$ parameters for each pooling layer of $n$ qubits.
+
 For the final layer, the sole remaining qubit is measured, and the result is interpreted as the prediction.
 In total, the circuit appears as
 
@@ -701,7 +775,7 @@ Looking at the loss curves, it is clear that the new model converges much faster
         (a) loss (mean square error) during training.
         (b) accuracy on the training and test sets.
         Solid lines are for the training set, dashed lines for the test set.
-        (Note the different range of the $x$ axis.)
+        (Note the different ranges of the $x$-axes.)
     }
     \label{fig:qcnnm_training}
 \end{figure}
