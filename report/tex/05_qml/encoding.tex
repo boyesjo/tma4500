@@ -1,0 +1,124 @@
+\section{Data encoding}
+\label{sec:data_encoding}
+In order for quantum computers to use classical data, it must first be encoded in a way that is compatible with the quantum hardware.
+How this is done has major implications on both the computational performance and the model expressibility.
+While naive techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance.
+The four methods that will be discussed in this section are summarised in \cref{tab:data_encoding}.
+
+\begin{table}
+    \centering
+    \renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{l|c|c|c}
+
+                                    & Qubits needed           & Circuit depth       & Hard to simulate classically    \\
+        \hline
+        Basis encoding              & $b(N)$                  & $\mathcal{O}(b(N))$ & No                              \\
+        Amplitude encoding          & $\lceil\log_2{N}\rceil$ & $\mathcal{O}(N)$    & Yes                             \\
+        Angle encoding              & $N$                     & $\mathcal{O}(N)$    & No                              \\
+        Second order angle encoding & $N$                     & $\mathcal{O}(N^2)$  & Yes\tablefootnote{Conjectured.}
+    \end{tabular}
+    \caption{
+        Properties of different data encodings for an $N$-dimensional data set of $M$ data points.
+        $b(N)>N$ is the number of bits needed to represent an $N$-dimensional data point.
+    }
+    \label{tab:data_encoding}
+\end{table}
+
+
+\subsection{Basis encoding}
+The perhaps simplest way to encode data is to use the computational basis states of the qubits.
+This is done in much the way that classical computers use binary numbers.
+For example, some data $x$ can be expressed as a bit-string $x = \{x_1, x_2, \dots, x_n\}$, where each $x_i$ is either 0 or 1, where any continuous variables are encoded as floating point numbers.
+For multidimensional data, the bit-strings are simply concatenated.
+
+If for instance the data point $010101$ is to be encoded in a quantum computer, it is simply mapped to the computational basis state $\ket{010101}$.
+This allows for multiple data points to be encoded in parallel as
+\begin{equation}
+    \ket{\mathcal{D}} = \frac{1}{\sqrt M} \sum_{m=1}^M \ket{\bm{x}^{(m)}},
+\end{equation}
+where $\mathcal{D}$ is the data set, $M$ the total number of data points and $\bm{x}^{(m)}$ the $m$-th binarised data point.
+This is a simple encoding and has some significant disadvantages.
+There must be at least as many qubits as there are bits in the binarised data.
+For $N$ bits, there are $2^N$ possible states, but at most $M$ are used, which means that the embedding will be sparse.
+This means that the computational resources required to encode the data will in some sense wasted, and that the quantum computer will not be able to exploit the full power of the quantum hardware.
+To utilise the entire Hilbert space, amplitude encoding is better suited.
+
+\subsection{Amplitude encoding}
+A more efficient way to encode data is to use amplitude encoding, exploiting the exponentially large Hilbert space of quantum computers.
+This is done by mapping the bits in the bit-string to individual qubits, but to individual amplitudes in the exponentially large Hilbert space.
+Mathematically, for some $N$-dimensional data point $\bm{x}$, this reads
+\begin{equation}
+    \ket{\psi(\bm{x})} = \sum_{i=1}^{N} x_i \ket{i},
+\end{equation}
+where $x_i$ is the $i$th component of the data point and $\ket{i}$ is the $i$th computational basis state.
+This has the advantage of being able to encode any numeric type natively, and perhaps more importantly, only needing logarithmically many qubits.
+For $N$-dimensional data points, only $\lceil \log_2 N \rceil$ qubits are needed.
+This is a significant improvement over the basis encoding, which requires $N$ qubits (or more if integers and floats are to be binarised).
+
+An insignificant drawback is that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant.
+Also, some padding may be needed if the number of qubits is not a power of two.
+
+Furthermore, amplitude encoding can easily be extended to cover the entire dataset.
+This is done by concatenating the data points, and then normalising the resulting state at the low cost of a single additional bit.
+Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
+\begin{equation}
+    \ket{\mathcal{D}} = \sum_{m=1}^M \sum_{i=1}^{N} x_i^{(m)} \ket{i} \ket{m},
+\end{equation}
+where $x_i^{(m)}$ is the $i$-th component of the $m$-th data point.
+For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.
+
+The main drawback of amplitude encoding is the practical difficulties of preparing such states.
+Any state of the form
+\begin{equation}
+    \ket{\psi} = \sum_{i} a_i \ket{i}
+\end{equation}
+must be efficiently and correctly prepared, which is not trivial.
+Unless some very specific assumptions are made, this is not possible in polynomial time (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{textbook}.
+In general, for classical data, circuits must be linearly deep in the size of the data and ergo exponentially deep in the amount of qubits, which makes it beyond the reach of NISQ hardware.
+
+\subsection{Angle encoding}
+A third option is angle encoding.
+Here, the potentially continuous components of the data are mapped to rotations of the qubits.
+For the rotations to be meaningful angles and not loop around, the data needs be normalised.
+An $N$-dimensional data point $\bm{x}$ is then encoded as
+\begin{equation}
+    \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_X(x) \ket{0},
+\end{equation}
+\begin{equation}
+    \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_Y(x) \ket{0}
+\end{equation}
+or
+\begin{equation}
+    \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_Z(x) H \ket{0},
+\end{equation}
+depending on which rotation is used.
+For Z-rotations, a Hadamard gate is needed for the operation to do something.
+$N$ qubits are still required, but with native support for continuous variables, angle encoding can be more efficient than basis encoding.
+A constant number of gates are needed to prepare the state, which is a significant advantage over amplitude encoding.
+Still, being a product state, it offers no inherent quantum advantage.
+
+
+\subsection{Second order angle encoding}
+\label{sec:second_order_angle_encoding}
+\textcite{havlicek2018} propose a second-order angle encoding, which they conjecture to be hard to simulate classically.
+First, angles are encoded as above, but then the qubits are entangled and rotated further based on second order terms.
+In circuit notation, such an encoding with Z-rotations reads
+\begin{equation}
+    \begin{quantikz}
+        \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^1} & \ctrl{1} & \qw & \ctrl{1} & \ctrl{2} & \qw & \ctrl{2} & \qw & \qw & \qw & \qw & \dots \\
+        \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^2} & \octrl{-1} & \gate{R_Z^{1,2}} & \octrl{-1} & \qw & \qw & \qw & \ctrl{1} & \qw & \ctrl{1} & \qw & \dots \\
+        \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^3} & \qw & \qw &  \qw &  \octrl{-2} & \gate{R_Z^{1,3}} & \octrl{-2} & \octrl{-1} & \gate{R_Z^{2,3}} & \octrl{-1} & \qw & \dots \\
+        \lstick{\vdots} \\
+        \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^N} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \dots
+    \end{quantikz}
+\end{equation}
+where $R_Z^i = R_Z(x_i)$ and $R_Z^{i,j} = R_Z((\pi-x_i)(\pi-x_j))$ and with the entanglements and second-order rotations being applied pairwise for all $N$ qubits.
+This increases the circuit depth to order $N^2$ and full connectivity is needed.
+Nonetheless, it may be feasible for data of moderate dimensionality on NISQ hardware, and were it indeed classically hard to simulate, it could provide quantum advantage.
+
+\subsection{Repeats}
+The expressive power of models heavily rely on the encoding strategy.
+For instance, a single qubit rotation only allows the model to learn sine functions, where the frequency is determined by the scaling of the data.
+Generally, quantum models will learn periodic functions, and thus Fourier analysis is a useful tool.
+\textcite{schuld2021} study the implications of this, and they show that simply repeating basic encoding blocks allows for learning of more frequencies and thus more complex functions.
+Asymptotically, such repeats lets a quantum model learn arbitrary functions.

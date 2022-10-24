@@ -1,0 +1,26 @@
+\section{Variational quantum algorithms}
+\label{sec:vqa}
+Variational quantum algorithms (VQAs) are envisioned as the most likely candidate for quantum advantage to be achieved.
+By optimising a set of parameters that describe the quantum circuit, classical optimisation techniques are applicable, and only using the quantum hardware for what can be interpreted as function calls, limits the circuit depths needed.
+Running the same circuit many times with slightly different parameters and inputs in a classical-quantum-hybrid fashion, rather than a complete quantum implementation, means that the quantum operations can be simple enough for the noise and decoherence to be manageable.
+
+Generally, VQAs start with defining a cost function, depending on some input data (states) and the parametrised circuit, to be minimised with respect to the parameters of the quantum circuit.
+For example, the cost function for the variational quantum eigensolver (VQE) is the expectation value of some Hamiltonian, which is the energy of a system.
+The cost function should be meaningful in the sense that the minimum coincides with the optimal solution to the problem, and that lower values generally implies better solutions.
+Additionally, the cost function should be complicated enough to warrant quantum computation by not being easily calculated on classical hardware, while still having few enough parameters to be efficiently optimised.
+
+The optimisation of the cost function is often done with gradient descent methods.
+To evaluate the gradient of the quantum circuit with respect to the parameters, the very convenient parameter shift rule is often used.
+Though appearing almost as a finite difference scheme, relying on evaluating the circuit with slightly shifted parameters, it is indeed an exact formula.
+Furthermore, it may be used recursively to evaluate higher order derivatives, which allows usage of more advanced optimisation methods like the Newton method that require the Hessian.
+
+VQA's applications are numerous.
+A typical example is finding the ground state of a Hamiltonian for a molecule.
+Such problems are exponential in the particle count, and thus intractable on classical hardware for larger molecules, while the problem of evaluating the Hamiltonian on quantum hardware is typically polynomial.
+VQAs are also well suited for general mathematical problems and optimisation, with another common example being QAOA for the max-cut problem.
+
+Still, there are many difficulties when applying VQAs.
+Exponentially vanishing gradients, known as barren plateaus, are a common occurrence, making the optimisation futile.
+The choosing of the ansatz determines the performance and feasibility of the algorithms, and there are many strategies and options.
+Some rely on exploiting the specific quantum hardware's properties, while other use the specifics of the problem at hand.
+Finally, the inherent noise and errors on near-term hardware will still be a problem and limit circuit depths.

@@ -1,0 +1,77 @@
+\section{Quantum neural networks}
+Quantum neural networks (QNNs) are simply an abstraction of parametrised quantum circuits with some sort of data encoding.
+As classical artificial neural networks have made classical machine learning into a powerful tool, QNNs are envisioned as a quantum counterpart, inheriting some classical theory, nomenclature and perhaps unfounded hype.
+The main goal of QNNs is to do what classical NNs do, but with some quantum advantage, be it in terms of generalisability, training required or something else.
+
+The structure of most quantum neural networks follow classical feed-forward networks.
+\Cref{fig:qnn} shows the general circuit layout.
+In the first step or layer, data is encoded into the qubits, typically using a method discussed in \cref{sec:data_encoding}.
+Next, the data is passed through a sequence of parametrised quantum gates which often can be interpreted as layers.
+Lastly, an output is produced, which is typically a measurement of some observable.
+Usually, the observable is a combination of Pauli operators on every qubit.
+Thence, a cost function can be evaluated.
+Often, methods like parameter-shift allows for computation of gradients, which makes it possible to train the network using classical methods.
+
+\begin{figure}
+    \centering
+    \begin{quantikz}
+        \lstick{$\ket{0}$} &
+        \gate[wires=4, nwires=3]{\text{Encoding}(\bm{x})} &
+        \gate[wires=4, nwires=3]{U_1(\bm{\theta})}
+        \gategroup[
+            wires=4,
+            steps=3,
+            style={dashed, rounded corners, inner sep=2pt},
+            label style={label position=below, anchor=north, yshift=-0.2cm}
+        ]{Variational circuit $U(\bm{\theta})$} &
+        \ \ldots\ \qw &
+        \gate[wires=4, nwires=3]{U_n(\bm{\theta})} &
+        \meter{}
+        \\
+        \lstick{$\ket{0}$} & & & \ \ldots\ \qw & & \meter{}
+        \\
+        \lstick{\vdots} & & & & &
+        \\
+        \lstick{$\ket{0}$} & & & \ \ldots\ \qw & & \meter{}
+    \end{quantikz}
+    \caption{
+        The structure of a quantum neural network.
+        First, the data $\bm{x}$ is encoded into a state $\ket{\psi(\bm{x})}$ using some encoding strategy.
+        Then, the state is transformed by a parametrised quantum circuit $U(\theta)$.
+        This variational circuit can often be decomposed into a sequence of gates $U_1,\dots, U_n$, making the QNN structure more akin to the layered classical neural networks.
+        These gates or layers do not need to use all qubits, but can be restricted to a subset, mimicking the classical concept of differently sized hidden layers.
+        Finally, measurements are made and used to calculate the model output.
+    }
+    \label{fig:qnn}
+\end{figure}
+
+
+\subsection{Architectures and their applications}
+\subsubsection{Quantum convolutional neural networks}
+Originally introduced by \textcite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before the output is made.
+In the quantum convolutional layers, neighbouring qubits are entangled with some parametrised gates.
+After that, pooling layers halve the active qubit count by yet a parametrised gate.
+When pooling, the qubits to be discarded could be measured and used to determine the operations on the still active qubits.
+Otherwise, the unused qubits are simply ignored.
+After several iterations, a gate can be employed on the remaining qubits, analogous to a fully connected layer in classical CNNs, before the final measurement and output.
+
+Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count is only of order logarithm of the network depth, making them easier to train than dense networks of similar input size.
+In \cite{cong2019}, QCNNs were shown to be able to classify topological phases of matter, and since then, it has been shown that they have inherited they classical counterparts' ability to classify images \cite{oh2020}.
+They have shown desirable properties with regard to avoiding barren plateaus \cite{pesah2021}, which could be essential in training at for problems of interesting size.
+
+\subsubsection{Quantum generative adversarial networks}
+Quantum generative models have been shown to potentially have an exponential advantage over their peers \cite{gao2018}.
+Due to the inherent probabilistic nature of quantum machines, it should not be surprising that they more naturally learn difficult distributions than classical computers do.
+For instance, real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images \cite{huang2021}.
+
+
+\subsubsection{Hybrid quantum-classical neural networks}
+Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure.
+Because parametrised quantum circuits are differentiable, they can easily be handled using the chain rule when back propagating a hybrid model.
+\textcite{killoran2019} describe and test several such models.
+They note that for the NISQ era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial.
+As quantum hardware develops, they can take over more and more of the hybrid models.
+
+
+More recently, \textcite{zeng2022} have explored using a hybrid model to multi-class classification on real world data sets using a CNN-inspired structure.
+There it is shown that the hybrid model outperforms a classical CNN of similar parameter size.

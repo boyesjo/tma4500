@@ -1,0 +1,18 @@
+\section{Limitations of NISQ hardware}
+Quantum hardware have been physically realised and even outperforms classical computers in very contrived situations, but the hardware is still very limited.
+The hardware is limited in the number of qubits, the connectivity between the qubits, and the noise and decoherence of the qubits.
+It is believed that quantum hardware will continue to improve and eventually perform demanding algorithms like Shor's for large numbers.
+Still, the era dubbed NISQ (Noisy Intermediate-Scale Quantum) is the first step, and to make use of the hardware, algorithms must take these limitations into consideration.
+
+Noise and decoherence severely limits how large circuits can be run on the hardware.
+Decoherence refers to the fact that the qubits are not isolated from the environment, and may be ruined by the environment, e.g., electrical noise from the control electronics.
+Furthermore, with the continuous nature of quantum states, minor errors can compound.
+If for instance a qubit is to be rotated many times, a small error in the rotation may cause the qubit to be rotated by a large angle.
+Because of this, NISQ algorithms must be shallow, meaning that the amount of gates applied before measurement is small.
+
+Another limiting factor is the amount of qubits.
+Current hardware has around 10-100 qubits, which though still may be enough to express states too large to be expressed on classical computers, is not enough to perform the most demanding algorithms.
+With more qubits, error correction could be used to mitigate the effects of noise and decoherence, but this would require many more qubits than are currently available.
+Another current limitation is the connectivity between the qubits.
+Not all qubits are directly linked, which means that applying a multi-qubit gate may require intermediate swapping of qubits.
+This increases circuit depth which in turn increases the error rate.
