@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -32,9 +33,25 @@ class NN(nn.Module):
         return x
 
 
+class LogReg(nn.Module):
+    def __init__(self, size=None):
+        super().__init__()
+        if size is None:
+            size = 4
+
+        self.size = size
+        self.fc1 = nn.Linear(self.size, 1, bias=True).double()
+
+    def forward(self, x):
+        x = self.fc1(x)
+        x = 1 / (1 + torch.exp(-x))
+        x = torch.cat((1 - x, x), dim=-1)
+        return x
+
+
 if __name__ == "__main__":
     from load_data import load_data
 
     x, y = load_data()
-    model = NN()
+    model = LogReg()
     print(model(x))
