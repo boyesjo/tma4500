@@ -479,10 +479,10 @@ Looking at the loss curves, it is clear that the new model converges much faster
                 ]
                 \addplot[mark=none, color=blue] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
                 \addplot[mark=none, color=red] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
-                % \legend{
-                %     New,
-                %     Old,
-                % }
+                \legend{
+                    New,
+                    Old
+                }
             \end{axis}
         \end{tikzpicture}
         \caption{}
@@ -500,18 +500,18 @@ Looking at the loss curves, it is clear that the new model converges much faster
                     % legend style={at={(0.5,1.03)},anchor=north},
                     grid=major,
                     legend pos=south east,
-                    xmax=50,
+                    xmax=35,
                 ]
                 \addplot[mark=none, color=blue] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
                 \addplot[mark=none, color=blue, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
                 \addplot[mark=none, color=red] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
                 \addplot[mark=none, color=red, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
-                % \legend{
-                %     New training,
-                %     New test,
-                %     Old training,
-                %     Old test,
-                % }
+                \legend{
+                    New training,
+                    New test,
+                    Old training,
+                    Old test,
+                }
             \end{axis}
         \end{tikzpicture}
         \caption{}
