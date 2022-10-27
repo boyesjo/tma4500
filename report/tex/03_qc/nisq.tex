@@ -11,8 +11,8 @@ If for instance a qubit is to be rotated many times, a small error in the rotati
 Because of this, NISQ algorithms must be shallow, meaning that the amount of gates applied before measurement is small.
 
 Another limiting factor is the amount of qubits.
-Current hardware has around 10-100 qubits, which though still may be enough to express states too large to be expressed on classical computers, is not enough to perform the most demanding algorithms.
-With more qubits, error correction could be used to mitigate the effects of noise and decoherence, but this would require many more qubits than are currently available.
+Current hardware has around 10 to 100 qubits, which though still may be enough to express states too large to be expressed on classical computers, is not enough to perform the most demanding algorithms.
+With more qubits, error correction could be used to mitigate the effects of noise and decoherence, but this would require many more qubits than are currently available; recent estimates require millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
 Another current limitation is the connectivity between the qubits.
 Not all qubits are directly linked, which means that applying a multi-qubit gate may require intermediate swapping of qubits.
 This increases circuit depth which in turn increases the error rate.

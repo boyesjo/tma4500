@@ -22,7 +22,9 @@ There can be more or fewer nodes in each layer, and as many or few hidden layers
     \centering
     \includegraphics[width=0.8\linewidth, page=4]{tex/02_ml/neural_networks.pdf}
     \caption{
-        A dense feed-forward neural network with three hidden layers, each with five nodes.
+        Typical structure of a dense feed-forward neural network.
+        Here it has three hidden layers of constant size $m$, but the number of layers and the size of each layer can be chosen arbitrarily.
+        Density means that each node in one layer is connected to all nodes in the next layer, while being feed-forward means that the connections are unidirectional.
         From \cite{nn_figs}.
     }
     \label{fig:nn}
@@ -63,6 +65,8 @@ A greatly simplified CNN is shown in \cref{fig:cnn}.
     \includegraphics[width=0.8\linewidth, page=7]{tex/02_ml/neural_networks.pdf}
     \caption{
         The basic structure of a convolutional neural network.
+        Data is input before conventional layers are applied, in which perceptrons are only connected to small regions of the previous layer.
+        After sufficient dimensionality reduction, regular dense layers can be used.
         From \cite{nn_figs}.
     }
     \label{fig:cnn}

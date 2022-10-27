@@ -119,7 +119,7 @@ The mean accuracy over the 10 folds was used for the final performance metric, s
                 width=0.8\textwidth,
                 height=0.5\textwidth,
                 xlabel={Iteration},
-                ylabel={Out of fold accuracy},
+                ylabel={Mean out-of-fold accuracy},
                 grid = major,
                 legend pos=south east,
                 legend cell align={left},
@@ -135,9 +135,10 @@ The mean accuracy over the 10 folds was used for the final performance metric, s
         \end{axis}
     \end{tikzpicture}
     \caption{
-        Mean accuracy during training for the iris dataset using 10-fold cross validation.
+        Mean accuracies during training for the iris dataset.
+        Ten-fold cross-validation was used, with the mean out-of-fold accuracy being used as the final performance metric.
         All models have 8 parameters and are trained using the Adam optimiser with a learning rate of 0.1, using cross-entropy as the loss function.
-        Due to the computational cost, the noisy (simulated IBM Montreal backend) QNN was only trained for 10 epochs.
+        Due to the computational cost, the noisy (simulated IBM Montreal backend) QNN was only trained for ten epochs.
     }
     \label{fig:iris_training}
 \end{figure}
@@ -356,7 +357,7 @@ It seems that the noiseless QCNN is overfitting to the training data, while the 
         \label{fig:qcnn_acc}
     \end{subfigure}
     \caption{
-        Training of the QCNN.
+        Training of the basic QCNN.
         The red curves are for the noisy model (modelled after IBM's Montreal hardware), while the blue curves are for the exact model.
         The dashed curves are for the test set.
         (a) loss (mean square error) during training.
@@ -525,7 +526,7 @@ However, by extending the model without mid-circuit measurements to have a more 
         \label{fig:qcnnm_acc}
     \end{subfigure}
     \caption{
-        Training of the QCNNs.
+        Training of QCNNs with and without intermediate measurements.
         With intermediate refers to the QCNN with intermediate measurements of \cite{pesah2021}.
         Without refers to the QCNN without intermediate measurements from \cref{sec:qcnn}, while without extended is the same with a more expressive convolutional layer.
         (a) loss (mean square error) during training.

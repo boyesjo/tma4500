@@ -14,7 +14,7 @@ To evaluate the gradient of the quantum circuit with respect to the parameters, 
 Though appearing almost as a finite difference scheme, relying on evaluating the circuit with slightly shifted parameters, it is indeed an exact formula.
 Furthermore, it may be used recursively to evaluate higher order derivatives, which allows usage of more advanced optimisation methods like the Newton method that require the Hessian.
 
-VQA's applications are numerous.
+Applications of VQAs are numerous.
 A typical example is finding the ground state of a Hamiltonian for a molecule.
 Such problems are exponential in the particle count, and thus intractable on classical hardware for larger molecules, while the problem of evaluating the Hamiltonian on quantum hardware is typically polynomial.
 VQAs are also well suited for general mathematical problems and optimisation, with another common example being QAOA for the max-cut problem.

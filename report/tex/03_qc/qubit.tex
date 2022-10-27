@@ -34,9 +34,10 @@ There, the state $\ket{0}$ is typically thought of as the north pole, and $\ket{
     \def\svgwidth{0.4\textwidth}
     \input{figs/bloch/bloch_sphere.tex}
     \caption{
-        The Bloch sphere in which a qubit state is represented by a point.
+        The Bloch sphere.
+        On it, the state of a single qubit state is represented by a point.
         The state $\ket{0}$ is the north pole, and $\ket{1}$ is the south pole.
-        The latitudinal angle $\theta$ determines the probability of measuring the qubit in the state $\ket{0}$, while the longitudinal angle $\phi$ corresponds to the complex phase.
+        The latitudinal angle $\theta$ determines the probability of measuring the qubit in the state $\ket{0}$, while the longitudinal angle $\phi$ corresponds to the complex phase between the two basis states.
         From \cite{wikipedia_bloch}.
     }
     \label{fig:bloch}
@@ -67,3 +68,4 @@ What makes this so powerful is that the state of a multi-qubit system can be any
 \end{equation}
 which means that with $n$ qubits, the system can be in any superposition of the $2^n$ basis states.
 Operating on several qubits then, one can do linear algebra in an exponentially large space.
+This is the origin of the exponential speed-up of quantum computers.
