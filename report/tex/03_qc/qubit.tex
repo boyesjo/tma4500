@@ -1,7 +1,7 @@
 
 \section{The qubit}
 The quantum bit, the qubit, is the building block of quantum computing.
-Like the classical binary digit it can be either 0 or 1.
+Like the classical binary digit, it can be either 0 or 1.
 But being quantum, these are quantum states, $\ket{0}$ and $\ket{1}$, and the qubit can be in any superposition of these states.
 The state of the qubit lies in a two-dimensional Hilbert space, and the states $\ket{0}$ and $\ket{1}$ are basis vectors, known as the computational basis states.
 Thus, the state of a qubit can be expressed as
@@ -10,22 +10,22 @@ Thus, the state of a qubit can be expressed as
     \label{eq:qubit}
 \end{equation}
 where $\alpha$ and $\beta$ are any numbers, even complex ones.
-The only requirement is that the state is normalised, i.e., $\vert\alpha\vert^2 + \vert\beta\vert^2 = 1$.
+The only requirement is that the state is normalised, id est $\vert\alpha\vert^2 + \vert\beta\vert^2 = 1$.
 
 Normalisation is required due to the Born rule, as the absolute square of the coefficients is the probability of measuring the qubit in the corresponding basis state.
 It is one of nature's great mysteries what exactly a measurement is, but in the quantum computational setting, it can be thought of as taking a random sample with the probabilities given by the coefficients, which can be done systematically.
 
 \subsection{The Bloch sphere}
 A useful tool for visualising the state of a qubit is the Bloch sphere.
-First, it should be noted for states on the form \cref{eq:qubit} are not unique, only the relative complex phase matters.
-There is a global phase which is not measurable, and thus not relevant for the state of the qubit.
+First, it should be noted that states on the form \cref{eq:qubit} are not unique, only the relative complex phase matters.
+There is a global phase which is not measurable, and thus not relevant to the state of the qubit.
 Therefore, taking also the normalisation requirement into account, the state of the qubit can be expressed as
 \begin{equation}
     \ket{\psi} = \cos\left(\frac{\theta}{2}\right) \ket{0} + e^{i\phi} \sin\left(\frac{\theta}{2}\right) \ket{1}
     \label{eq:bloch}
 \end{equation}
 where $\theta, \phi \in \mathbb{R}$.
-Interpreting $\theta$ as the polar angle and $\phi$ the azimuthal angle, the state of the qubit can be identified with a point a sphere, the Bloch sphere.
+Interpreting $\theta$ as the polar angle and $\phi$ the azimuthal angle, the state of the qubit can be identified with a point a sphere, known as the Bloch sphere.
 There, the state $\ket{0}$ is typically thought of as the north pole, and $\ket{1}$ as the south pole.
 \Cref{fig:bloch} shows the Bloch sphere with the state of the qubit in \cref{eq:bloch}.
 
@@ -49,7 +49,7 @@ Having multiple qubits allows for the creation of entanglement, which is a key f
 
 With just two qubits, there are four possible states, $\ket{00}, \ket{01}, \ket{10}, \ket{11}$.
 Each of these four have their own probability amplitude, and thus their own probability of being measured.
-A two-qubit system will therefore operate on with four complex numbers.
+A two-qubit system will therefore operate with four complex numbers.
 
 Generally, the state of multiple qubits can be expressed using the tensor product as
 \begin{equation}

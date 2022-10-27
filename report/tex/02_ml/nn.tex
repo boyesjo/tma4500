@@ -7,10 +7,10 @@ Modern hardware is of course paramount, but also backpropagation is crucial.
 Neural networks are trained using gradient methods, and with backpropagation, the gradient can be computed efficiently.
 
 With the great size and complexity is interpretability sacrificed.
-The models are often black boxes, and it is difficult to understand why they make the predictions they do.
+The models are often black boxes; it is difficult to understand why they make the predictions they do.
 Luckily, there have been some developments, perhaps most notably the universal approximation theorem.
 It states that a neural network with a single hidden layer can approximate any continuous function to arbitrary precision, given enough neurons\footnote{In addition to some requirements regarding the activation function.}.
-This gives some credence to the idea that NNs of other structures could be used to approximate complex functions.
+This gives some credence to the idea that NNs of other structures could be used to approximate intricate functions.
 
 
 \subsection{Types of neural networks}
@@ -24,7 +24,7 @@ There can be more or fewer nodes in each layer, and as many or few hidden layers
     \caption{
         Typical structure of a dense feed-forward neural network.
         Here it has three hidden layers of constant size $m$, but the number of layers and the size of each layer can be chosen arbitrarily.
-        Density means that each node in one layer is connected to all nodes in the next layer, while being feed-forward means that the connections are unidirectional.
+        Being dense means that each node in one layer is connected to all nodes in the next layer, while being feed-forward means that the connections are unidirectional.
         From \cite{nn_figs}.
     }
     \label{fig:nn}
@@ -73,10 +73,10 @@ A greatly simplified CNN is shown in \cref{fig:cnn}.
 \end{figure}
 
 The basic component of the CNN is the convolutional layer.
-In it, a kernel or filter is applied to the input data, which often is a simple as a $3 \times 3$ matrix.
+In it, a kernel or filter is applied to the input data, which often is as simple as a $3 \times 3$ matrix.
 It is applied to only parts of the input, and thus only extracts local properties.
 Typically, pooling layers complement the convolutions by reducing the dimensionality through some simple non-parametrised operation, such as taking the maximum value in a $2 \times 2$ matrix.
 CNNs generally finish with one or more dense layers, which then operate on a significantly reduced number of features.
-The reduction of dimensionality is important, because it reduces the number of parameters in the model and the risk of overfitting.
+The reduction of dimensionality is important because it reduces the number of parameters in the model and the risk of overfitting.
 Furthermore, the convolutional approach forces the model to learn local features.
-This is very beneficial in problems such as image classification, where local features, like edges, are more important than global ones, like the position of the subject.
+This is very beneficial for tasks such as image classification, where local features, like edges, are more important than global ones, like the position of the subject.

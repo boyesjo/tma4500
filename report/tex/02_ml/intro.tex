@@ -1,8 +1,9 @@
 Machine learning lies at the intersection of statistics, computer science and optimisation.
 The central idea is to design an algorithm that uses data to solve a problem, and in so avoid explicitly programming a solution.
-Such algorithms or models can be used for a plethora of tasks, which is mainly divided into three major categories:
+With ever more data available and with ever more powerful computers, machine learning has become a powerful tool in many fields, solving problems previously thought intractable.
+Such algorithms or models can be used for a plethora of tasks, which are mainly divided into three major categories:
 \begin{itemize}
-    \item \textbf{Supervised learning}: Given data and labels, find the relationship and try to be able to assign correct labels to new data.
+    \item \textbf{Supervised learning}: Given data and labels, find the relationship and try to assign correct labels to new data.
     \item \textbf{Unsupervised learning}: Given data, find some underlying structure, patterns, properties or relationships.
     \item \textbf{Reinforcement learning}: Given some rules (e.g., a game), find a strategy to maximise some reward.
 \end{itemize}
@@ -21,7 +22,7 @@ $
     \}
 $
 of $n$ samples, where $\bm{x}^{(i)}$ is a vector of features and $y^{(i)}$ is the corresponding label, the goal is to find a function $f$ that maps $\bm{x}$ to $y$.
-In statistical terms, supervised learning can be thought of as having samples from a joint distribution $p(\bm{x}, y)$ with the goal of to find a conditional distribution $p(y|\bm{x})$, or at least the expectation thereof.
+In statistical terms, supervised learning can be interpreted as having samples from a joint distribution $p(\bm{x}, y)$ with the goal of finding a conditional distribution $p(y|\bm{x})$, or at least the expectation thereof.
 The labels $y^{(i)}$ are usually assumed to be single-dimensional.
 They may be categorical, in which case the problem is called classification, or continuous, in which case it is called regression.
 
@@ -35,11 +36,12 @@ This simplifies the problem to approximating the function $f(\bm{x})$.
 Namely, find a function $\hat{f}$ such that the predictions $\hat{y}=\hat{f}(\bm{x})$ are good approximations of $y$.
 The loss is a measure of how well the model fits the data.
 In statistics, the (log-) likelihood is often used, while in machine learning, simpler, more naïve functions like mean square error (MSE) are often used.
+% why?
 
 
 \subsection{Parametric models}
 Parametric models are a subclass of supervised learning models that are defined by a finite set of parameters $\bm{\theta}$.
-This means that the model is fully defined by the parameters, and the data is only used to estimate the parameters.
+This means that the model output is fully defined by the parameters, and the data is only used to estimate the parameters.
 
 \subsection{Training}
 Since the model is defined by the parameters, the loss function is a function of the parameters.
@@ -49,7 +51,7 @@ The supervised learning problem with a parametric model is rephrased into a stan
 \end{equation}
 where $L$ is the loss as a function of the parameters and given the data.
 $\bm{\theta}^*$ is then the optimal set of parameters.
-This optimisation usually done using gradient descent methods, which means that the loss function should be differentiable with respect to the parameters.
+This optimisation is usually done using gradient descent methods, which means that the loss function should be differentiable with respect to the parameters.
 
 
 \subsection{Bias-variance trade-off}
@@ -61,7 +63,7 @@ The main goal is of course to generalise, that is to have a model that truly cap
 Intrinsically, with an assumption like that of \cref{eq:ml_model}, there is some uncertainty or noise that is inherent to the data.
 Consequently, one must choose a model that is flexible enough to capture the underlying structure of the data, but not so flexible that it captures the noise.
 When a model is too simple to capture the underlying structure, it is said to have high bias or be underfitted, while a model complex enough to capture the noise is said to have high variance or be overfitted.
-An overfitted model will have a low or zero errors on the data used for training, but may be wildly inaccurate on new data.
+An overfitted model will have small or no errors on the data used for training, but may be wildly inaccurate on new data.
 This is captured in \cref{fig:over_under_fit}.
 
 \begin{figure}
