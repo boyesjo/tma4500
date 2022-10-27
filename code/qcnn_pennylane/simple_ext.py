@@ -1,35 +1,49 @@
-# %%
 import pennylane as qml
-from gen_data import generate_data
 from pennylane import numpy as np
-from pennylane.optimize import AdamOptimizer
 
-CONV_PARAMS = 3
+RG_PARAMS = 3
+CONV_PARAMS = 15
 POOL_PARAMS = 3
 WIRES = 8
-TOTAL_PARAMS = 63
+TOTAL_PARAMS = 231
 
 dev = qml.device("default.qubit", wires=WIRES)
 
 np.random.seed(1337)
 
 
-# %%
-def conv_gate(params, wires):
-    assert len(wires) >= 2
-    assert len(params) == CONV_PARAMS
+def rg_gate(params, wires):
 
-    qml.RZ(-np.pi / 2, wires=wires[1])
+    assert type(wires) == int
+    assert len(params) == RG_PARAMS
+
+    qml.RZ(params[0], wires=wires)
+    qml.RY(params[1], wires=wires)
+    qml.RZ(params[2], wires=wires)
+
+
+def conv_gate(params, wires):
+
+    rg_gate(params[:3], wires=wires[0])
+    rg_gate(params[3:6], wires=wires[1])
+
     qml.CNOT(wires=[wires[1], wires[0]])
-    qml.RZ(params[0], wires=wires[0])
-    qml.RY(params[1], wires=wires[1])
+
+    qml.RZ(params[6], wires=wires[0])
+    qml.RY(params[7], wires=wires[1])
+
     qml.CNOT(wires=[wires[0], wires[1]])
-    qml.RY(params[2], wires=wires[1])
+
+    qml.RY(params[8], wires=wires[1])
+
     qml.CNOT(wires=[wires[1], wires[0]])
-    qml.RZ(np.pi / 2, wires=wires[0])
+
+    rg_gate(params[9:12], wires=wires[0])
+    rg_gate(params[12:15], wires=wires[1])
 
 
 def conv_layer(params, wires):
+
     assert len(wires) >= 2
     assert len(params) == CONV_PARAMS * (len(wires))
 
@@ -79,9 +93,11 @@ def circuit(params, x):
 
     layer_size = WIRES
     gap = 1
+
     high = 0
 
     for _ in range(3):
+
         low, high = high, high + layer_size * CONV_PARAMS
         conv_layer(params[low:high], wires=range(0, WIRES, gap))
 
@@ -92,54 +108,3 @@ def circuit(params, x):
         layer_size //= 2
 
     return qml.expval(qml.PauliZ(4))
-
-
-# # %%
-# init_params = np.random.rand(90)
-# x = np.random.rand(8)
-# circuit(init_params, x)
-
-# # %%
-# x_train, y_train = generate_data(64)
-# x_test, y_test = generate_data(64)
-
-# # %%
-# opt = AdamOptimizer(0.01)
-
-
-# def square_loss(labels, predictions):
-#     loss = 0
-#     for label, prediction in zip(labels, predictions):
-#         loss = loss + (label - prediction) ** 2
-
-#     loss = loss / len(labels)
-#     return loss
-
-
-# def cost(var, features, labels):
-#     preds = [circuit(var, x) for x in features]
-#     return square_loss(labels, preds)
-
-
-# def accuracy(var, features, labels):
-#     preds = [np.sign(circuit(var, x)) for x in features]
-#     return np.mean(preds == labels)
-
-
-# history = []
-
-# params = init_params
-# for i in range(100):
-#     (params, _, _), loss = opt.step_and_cost(cost, params, x_train, y_train)
-#     test_loss = cost(params, x_test, y_test)
-#     history.append(
-#         {
-#             "Loss": float(loss),
-#             "Test loss": float(test_loss),
-#             "Accuracy": float(accuracy(params, x_train, y_train)),
-#             "Test accuracy": float(accuracy(params, x_test, y_test)),
-#         }
-#     )
-#     print(history[-1])
-
-# # %%

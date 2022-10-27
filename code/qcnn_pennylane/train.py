@@ -2,6 +2,7 @@
 import intermediate
 import pandas as pd
 import simple
+import simple_ext
 from gen_data import generate_data
 from pennylane import numpy as np
 from pennylane.optimize import AdamOptimizer
@@ -11,7 +12,7 @@ x_test, y_test = generate_data(64)
 
 
 # %%
-def train(x_train, y_train, circuit, param_count, max_iter=200):
+def train(x_train, y_train, circuit, param_count, max_iter=400):
     def square_loss(labels, predictions):
         loss = 0
         for label, prediction in zip(labels, predictions):
@@ -56,9 +57,8 @@ def train(x_train, y_train, circuit, param_count, max_iter=200):
 # %%
 for circuit, param_count, name in [
     (simple.circuit, simple.TOTAL_PARAMS, "simple"),
+    (simple_ext.circuit, simple_ext.TOTAL_PARAMS, "simple_ext"),
     (intermediate.circuit, intermediate.TOTAL_PARAMS, "intermediate"),
 ]:
     history = train(x_train, y_train, circuit, param_count)
     pd.DataFrame(history).to_csv(f"results_{name}.csv", index=False)
-
-# %%
