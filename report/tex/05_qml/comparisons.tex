@@ -261,7 +261,6 @@ giving $3n/2$ parameters for each pooling layer of $n$ qubits.
 
 For the final layer, the sole remaining qubit is measured, and the result is interpreted as the prediction.
 In total, the circuit appears as
-
 \begin{center}
     \begin{quantikz}
         \lstick[wires=8]{$\ket{0}^{\otimes 8}$} &
@@ -460,7 +459,8 @@ This prompted the reimplementation of the former QCNN, which was here also train
 The results are shown in \cref{fig:qcnnm_training}.
 The training loss was lower than for the QCNN in \cref{sec:qcnn}, despite the fewer iterations, showing expected advantages of using gradient based optimisation.
 Furthermore, the new model with intermediate measurements achieves a perfect accuracy on both the training and test sets in only 10 iterations.
-Looking at the loss curves, it is clear that the new model converges much faster than the old one.
+Looking at the loss curves, the model with intermediate measurements seems only to converge slightly faster than the model without intermediate measurements.
+However, by extending the model without mid-circuit measurements to have a more comparable parameter count of 231, it overtakes the model with intermediate measurements in terms of training loss.
 
 \begin{figure}
     \centering
@@ -476,12 +476,15 @@ Looking at the loss curves, it is clear that the new model converges much faster
                     % legend style={at={(0.5,1.03)},anchor=north},
                     grid=major,
                     legend pos=north east,
+                    ymode=log,
                 ]
                 \addplot[mark=none, color=blue] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
                 \addplot[mark=none, color=red] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
+                \addplot[mark=none, color=green] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_simple_ext.csv};
                 \legend{
-                    New,
-                    Old
+                    With intermediate,
+                    Without,
+                    Without extended
                 }
             \end{axis}
         \end{tikzpicture}
@@ -506,11 +509,15 @@ Looking at the loss curves, it is clear that the new model converges much faster
                 \addplot[mark=none, color=blue, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
                 \addplot[mark=none, color=red] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
                 \addplot[mark=none, color=red, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
+                \addplot[mark=none, color=green] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple_ext.csv};
+                \addplot[mark=none, color=green, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple_ext.csv};
                 \legend{
-                    New training,
-                    New test,
-                    Old training,
-                    Old test,
+                    With intermediate,
+                    , %With intermediate (test),
+                    Without,
+                    , %Without (test),
+                    Without extended,
+                    , %Without extended (test)
                 }
             \end{axis}
         \end{tikzpicture}
@@ -519,11 +526,12 @@ Looking at the loss curves, it is clear that the new model converges much faster
     \end{subfigure}
     \caption{
         Training of the QCNNs.
-        Blue lines refer to the network with intermediate measurements, while the red are for the network without.
+        With intermediate refers to the QCNN with intermediate measurements of \cite{pesah2021}.
+        Without refers to the QCNN without intermediate measurements from \cref{sec:qcnn}, while without extended is the same with a more expressive convolutional layer.
         (a) loss (mean square error) during training.
         (b) accuracy on the training and test sets.
         Solid lines are for the training set, dashed lines for the test set.
-        (Note the different ranges of the $x$-axes.)
+        Note the reduced $x$-axis range; all models achieve perfect accuracy quickly.
     }
     \label{fig:qcnnm_training}
 \end{figure}
