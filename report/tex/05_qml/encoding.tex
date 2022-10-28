@@ -2,11 +2,16 @@
 \label{sec:data_encoding}
 In order for quantum computers to use classical data, it must first be encoded in a way that is compatible with the quantum hardware.
 How this is done has major implications on both the computational performance and the model expressibility.
-While naive techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance.
-The four methods that will be discussed in this section are summarised in \cref{tab:data_encoding}.
+While naïve techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance.
+The four methods that will be discussed in this section are summarised in \Cref{tab:data_encoding}.
 
 \begin{table}
     \centering
+    \caption{
+        Properties of different data encodings.
+        Given $N$-dimensional data set of $M$ data points, qubits needed is a lower bound for qubits required to represent the data, and circuit depth is the number of gates needed for the encoding algorithm.
+        For basis encoding, $b(N)>N$ is the number of bits needed to represent an $N$-dimensional data point.
+    }
     \renewcommand{\arraystretch}{1.5}
     \begin{tabular}{l|c|c|c}
 
@@ -17,11 +22,6 @@ The four methods that will be discussed in this section are summarised in \cref{
         Angle encoding              & $N$                     & $\mathcal{O}(N)$    & No                              \\
         Second order angle encoding & $N$                     & $\mathcal{O}(N^2)$  & Yes\tablefootnote{Conjectured.}
     \end{tabular}
-    \caption{
-        Properties of different data encodings.
-        Given $N$-dimensional data set of $M$ data points, qubits needed is a lower bound for qubits required to represent the data, and circuit depth is the number of gates needed for the encoding algorithm.
-        For basis encoding, $b(N)>N$ is the number of bits needed to represent an $N$-dimensional data point.
-    }
     \label{tab:data_encoding}
 \end{table}
 
@@ -35,7 +35,7 @@ For multidimensional data, the bit-strings are simply concatenated.
 If for instance the data point $010101$ is to be encoded in a quantum computer, it is simply mapped to the computational basis state $\ket{010101}$.
 This allows for multiple data points to be encoded in parallel as
 \begin{equation}
-    \ket{\mathcal{D}} = \frac{1}{\sqrt M} \sum_{m=1}^M \ket{\bm{x}^{(m)}},
+    \ket{\mathcal{D}} = \frac{1}{\sqrt M} \sum_{m=1}^M \ket{\bm{x}^{(m)}}
 \end{equation}
 where $\mathcal{D}$ is the data set, $M$ the total number of data points and $\bm{x}^{(m)}$ the $m$-th binarised data point.
 This is a simple encoding and has some significant disadvantages.
@@ -49,7 +49,7 @@ A more efficient way to encode data is to use amplitude encoding, exploiting the
 This is done by mapping the bits in the bit-string to individual qubits, but to individual amplitudes in the exponentially large Hilbert space.
 Mathematically, for some $N$-dimensional data point $\bm{x}$, this reads
 \begin{equation}
-    \ket{\psi(\bm{x})} = \sum_{i=1}^{N} x_i \ket{i},
+    \ket{\psi(\bm{x})} = \sum_{i=1}^{N} x_i \ket{i}
 \end{equation}
 where $x_i$ is the $i$th component of the data point and $\ket{i}$ is the $i$th computational basis state.
 This has the advantage of being able to encode any numeric type natively, and perhaps more importantly, only needing logarithmically many qubits.
@@ -63,7 +63,7 @@ Furthermore, amplitude encoding can easily be extended to cover the entire datas
 This is done by concatenating the data points, and then normalising the resulting state at the low cost of a single additional bit.
 Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
 \begin{equation}
-    \ket{\mathcal{D}} = \sum_{m=1}^M \sum_{i=1}^{N} x_i^{(m)} \ket{i} \ket{m},
+    \ket{\mathcal{D}} = \sum_{m=1}^M \sum_{i=1}^{N} x_i^{(m)} \ket{i} \ket{m}
 \end{equation}
 where $x_i^{(m)}$ is the $i$-th component of the $m$-th data point.
 For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.

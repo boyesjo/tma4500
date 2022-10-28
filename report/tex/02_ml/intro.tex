@@ -1,12 +1,19 @@
 Machine learning lies at the intersection of statistics, computer science and optimisation.
 The central idea is to design an algorithm that uses data to solve a problem, and in so avoid explicitly programming a solution.
 With ever more data available and with ever more powerful computers, machine learning has become a powerful tool in many fields, solving problems previously thought intractable.
-Such algorithms or models can be used for a plethora of tasks, which are mainly divided into three major categories:
-\begin{itemize}
-    \item \textbf{Supervised learning}: Given data and labels, find the relationship and try to assign correct labels to new data.
-    \item \textbf{Unsupervised learning}: Given data, find some underlying structure, patterns, properties or relationships.
-    \item \textbf{Reinforcement learning}: Given some rules (e.g., a game), find a strategy to maximise some reward.
-\end{itemize}
+Such algorithms or models can be used for a plethora of tasks, which are mainly divided into three main categories:
+\begin{description}
+
+    \item[Supervised learning]
+        Given data and labels, find the relationship and try to assign correct labels to new data.
+
+    \item[Unsupervised learning]
+        Given data, find some underlying structure, patterns, properties or relationships.
+
+    \item[Reinforcement learning]
+        Given a set of rules (such as a game), find a strategy to maximise some reward.
+
+\end{description}
 Only the first thereof will be explicitly considered in this thesis, though much of the theory and results can be extended to the latter two.
 This chapter is hardly a comprehensive introduction to machine learning, but rather a brief overview of the most important concepts and techniques, serving as a reference point for the later endeavours into quantum machine learning.
 
@@ -51,7 +58,7 @@ The supervised learning problem with a parametric model is rephrased into a stan
 \end{equation}
 where $L$ is the loss as a function of the parameters and given the data.
 $\bm{\theta}^*$ is then the optimal set of parameters.
-This optimisation is usually done using gradient descent methods, which means that the loss function should be differentiable with respect to the parameters.
+This optimisation is usually done using gradient descent methods, which means that the loss function needs to be differentiable with respect to the parameters.
 
 
 \subsection{Bias-variance trade-off}
@@ -60,11 +67,11 @@ The former are more likely to overfit the data, while the latter are more likely
 This is known as the bias-variance trade-off.
 The main goal is of course to generalise, that is to have a model that truly captures the underlying properties of the data and subsequently performs well on data that it has not seen before.
 
-Intrinsically, with an assumption like that of \cref{eq:ml_model}, there is some uncertainty or noise that is inherent to the data.
+Intrinsically, with an assumption like that of \Cref{eq:ml_model}, there is some uncertainty or noise that is inherent to the data.
 Consequently, one must choose a model that is flexible enough to capture the underlying structure of the data, but not so flexible that it captures the noise.
 When a model is too simple to capture the underlying structure, it is said to have high bias or be underfitted, while a model complex enough to capture the noise is said to have high variance or be overfitted.
 An overfitted model will have small or no errors on the data used for training, but may be wildly inaccurate on new data.
-This is captured in \cref{fig:over_under_fit}.
+This is captured in \Cref{fig:over_under_fit}.
 
 \begin{figure}
     \centering
