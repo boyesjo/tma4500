@@ -151,6 +151,46 @@ The classical network, on the other hand, requires more iterations to converge a
 In some cases, the model did not converge, only predicting one class, which is why the out-of-fold accuracy was not 100\% for all folds.
 This is in line with the original paper, underlining the potential advantage of quantum neural networks.
 
+Why parity was chosen as output interpretation is not clear, other than being cited as a \enquote{standard in practice}.
+However, it is not the only possible interpretation, and a perhaps more intuitive one would be to use the sign of just one of the qubits.
+Doing so effectively ignores three of the qubits, giving a parameter count of five.
+Five is coincidentally also the parameter choice of a logistic regression scheme, which could be a more natural choice for a classical classification algorithm than the neural network whose architecture appears mostly based on the goal of having eight parameters.
+
+Looking at the testing visualised in \Cref{fig:iris_training_lr} reveals that parity indeed performs better than the sign of a single qubit, though not by much.
+The bigger revelation is the performance of logistic regression, which greatly outperforms the neural network, and while slightly slower to converge than the quantum models, does approach an overall smaller loss value.
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                width=0.8\textwidth,
+                height=0.5\textwidth,
+                xlabel={Iteration},
+                ylabel={Loss (cross-entropy)},
+                grid = major,
+                legend pos=north east,
+                legend cell align={left},
+            ]
+            \addplot[mark=none, color=red] table[x = epoch, y=loss, col sep=comma] {../code/iris/results_5/QNN_parity.csv};
+            \addplot[mark=none, color=blue] table[x = epoch, y=loss, col sep=comma] {../code/iris/results_5/QNN_last.csv};
+            \addplot[mark=none, color=green] table[x = epoch, y=loss, col sep=comma] {../code/iris/results_5/NN.csv};
+            \addplot[mark=none, color=orange] table[x = epoch, y=loss, col sep=comma] {../code/iris/results_5/LogReg.csv};
+            \legend{
+                QNN (parity),
+                QNN (sign),
+                Classical NN,
+                Logistic regression,
+            }
+        \end{axis}
+    \end{tikzpicture}
+    \caption{
+        Cross-entropy loss during training for the iris dataset.
+        The QNN with parity interpretation has eight parameters, while the QNN with sign interpretation has effectively five.
+        The classical neural network has eight and the logistic regression has five parameters.
+    }
+    \label{fig:iris_training_lr}
+\end{figure}
+
 
 \subsection{Quantum convolutional neural networks}
 \label{sec:qcnn}
