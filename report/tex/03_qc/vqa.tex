@@ -8,12 +8,23 @@ This loop of running the circuit, measuring the output to evaluate a cost, optim
 \begin{figure}
     \centering
     \begin{tikzpicture}
-        \node[
+        \tikzstyle{box} = [
         rectangle,
         draw,
-        label=below:{Variational circuit},
-        ] (qc) at (-4, -1) {
-                \begin{quantikz}
+        dashed,
+        rounded corners,
+        outer sep=0.2cm,
+        inner sep=0.2cm,
+        ]
+
+        \node[box, label=below:{Variational circuit}] (qc) at (-4, -1) {
+                \begin{quantikz}[
+                        % manually have to avoid inheriting the nod style
+                        solid,
+                        rounded corners=0,
+                        outer sep=0,
+                        inner sep=0.2cm,
+                    ]
                     \lstick{$\ket{0}$}
                     &
                     \gate[wires=3, nwires=2]{U(\bm{\theta})}
@@ -26,9 +37,9 @@ This loop of running the circuit, measuring the output to evaluate a cost, optim
                     \lstick{$\ket{0}$} & \qw & \meter{}
                 \end{quantikz}
             };
-        \node (cf) at (2, -1) {$\text{Cost}(\bm{\theta})$};
-        \node (opt) at (2, 2) {Classical optimiser};
-        \node (up) at (-4, 2) {Updated $\bm{\theta}$};
+        \node[box] (cf) at (2, -1) {$\text{Cost}(\bm{\theta})$};
+        \node[box] (opt) at (2, 2) {Classical optimiser};
+        \node[box] (up) at (-4, 2) {Updated $\bm{\theta}$};
         \draw[->] (qc) -- (cf);
         \draw[->] (cf) -- (opt);
         \draw[->] (opt) -- (up);
@@ -47,9 +58,15 @@ For example, the cost function for the variational quantum eigensolver (VQE) is 
 The cost function should be meaningful in the sense that the minimum coincides with the optimal solution to the problem, and that lower values generally imply better solutions.
 Additionally, the cost function should be complicated enough to warrant quantum computation by not being easily calculated on classical hardware, while still having few enough parameters to be efficiently optimised.
 
+Important to the success of a VQA is the choice of the quantum circuit.
+The circuit selected is known as the ansatz, and there are a plethora of different ansätze to choose from.
+An example are hardware-efficient ansätze, which, as the name implies, is a general term used for ansätze designed in accord with the hardware properties of a given quantum computer, taking for instance the physical gates available into account and minimising the circuit depth.
+Other ansätze may be problem-specific, like the quantum alternating operator ansatz used for the quantum approximate optimisation algorithm (QAOA) (both confusingly sharing the QAOA acronym), while others are more general and can be used to solve a variety of problems.
+
 The optimisation of the cost function is often done with gradient descent methods.
-To evaluate the gradient of the quantum circuit with respect to the parameters, the very convenient parameter shift rule is often used.
+To evaluate the gradient of the quantum circuit with respect to the parameters, the very convenient parameter shift rule is commonly used.
 Though appearing almost as a finite difference scheme, relying on evaluating the circuit with slightly shifted parameters, it is indeed an exact formula.
+Not having to rely on finite differences is a major advantage, as the effects of small changes in parameters would quickly be drowned out in noise.
 Furthermore, it may be used recursively to evaluate higher order derivatives, which allows the usage of more advanced optimisation methods like the Newton method that requires the Hessian.
 
 Applications of VQAs are numerous.
