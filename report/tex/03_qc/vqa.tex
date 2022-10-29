@@ -9,6 +9,43 @@ For example, the cost function for the variational quantum eigensolver (VQE) is 
 The cost function should be meaningful in the sense that the minimum coincides with the optimal solution to the problem, and that lower values generally imply better solutions.
 Additionally, the cost function should be complicated enough to warrant quantum computation by not being easily calculated on classical hardware, while still having few enough parameters to be efficiently optimised.
 
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \node[
+        rectangle,
+        draw,
+        label=below:{Variational circuit},
+        ] (qc) at (-4, 0) {
+                \begin{quantikz}
+                    \lstick{$\ket{0}$}
+                    &
+                    \gate[wires=3, nwires=2]{U(\bm{\theta})}
+                    &
+                    \meter{}
+                    \rstick[wires=3]{\rotatebox{90}{Measurement}}
+                    \\
+                    \lstick{\vdots} & &
+                    \\
+                    \lstick{$\ket{0}$} & \qw & \meter{}
+                \end{quantikz}
+            };
+        \node (cf) at (0, -2) {$\text{Cost}(\bm{\theta})$};
+        \node (opt) at (3, 0) {Classical optimiser};
+        \node (up) at (0, 2) {Updated $\bm{\theta}$};
+        \draw[->] (qc) -- (cf);
+        \draw[->] (cf) -- (opt);
+        \draw[->] (opt) -- (up);
+        \draw[->] (up) -- (qc);
+    \end{tikzpicture}
+    \caption{
+        The general structure of a VQA.
+        A parametrised quantum circuit is run multiple times on a quantum computer, after which a cost function is calculated based on the measurements.
+        The parameters of the quantum circuit are then updated by a classical optimiser, and the process is repeated.
+    }
+    \label{fig:vqa}
+\end{figure}
+
 The optimisation of the cost function is often done with gradient descent methods.
 To evaluate the gradient of the quantum circuit with respect to the parameters, the very convenient parameter shift rule is often used.
 Though appearing almost as a finite difference scheme, relying on evaluating the circuit with slightly shifted parameters, it is indeed an exact formula.

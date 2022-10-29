@@ -1,4 +1,4 @@
-\section{Operating with qubits}
+\section{Quantum algorithms}
 \subsection{Single-qubit gates}
 To operate on one or more qubits, a unitary operation is applied to the state, where the unitarity is needed for states to remain normalised.
 With the finite number of qubits, these operations can be expressed as matrices.
@@ -60,8 +60,19 @@ Using such intermediate measurements is a way of introducing non-linearities in 
 The operations on qubits are often described using quantum circuits, which are a graphical representation of the operations on the qubits, the quantum algorithms.
 They are read from left to right.
 It is standard procedure to assume all qubits start in the state $\ket{0}$.
-Gates are generally written as boxes with the name of the gate insides.
-An example is the circuit
+Gates are generally written as boxes with the name of the gate inside.
+
+A simple example is the circuit
+\begin{equation}
+    \begin{quantikz}
+        \lstick{$\ket{0}$} & \gate{H} & \qw \\
+        \lstick{$\ket{0}$} & \gate{H} & \qw
+    \end{quantikz}
+\end{equation}
+which prepares the state $\frac{1}{2}(\ket{00} + \ket{01} + \ket{10} + \ket{11})$.
+There is no entanglement, and so the measurement probabilities of the two qubits are independent.
+
+Slightly more interesting is the circuit
 \begin{equation}
     \begin{quantikz}
         \lstick{$\ket{0}$} & \gate{H} & \ctrl{1} & \qw \\
@@ -70,3 +81,19 @@ An example is the circuit
 \end{equation}
 in which the first qubit is put into a superposition using the Hadamard gate before a CNOT gate is applied to the second, controlled on the first.
 This creates the state $\frac{1}{\sqrt{2}}\left(\ket{00} + \ket{11}\right)$.
+The measurement probabilities of the two qubits are now correlated; if the first qubit is measured to be 1, the second will always be 1, and vice versa.
+The probability of measuring the qubits to be different is nil.
+
+\subsection{Quantum supremacy}
+Exponential speed-ups do not come for free.
+Quantum computers do only solve certain problems more efficiently than classical computers, and finding the algorithms to do so is no easy task.
+Shor's algorithm has time complexity $\mathcal{O}((\log N)^2 (\log \log N) (\log \log \log N))$ while the most efficient known classical algorithm has time complexity $\mathcal{O}(\exp{1.9(\log N)^{1/3}(\log \log N)^{2/3}})$.
+To solve linear system algorithms, the HHL algorithm has time complexity $\mathcal{O}(\log(N)\kappa^2)$ where $\kappa$ is the condition number, which is an exponential speed-up over the fastest known classical algorithm has time complexity $\mathcal{O}(N \kappa)$.
+Still, discovering these algorithms is not trivial.
+
+Polynomial speed-ups are also found.
+For example, the Grover algorithm which is used to search for an element in an unsorted list has time complexity $\mathcal{O}(\sqrt{N})$.
+Classically, this can not be done in less than $\mathcal{O}(N)$ time.
+This algorithm, or the more general amplitude amplification that it builds on, solves a very general problem and is often used a subroutine to achieve quadratic speed-ups in other algorithms.
+Being only a quadratic speed-up, it is not as impressive as the exponential speed-ups,
+and achieving quantum supremacy in that manner would require larger quantum computers than if the speed-up were exponential.

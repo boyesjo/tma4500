@@ -36,7 +36,7 @@ Often, methods like parameter-shift allows for computation of gradients, which m
     \end{quantikz}
     \caption{
         General structure of quantum neural networks.
-        First, spome data $\bm{x}$ is encoded into a state $\ket{\psi(\bm{x})}$ using some encoding strategy.
+        First, some data $\bm{x}$ is encoded into a state $\ket{\psi(\bm{x})}$ using some encoding strategy.
         Then, the state is transformed by a parametrised quantum circuit $U(\theta)$.
         This variational circuit can often be decomposed into a sequence of gates $U_1,\dots, U_n$, making the QNN structure more akin to the layered classical neural networks.
         These gates or layers do not need to use all qubits, but can be restricted to a subset, mimicking the classical concept of differently sized hidden layers.

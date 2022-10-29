@@ -2,7 +2,7 @@
 \section{The qubit}
 The quantum bit, the qubit, is the building block of quantum computing.
 Like the classical binary digit, it can be either 0 or 1.
-But being quantum, these are quantum states, $\ket{0}$ and $\ket{1}$, and the qubit can be in any superposition of these states.
+But being quantum, these are quantum states, $\ket{0}$ and $\ket{1}$\footnotemark{}, and the qubit can be in any superposition of these states.
 The state of the qubit lies in a two-dimensional Hilbert space, and the states $\ket{0}$ and $\ket{1}$ are basis vectors, known as the computational basis states.
 Thus, the state of a qubit can be expressed as
 \begin{equation}
@@ -11,6 +11,13 @@ Thus, the state of a qubit can be expressed as
 \end{equation}
 where $\alpha$ and $\beta$ are any numbers, even complex ones.
 The only requirement is that the state is normalised, id est $\vert\alpha\vert^2 + \vert\beta\vert^2 = 1$.
+
+\footnotetext{
+    The $\ket{\cdot}$ notation is known as a ket and is used in quantum mechanics to denote a quantum state.
+    It is effectively a column vector in a Hilbert space, whose inner product may be taken with a bra, $\bra{\cdot}$, to give a scalar.
+    These inner products are then denoted by $\bra{\cdot}\ket{\cdot}$.
+    Similarly, outer products are well-defined and denoted by $\ket{\cdot}\bra{\cdot}$.
+}
 
 Normalisation is required due to the Born rule, as the absolute square of the coefficients is the probability of measuring the qubit in the corresponding basis state.
 It is one of nature's great mysteries what exactly a measurement is, but in the quantum computational setting, it can be thought of as taking a random sample with the probabilities given by the coefficients, which can be done systematically.
