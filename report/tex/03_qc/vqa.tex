@@ -16,7 +16,7 @@ Additionally, the cost function should be complicated enough to warrant quantum 
         rectangle,
         draw,
         label=below:{Variational circuit},
-        ] (qc) at (-4, 0) {
+        ] (qc) at (-4, -1) {
                 \begin{quantikz}
                     \lstick{$\ket{0}$}
                     &
@@ -30,9 +30,9 @@ Additionally, the cost function should be complicated enough to warrant quantum 
                     \lstick{$\ket{0}$} & \qw & \meter{}
                 \end{quantikz}
             };
-        \node (cf) at (0, -2) {$\text{Cost}(\bm{\theta})$};
-        \node (opt) at (3, 0) {Classical optimiser};
-        \node (up) at (0, 2) {Updated $\bm{\theta}$};
+        \node (cf) at (2, -1) {$\text{Cost}(\bm{\theta})$};
+        \node (opt) at (2, 2) {Classical optimiser};
+        \node (up) at (-4, 2) {Updated $\bm{\theta}$};
         \draw[->] (qc) -- (cf);
         \draw[->] (cf) -- (opt);
         \draw[->] (opt) -- (up);
