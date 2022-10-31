@@ -1,5 +1,5 @@
-
-\section{The qubit}
+\section{Quantum states}
+\subsection{The qubit}
 The quantum bit, the qubit, is the building block of quantum computing.
 Like the classical binary digit, it can be either 0 or 1.
 But being quantum, these are quantum states, $\ket{0}$ and $\ket{1}$\footnotemark{}, and the qubit can be in any superposition of these states.
@@ -50,7 +50,38 @@ There, the state $\ket{0}$ is typically thought of as the north pole, and $\ket{
     \label{fig:bloch}
 \end{figure}
 
-\subsection{Multiple qubits}x
+\subsection{Mixed states and density operators}
+It is not only the superpositions of states that are important in quantum computing, but also the mixed states in which classical uncertainties manifest.
+For the description of mixed states, the formalism of density operators is more useful than the state vector formalism.
+In a mixed state, some classical probabilities $p_i$ are associated with the different states $\ket{\psi_i}$, and the state of the system is described by the density operator
+\begin{equation}
+    \rho = \sum_{i=1}^n p_i \ketbra{\psi_i}{\psi_i}
+    \label{eq:density}
+\end{equation}
+where $\ket{\psi_i}$ are the states of the system, and $\bra{\psi_i}$ are the corresponding dual vectors.
+Naturally, the $p_i$ must be non-negative and sum to one.
+Furthermore, the density operator is positive semidefinite.
+If there is no classical uncertainties, the state is called pure, and the density operator can be expressed a single ket-bra, $\rho = \ketbra{\psi}{\psi}$.
+
+For a density operator, the diagonal elements are the probabilities of measuring the system in the corresponding basis states, and hence they are positive and the trace one.
+Ergo, for a single qubit, the density operator can be expressed as
+\begin{equation}
+    \rho = \frac{1}{2} \left(I + x \sigma_x + y \sigma_y + z \sigma_z\right).
+\end{equation}
+Here, $x, y, z \in \mathbb{R}$, and $\sigma_x, \sigma_y, \sigma_z$ are the Pauli matrices,
+\begin{equation}
+    \sigma_x = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \quad
+    \sigma_y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}, \quad
+    \sigma_z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix},
+    \label{eq:pauli}
+\end{equation}
+which together with the identity matrix serve as a basis for Hermitian $2\times 2$ matrices.
+Being positive semidefinite, the determinant should be non-negative, and thus $x^2 + y^2 + z^2 \leq 1$.
+This allows density operators to be interpreted as points on the Bloch sphere or indeed within it.
+Notably, pure states lie on the surface, while mixed states lie within the sphere.
+In particular, a quantum mechanical superposition of 0 and 1 with equal probabilities would have a complex phase and lie somewhere on the equator, while a mixed state with equal probabilities of being 0 and 1 would lie in the centre.
+
+\subsection{Systems of multiple qubits}
 Although the continuous nature of the qubit is indeed useful, the true power of quantum computers lie in how multiple qubits interact.
 Having multiple qubits allows for the creation of entanglement, which is a key feature of quantum computing.
 

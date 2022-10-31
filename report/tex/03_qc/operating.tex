@@ -1,14 +1,12 @@
 \section{Quantum operations}
 \subsection{Single-qubit gates}
 To operate on one or more qubits, a unitary operation is applied to the state, where the unitarity is needed for states to remain normalised.
+As they are unitary, any purity is preserved.
 With the finite number of qubits, these operations can be expressed as matrices.
 These operations are often thought of as gates, paralleling the classical gates in digital logic.
-The most basic gates are the Pauli gates, which are the $X$, $Y$ and $Z$ gates:
-\begin{align}
-    X =\ket{0}\bra{1} + \ket{1}\bra{0} & = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix},  \\
-    Y =\ket{0}\bra{1} - \ket{1}\bra{0} & = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}, \\
-    Z =\ket{0}\bra{0} - \ket{1}\bra{1} & = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix}.
-\end{align}
+
+
+The most basic gates are the Pauli gates, which are applications of the Pauli matrices from \cref{eq:pauli} and are as gates simply denoted as $X$, $Y$, and $Z$ respectively.
 These gates can be seen as half turns around the $x$, $y$ and $z$ axes, respectively, of the Bloch sphere.
 The $X$ gate is also known as the NOT gate, as it mirrors the classical NOT gate by mapping $\ket{0}$ to $\ket{1}$ and vice versa, though it of course is more general, being also applicable to superposition states.
 
@@ -70,7 +68,7 @@ A simple example is the circuit
     \end{quantikz}
 \end{equation}
 which prepares the state $\frac{1}{2}(\ket{00} + \ket{01} + \ket{10} + \ket{11})$.
-There is no entanglement, and so the measurement probabilities of the two qubits are independent.
+This is a pure state with no entanglement, and so the measurement probabilities of the two qubits are independent.
 
 Slightly more interesting is the circuit
 \begin{equation}
@@ -83,6 +81,17 @@ in which the first qubit is put into a superposition using the Hadamard gate bef
 This creates the state $\frac{1}{\sqrt{2}}\left(\ket{00} + \ket{11}\right)$.
 The measurement probabilities of the two qubits are now correlated; if the first qubit is measured to be 1, the second will always be 1, and vice versa.
 The probability of measuring the qubits to be different is nil.
+
+To create a mixed state, an intermediate measurement can be used to control a gate.
+For instance, the circuit
+\begin{equation}
+    \begin{quantikz}
+        \lstick{$\ket{0}$} & \gate{H} & \meter{} & \cwbend{1} \\
+        \lstick{$\ket{0}$} & \qw & \qw & \gate{X} & \qw
+    \end{quantikz}
+\end{equation}
+places the second qubit in the mixed state $\frac{1}{2}(\ketbra{0}{0} + \ketbra{1}{1})$.
+If it were immediately to be measured, it would have a 50\% chance of being 0 and a 50\% chance of being 1, but the uncertainty only classical, and it could therefore not be used to create entanglement or for any other quantum spookiness.
 
 \subsection{Quantum supremacy}
 Exponential speed-ups do not come for free.
