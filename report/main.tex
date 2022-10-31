@@ -9,7 +9,8 @@
 ]{report} % Template using the report document class.
 % 10 pt font size for b5 paper, twoside adjusts margins on left/right sides, and openright ensures that new chapters start on a right page.
 
-\input{preamble}
+\usepackage{import}
+\usepackage{preamble}
 \usepackage[
     % twoside,
     % bindingoffset=20mm,
@@ -36,7 +37,7 @@
 
 \begin{document}
 
-\input{tex/frontmatter/titlepage}
+\import{tex/frontmatter/}{titlepage}
 % Kommenter ut når print bestilles -- egen forside genereres i NTNU Grafisk senter
 
 % disable page numbering
@@ -55,13 +56,12 @@
 \cleardoublepage
 
 
-\input{tex/01_intro}
-\input{tex/02_ml}
-\input{tex/03_qc}
-\input{tex/05_qml}
-\input{tex/10_conclusion}
+\import{tex/01_intro}{main}
+\import{tex/02_ml}{main}
+\import{tex/03_qc}{main}
+\import{tex/05_qml}{main}
+\import{tex/10_conclusion}{main}
 
-% add all refs to refernce list. TODO: remove this when done
 \nocite{
     qiskit,
     adamoptimser,
