@@ -3,13 +3,13 @@
 \label{sec:qnn-vs-nn}
 
 In order to compare the performance of the QNN and the NN, architectures suited for binary classification with exactly 8 parameters are used.
-The QNN structure is shown in \Cref{fig:qnn_vs_nn_models}.
+The QNN structure is shown in \cref{fig:qnn_vs_nn_models}.
 The data used is Fisher's iris dataset, perhaps the most used dataset for studying classification in statistics, containing samples of three different species of iris flowers.
 For each species, there are 50 samples, each with four features: sepal length, sepal width, petal length, and petal width.
 Like in \cite{abbas2021}, only the two first species are considered, which happen to be linearly separable in the feature space.
 
 The four-dimensional input data is first scaled to have zero mean and unit variance.
-Then, it is encoded into a quantum state a second order angle encoding with $Z$ rotations, discussed in \Cref{sec:second_order_angle_encoding}, with two repetitions.
+Then, it is encoded into a quantum state a second order angle encoding with $Z$ rotations, discussed in \cref{sec:second_order_angle_encoding}, with two repetitions.
 In the Qiskit framework, this is implemented in the \texttt{ZZFeatureMap} class.
 This entangles the qubits and embeds them in higher dimensional space.
 
@@ -20,7 +20,7 @@ There are in total 8 parameters.
 This is implemented in Qiskit as the \texttt{RealAmplitudes} ansatz.
 
 Finally, all four qubits are measured and the parity of the four bit output is interpreted as the prediction of the class label.
-\Cref{fig:qnn_vs_nn_models} shows the structure of the QNN and how the parameters are used.
+\cref{fig:qnn_vs_nn_models} shows the structure of the QNN and how the parameters are used.
 
 Both exact simulations and noisy simulations were performed, with the latter using noise modelled after the 27-qubit IBM Montreal architecture, the actual hardware used in the original paper.
 
@@ -112,7 +112,7 @@ The classical and noiseless models were trained for 100 epochs, while the noisy 
 For validation, 10-fold cross-validation was used.
 That is, the dataset was split into 10 equal parts (folds).
 Each fold us used as the validation set once, their accuracies being recorded during the training with the other nine folds.
-The mean accuracy over the 10 folds was used for the final performance metric, shown in \Cref{fig:iris_training}.
+The mean accuracy over the 10 folds was used for the final performance metric, shown in \cref{fig:iris_training}.
 
 \begin{figure}
     \centering
@@ -156,7 +156,7 @@ However, it is not the only possible interpretation, and a perhaps more intuitiv
 Doing so effectively ignores three of the qubits, giving a parameter count of five.
 Five is coincidentally also the parameter choice of a logistic regression scheme, which could be a more natural choice for a classical classification algorithm than the neural network whose architecture appears mostly based on the goal of having eight parameters.
 
-Looking at the testing visualised in \Cref{fig:iris_training_lr} reveals that parity indeed performs better than the sign of a single qubit, though not by much.
+Looking at the testing visualised in \cref{fig:iris_training_lr} reveals that parity indeed performs better than the sign of a single qubit, though not by much.
 The bigger revelation is the performance of logistic regression, which greatly outperforms the neural network, and while slightly slower to converge than the quantum models, does approach an overall smaller loss value.
 
 \begin{figure}
@@ -265,6 +265,7 @@ Effectively, each consecutive pair of qubits were entangled by
         &
         \qw
     \end{quantikz}
+    \label{eq:qcnn_conv_gate}
 \end{equation}
 giving $3n$ parameters for each convolution layer of $n$ qubits.
 
@@ -333,7 +334,7 @@ with a total of 63 parameters.
 As in Qiskit's guide, training was done using the COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients.
 Why this optimiser was chosen is not clear, but testing shows that simulations using gradient based methods such as Adam or simple gradient descent is significantly slower.
 The accuracies and loss (mean square error) during training is shown in \cref{fig:qcnn_training}.
-As in \Cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware.
+As in \cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware.
 The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions.
 Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training.
 It seems that the noiseless QCNN is overfitting to the training data, while the noisy QCNN generalises better.
@@ -412,15 +413,66 @@ It seems that the noiseless QCNN is overfitting to the training data, while the 
 A more complex QCNN structure was described by \textcite{pesah2021}, where the pooling modules measure a qubit and use the result to control a unitary gate on its neighbour.
 The use of mid-circuit measurements complicates the circuit and its implementation, but allows for a non-linear and potentially more powerful model.
 
-Following the description in \cite{pesah2021}, a QCNN was implemented with structure as shown in \Cref{fig:qcnnm}.
+Following the description in \cite{pesah2021}, a QCNN was implemented with structure as shown in \cref{fig:qcnnm}.
 First, the data was encoded using angle encoding in the $X$ direction.
 The convolutional layers consisted of pairwise $W$ gates, a mix of parametrised rotations and CNOTs, with total of 15 parameters per gate.
+As circuits, they appear as
+\begin{equation}
+    \begin{quantikz}
+        \qw
+        &
+        \gate[wires=2]{W}
+        &
+        \qw
+        \midstick[2,brackets=none]{=}
+        &
+        \gate{R_G}
+        &
+        \targ{}
+        &
+        \gate{R_Z}
+        &
+        \ctrl{1}
+        &
+        \qw
+        &
+        \targ{}
+        &
+        \gate{R_G}
+        &
+        \qw
+        \\
+        \qw
+        &
+        &
+        \qw
+        &
+        \gate{R_G}
+        &
+        \ctrl{-1}
+        &
+        \gate{R_Y}
+        &
+        \targ{}
+        &
+        \gate{R_Y}
+        &
+        \ctrl{-1}
+        &
+        \gate{R_G}
+        &
+        \qw
+    \end{quantikz}
+    \label{eq:w_gate}
+\end{equation}
+where $R_G$ is are general rotations around all three axes.
+
 The pooling layers consisted of a measurement and a conditional single-qubit unitary gate.
 Without any particular recommendation in the original paper, a simple $X$-gate was used.
-Like in \Cref{sec:qcnn}, the network used 8 qubits to handle the 8-dimensional data.
+Like in \cref{sec:qcnn}, the network used 8 qubits to handle the 8-dimensional data.
 Three convolutional and pooling layers were used, reducing the data from 8 to 2 dimensions
 Lastly, a final general two-qubit ansatz was used, and a single qubit was measured and interpreted as a prediction.
-This was a simple parametrised entangler, similar to the \texttt{RealAmplitudes} in \Cref{sec:qnn-vs-nn}, but with $X$ rotations.
+This was a simple parametrised entangler, similar to the \texttt{RealAmplitudes} in \cref{sec:qnn-vs-nn}, but with $X$ rotations.
 In total, the network had 154 parameters.
 
 \begin{figure}
@@ -498,11 +550,13 @@ In total, the network had 154 parameters.
 The QCNN was implemented using the PennyLane framework and trained with the Adam optimiser with a learning rate of 0.01.
 With the PennyLane implementation, there were no problems using gradient based optimisation.
 This prompted the reimplementation of the former QCNN, which was here also trained with the same Adam optimiser.
-The results are shown in \Cref{fig:qcnnm_training}.
-The training loss was lower than for the QCNN in \Cref{sec:qcnn}, despite the fewer iterations, showing expected advantages of using gradient based optimisation.
+The results are shown in \cref{fig:qcnnm_training}.
+The training loss was lower than for the QCNN in \cref{sec:qcnn}, despite the fewer iterations, showing expected advantages of using gradient based optimisation.
 Furthermore, the new model with intermediate measurements achieves a perfect accuracy on both the training and test sets in only 10 iterations.
 Looking at the loss curves, the model with intermediate measurements seems only to converge slightly faster than the model without intermediate measurements.
+
 However, by extending the model without mid-circuit measurements to have a more comparable parameter count of 231, it overtakes the model with intermediate measurements in terms of training loss.
+This extension was done by switching out the convolutional gates from \cref{eq:qcnn_conv_gate} with the $W$-gates from \cref{eq:w_gate}.
 
 \begin{figure}
     \centering
