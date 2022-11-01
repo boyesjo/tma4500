@@ -103,7 +103,7 @@ Still, being a product state, it offers no inherent quantum advantage.
 \label{sec:second_order_angle_encoding}
 \textcite{havlicek2018} propose a second-order angle encoding, which they conjecture to be hard to simulate classically.
 First, angles are encoded as above, but then the qubits are entangled and rotated further based on second order terms.
-In circuit notation, such an encoding with Z-rotations reads
+In circuit notation, such an encoding with $Z$-rotations reads
 \begin{equation}
     \begin{quantikz}
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^1} & \ctrl{1} & \qw & \ctrl{1} & \ctrl{2} & \qw & \ctrl{2} & \qw & \qw & \qw & \qw & \dots \\

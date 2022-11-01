@@ -1,5 +1,5 @@
 \section{Comparisons}
-\subsection{QNNs vs NNs}
+\subsection{Quantum versus classical}
 \label{sec:qnn-vs-nn}
 
 In order to compare the performance of the QNN and the NN, architectures suited for binary classification with exactly 8 parameters are used.
@@ -409,7 +409,7 @@ It seems that the noiseless QCNN is overfitting to the training data, while the 
 \end{figure}
 
 
-\subsection{QCNN with intermediate measurements}
+\subsection{Quantum convolutional with mid-circuit measurements}
 A more complex QCNN structure was described by \textcite{pesah2021}, where the pooling modules measure a qubit and use the result to control a unitary gate on its neighbour.
 The use of mid-circuit measurements complicates the circuit and its implementation, but allows for a non-linear and potentially more powerful model.
 

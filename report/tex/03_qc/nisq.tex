@@ -4,12 +4,93 @@ The hardware is limited in the number of qubits, the connectivity between the qu
 It is believed that quantum hardware will continue to improve and eventually perform demanding algorithms like Shor's for large numbers.
 Still, the era dubbed NISQ (Noisy Intermediate-Scale Quantum) is the first step, and to make use of the hardware, algorithms must take these limitations into consideration.
 
-Noise and decoherence severely limits how large circuits can be run on the hardware.
-Decoherence refers to the fact that the qubits are not isolated from the environment, and may be ruined by the environment, e.g., electrical noise from the control electronics.
-Furthermore, with the continuous nature of quantum states, minor errors can compound.
+\subsection{Quantum channels and noise}
+The unitary gates from \cref{sec:quantum_operations} are an idealisation, and in reality, the gates are not perfect.
+A more realistic description of the gates is given by quantum channels, which can take noise into account.
+In an unmeasured, ideal quantum system, the state evolution is veritably unitary, but as the system in practice does interact with the environment, this can be modelled as a quantum channel in which traditionally probabilistic noise is introduced.
+
+Take the $X$ gate as an example.
+If the fails to apply with probability $p$, the resulting density operator $\rho'$ can be written as
+\begin{equation}
+    \rho' = p\rho + (1-p)X\rho X^\dagger
+\end{equation}
+where $\rho$ is the initial density.
+Such a channel has eigenvalues $p$ and $1-2p$, where $I$ and $X$ share the former and $Y$ and $Z$ the latter.
+Consequently, states with $Y$ or $Z$ components will have mixing introduced.
+Geometrically, this can be interpreted as contraction of states on the Bloch sphere towards the centre, illustrated in \cref{fig:noise}.
+Any physical gate will suffer some such noise, and so the tendency will be for states to degenerate towards the mixed centre of the Bloch sphere (or its higher-dimensional analogue).
+
+
+\begin{figure}
+    \centering
+    \begin{tikzpicture}
+        \begin{groupplot}[
+                group style={
+                        group size=2 by 1,
+                        horizontal sep=0pt,
+                    },
+                width=\textwidth,
+                % height=30 cm,
+                ymin = -1.5, ymax = 1.5,
+                xmin = -1.5, xmax = 1.5,
+                zmin = -1.5, zmax = 1.5,
+                % grid=major,
+                axis equal,
+                axis lines = center,
+                xlabel = {$x$},
+                ylabel = {$y$},
+                zlabel = {$z$},
+                ticks=none,
+                % enlargelimits=0.3,
+                view/h=120,
+                view/v=30,
+                scale uniformly strategy=units only,
+            ]
+            \nextgroupplot
+            \addplot3[
+                opacity = 0.35,
+                surf,
+                fill=white, point meta=0,
+                z buffer = sort,
+                samples = 21,
+                variable = \u,
+                variable y = \v,
+                domain = 0:180,
+                y domain = 0:360,
+            ]
+            ({cos(u)*sin(v)}, {sin(u)*sin(v)}, {cos(v)});;
+            \nextgroupplot[xshift=-3cm]
+            \addplot3[
+                opacity = 0.35,
+                surf,
+                fill=white, point meta=0,
+                z buffer = sort,
+                samples = 21,
+                variable = \u,
+                variable y = \v,
+                domain = 0:180,
+                y domain = 0:360,
+            ]
+            ({cos(u)*sin(v)}, {0.6*sin(u)*sin(v)}, {0.6*cos(v)});
+        \end{groupplot}
+    \end{tikzpicture}
+    \caption{
+        Illustration of a noisy $X$ gate on the Bloch sphere.
+        The left plot shows the set of all pure states, the surface of the Bloch sphere.
+        On the right, the same set of states is shown after the application of a noisy $X$ gate with probability $p=0.2$ of failing.
+        There, the $y$ and $z$ axes are contracted towards the centre by a factor $1-2p=0.6$, introducing mixing.
+    }
+    \label{fig:noise}
+\end{figure}
+
+Due to the multiplicative effect of noise, the overall degeneracy will increase exponentially with the number of operations.
+This means that there will be limits to the number of operations that can be performed before the system becomes unusable, assuming no error-correction is applied.
+
+There may also be systematic errors in the unitary gates applied.
 If for instance a qubit is to be rotated many times, a small error in the rotation may cause the overall rotation to be off by a large amount.
 Because of this, NISQ algorithms must be shallow, meaning that the amount of gates applied before measurement is small.
 
+\subsection{Qubit counts and connectivity}
 Another limiting factor is the amount of qubits.
 Current hardware has around 10 to 100 qubits, which though still may be enough to express states too large to be expressed on classical computers, is not enough to perform the most demanding algorithms.
 With more qubits, error correction could be used to mitigate the effects of noise and decoherence, but this would require many more qubits than are currently available; recent estimates require millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
