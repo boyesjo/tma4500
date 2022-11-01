@@ -33,7 +33,12 @@
     natbib=true
 ]{biblatex}
 \addbibresource{references.bib} 
-
+\usepackage{hyperref}
+\usepackage{cleveref}
+% \hypersetup{colorlinks={false}}
+\hypersetup{
+    hidelinks,
+}
 
 \begin{document}
 
@@ -68,6 +73,7 @@
     pennylane,
     pytorch,
 }
+\sloppy
 \printbibliography[
     heading=bibintoc,
     title={References}
