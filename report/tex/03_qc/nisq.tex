@@ -19,8 +19,7 @@ Such a channel has eigenvalues $p$ and $1-2p$, where $I$ and $X$ share the forme
 Consequently, states with $Y$ or $Z$ components will have mixing introduced.
 Geometrically, this can be interpreted as contraction of states on the Bloch sphere towards the centre, illustrated in \cref{fig:noise_bloch}.
 Any physical gate will suffer some such noise, and so the tendency will be for states to degenerate towards the mixed centre of the Bloch sphere (or its higher-dimensional analogue).
-Furthermore, measurements and even the preparation of the initial state $\ket{0^{\otimes n}}$
-will suffer from these decohering effects.
+Furthermore, measurements, letting a qubit idle when operating on others and even the preparation of the initial state $\ket{0^{\otimes n}}$ will suffer from decoherence.
 
 \begin{figure}
     \centering
@@ -94,9 +93,8 @@ There may also be systematic errors in the unitary gates applied.
 This kind of noise, known as coherent noise does not need quantum channels to be modelled, but may rather be modelled simply by slightly different unitary gates.
 Here too, the $X$ gate can serve as an example.
 Such a gate is typically implemented by applying a Hamiltonian for some time, requiring calibration of said time.
-If this time is not calibrated correctly, the effective operation will be a rotation by some angle.
-Even if the system is well calibrated, these errors can occur, and without correction, will only compound.
-If for instance the $X$ gate is applied many times, even a small error will add up, which could cause an overall rotation of the state by a large angle.
+If it is not calibrated correctly, the effective operation will be a rotation that slightly deviates from the intended half turn.
+When a gate like the $X$ is applied many times, even small errors will add up, which could cause an overall rotation of the state by a significant angle.
 
 \begin{figure}
     \centering
@@ -123,7 +121,7 @@ If for instance the $X$ gate is applied many times, even a small error will add 
         The error in the rotation is $1\deg$, while the probability of failing to apply the gate is $p=0.3\%$.
         For each number of gates, the measurement is repeated 1000 times.
         The coherent error causes a sinusoidal pattern, in which 180 rotations causes the overall rotation to be completely opposite.
-        The decoherent error causes an exponential dampening, as the system becomes more and more mixed.
+        The decoherent error causes an exponential dampening, as the state becomes more and more mixed.
         The wiggly pattern is simply classical randomness stemming from the probabilistic measurement with a finite number of samples.
     }
     \label{fig:noise_graph}

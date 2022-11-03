@@ -222,7 +222,7 @@ Each of the eight pixels of the image is mapped to a qubit through two repetitio
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z(x_2)} & \gate{H} & \gate{R_Z(x_2)}  \\
         \lstick{\vdots} \\
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z(x_n)} & \gate{H} & \gate{R_Z(x_n)}  \\
-    \end{quantikz}
+    \end{quantikz}.
 \end{equation}
 
 
@@ -264,7 +264,7 @@ Effectively, each consecutive pair of qubits were entangled by
         \qw
         &
         \qw
-    \end{quantikz}
+    \end{quantikz},
     \label{eq:qcnn_conv_gate}
 \end{equation}
 giving $3n$ parameters for each convolution layer of $n$ qubits.
@@ -304,31 +304,50 @@ This is done by acting on the first and fifth, second and sixth et cetera with t
 giving $3n/2$ parameters for each pooling layer of $n$ qubits.
 
 For the final layer, the sole remaining qubit is measured, and the result is interpreted as the prediction.
-In total, the circuit appears as
-\begin{center}
-    \begin{quantikz}
-        \lstick[wires=8]{$\ket{0}^{\otimes 8}$} &
-        \gate[wires=8, disable auto height]{{\rotatebox{90}{\texttt{ZFeatureMap}$(\bm{x})$}}} &
-        \gate[wires=8, disable auto height]{{\rotatebox{90}{\text{Convolution}}}} &
-        \gate[wires=8, disable auto height]{{\rotatebox{90}{\text{Pooling}}}} & \qw{}& \qw{}& \qw{}& \qw{} & \qw{}
-        \\
-        & \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}\\
-        & \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}\\
-        & \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}\\
-        & & & &
-        \gate[wires=4, disable auto height]{{\rotatebox{90}{\text{Convolution}}}} &
-        \gate[wires=4, disable auto height]{{\rotatebox{90}{\text{Pooling}}}} & \qw{} & \qw{} & \qw{}
-        \\
-        & \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}& \qw{}\\
-        & & & & & &
-        \gate[wires=2, disable auto height]{{\rotatebox{90}{\text{Conv.}}}} &
-        \gate[wires=2, disable auto height]{{\rotatebox{90}{\text{Pooling}}}} & \qw{}
+In total, the circuit appears as in \cref{fig:qcnn_circuit} with a total of 63 parameters.
 
+\begin{figure}
+    \centering
+    \begin{quantikz}
+        \lstick[wires=8]{$\ket{0}^{\otimes 8}$}
+        &
+        \gate[wires=8, disable auto height]{{\rotatebox{90}{\texttt{ZFeatureMap}$(\bm{x})$}}}
+        &
+        \gate[wires=8, disable auto height]{{\rotatebox{90}{\text{Convolution}}}}
+        &
+        \gate[wires=8, disable auto height]{{\rotatebox{90}{\text{Pooling}}}}
+        & \qw & \qw & \qw & \qw & \qw
         \\
-        & & & & & & & & \meter{} \\
+        & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw
+        \\
+        & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw
+        \\
+        & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw
+        \\
+        & & & &
+        \gate[wires=4, disable auto height]{{\rotatebox{90}{\text{Convolution}}}}
+        &
+        \gate[wires=4, disable auto height]{{\rotatebox{90}{\text{Pooling}}}}
+        & \qw & \qw & \qw
+        \\
+        & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw
+        \\
+        & & & & & &
+        \gate[wires=2, disable auto height]{{\rotatebox{90}{\text{Conv.}}}}
+        &
+        \gate[wires=2, disable auto height]{{\rotatebox{90}{\text{Pooling}}}}
+        & \qw
+        \\
+        & & & & & & & & \meter{}
     \end{quantikz}
-\end{center}
-with a total of 63 parameters.
+    \caption{
+        Circuit diagram of the QCNN.
+        Data is encoded using angle encoding, before convolutional and pooling layers are applied.
+        The final layer is a single qubit measurement.
+    }
+    \label{fig:qcnn_circuit}
+\end{figure}
+
 
 
 As in Qiskit's guide, training was done using the COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients.
@@ -415,7 +434,7 @@ The use of mid-circuit measurements complicates the circuit and its implementati
 
 Following the description in \cite{pesah2021}, a QCNN was implemented with structure as shown in \cref{fig:qcnnm}.
 First, the data was encoded using angle encoding in the $X$ direction.
-The convolutional layers consisted of pairwise $W$ gates, a mix of parametrised rotations and CNOTs, with total of 15 parameters per gate.
+The convolutional layers consisted of pairwise $W$ gates, a mix of parametrised rotations and CNOTs, with total of 15 parameters
 As circuits, they appear as
 \begin{equation}
     \begin{quantikz}
@@ -465,7 +484,7 @@ As circuits, they appear as
     \end{quantikz}
     \label{eq:w_gate}
 \end{equation}
-where $R_G$ is are general rotations around all three axes.
+where $R_G$ is are general rotations around all three axes and so have three parameters.
 
 The pooling layers consisted of a measurement and a conditional single-qubit unitary gate.
 Without any particular recommendation in the original paper, a simple $X$-gate was used.
