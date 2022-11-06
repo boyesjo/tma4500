@@ -2,15 +2,16 @@
 Quantum hardware have been physically realised and even outperforms classical computers in very contrived situations, but the hardware is still very limited.
 The hardware is limited in the number of qubits, the connectivity between the qubits, and the noise and decoherence of the qubits.
 It is believed that quantum hardware will continue to improve and eventually perform demanding algorithms like Shor's for large numbers.
-Still, the era dubbed NISQ (Noisy Intermediate-Scale Quantum) is the first step, and to make use of the hardware, algorithms must take these limitations into consideration.
+Once enough qubits are available, error correction can be implemented and truly enable quantum supremacy.
+Still, the era dubbed NISQ (Noisy Intermediate-Scale Quantum) is the first step, and to make use of the hardware, the inherent noise and its consequences must be understood, and algorithms must take the following limitations into consideration.
 
-\subsection{Quantum channels and noise}
+\subsection{Quantum channels and decoherent noise}
 The unitary gates from \cref{sec:quantum_operations} are an idealisation, and in reality, the gates are not perfect.
 A more realistic description of the gates is given by quantum channels, which can take noise into account.
 In an unmeasured, ideal quantum system, the state evolution is veritably unitary, but as the system in practice does interact with the environment, this can be modelled as a quantum channel in which traditionally probabilistic noise is introduced.
 
 Take the $X$ gate as an example.
-If the fails to apply with probability $p$, the resulting density operator $\rho'$ can be written as
+If the fails to apply with probability $p$, the resulting density operator $\rho'$ can be expressed as
 \begin{equation}
     \rho' = p\rho + (1-p)X\rho X^\dagger
 \end{equation}
@@ -18,8 +19,6 @@ where $\rho$ is the initial density.
 Such a channel has eigenvalues $p$ and $1-2p$, where $I$ and $X$ share the former and $Y$ and $Z$ the latter.
 Consequently, states with $Y$ or $Z$ components will have mixing introduced.
 Geometrically, this can be interpreted as contraction of states on the Bloch sphere towards the centre, illustrated in \cref{fig:noise_bloch}.
-Any physical gate will suffer some such noise, and so the tendency will be for states to degenerate towards the mixed centre of the Bloch sphere (or its higher-dimensional analogue).
-Furthermore, measurements, letting a qubit idle when operating on others and even the preparation of the initial state $\ket{0^{\otimes n}}$ will suffer from decoherence.
 
 \begin{figure}
     \centering
@@ -77,7 +76,7 @@ Furthermore, measurements, letting a qubit idle when operating on others and eve
         \end{groupplot}
     \end{tikzpicture}
     \caption{
-        Illustration of a noisy $X$ gate on the Bloch sphere.
+        Illustration of applying a noisy $X$ gate on the Bloch sphere.
         The left plot shows the set of all pure states, the surface of the Bloch sphere.
         On the right, the same set of states is shown after the application of a noisy $X$ gate with probability $p=0.2$ of failing.
         There, the $y$ and $z$ axes are contracted towards the centre by a factor $1-2p=0.6$, introducing mixing.
@@ -85,14 +84,23 @@ Furthermore, measurements, letting a qubit idle when operating on others and eve
     \label{fig:noise_bloch}
 \end{figure}
 
+Any physical gate will suffer some such noise, and so the tendency will be for states to degenerate towards the mixed centre of the Bloch sphere (or its higher-dimensional analogue).
+Furthermore, measurements, letting a qubit idle when operating on others and even the preparation of the initial state $\ket{0}^{\otimes n}$ will suffer from decoherence.
+
+This noise is very hard to avoid, as controlling the qubits necessarily requires some interaction with the environment.
+Additionally, to operate on multiple qubits, a connection between them is required, which too will suffer from noise.
+Nature tends to work against large quantum systems, made evident by the absence of quantum effects in regular life.
 
 Due to the multiplicative effect of noise, the overall degeneracy will increase exponentially with the number of operations.
 This means that there will be limits to the number of operations that can be performed before the system becomes unusable, assuming no error-correction is applied.
 
+
+\subsection{Coherent noise}
 There may also be systematic errors in the unitary gates applied.
 This kind of noise, known as coherent noise does not need quantum channels to be modelled, but may rather be modelled simply by slightly different unitary gates.
 Here too, the $X$ gate can serve as an example.
 Such a gate is typically implemented by applying a Hamiltonian for some time, requiring calibration of said time.
+
 If it is not calibrated correctly, the effective operation will be a rotation that slightly deviates from the intended half turn.
 When a gate like the $X$ is applied many times, even small errors will add up, which could cause an overall rotation of the state by a significant angle.
 
@@ -118,7 +126,7 @@ When a gate like the $X$ is applied many times, even small errors will add up, w
     \end{tikzpicture}
     \caption{
         Proportion of correct measurements of a qubit after applying several noisy $X$ gates.
-        The error in the rotation is $1\deg$, while the probability of failing to apply the gate is $p=0.3\%$.
+        The error in the rotation is \ang{1}, while the probability of failing to apply the gate is $p=0.3\%$.
         For each number of gates, the measurement is repeated 1000 times.
         The coherent error causes a sinusoidal pattern, in which 180 rotations causes the overall rotation to be completely opposite.
         The decoherent error causes an exponential dampening, as the state becomes more and more mixed.
@@ -135,7 +143,7 @@ There are more sources of noise than the two included in the figure, and having 
 \subsection{Qubit counts and connectivity}
 Another limiting factor is the amount of qubits.
 Current hardware has around 10 to 100 qubits, which though still may be enough to express states too large to be expressed on classical computers, is not enough to perform the most demanding algorithms.
-With more qubits, error correction could be used to mitigate the effects of noise and decoherence, but this would require many more qubits than are currently available; recent estimates require millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
+Recent estimates require millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
 Another current limitation is the connectivity between the qubits.
 Not all qubits are directly linked, which means that applying a multi-qubit gate may require intermediate swapping of qubits.
 This increases circuit depth which in turn increases the error rate.
