@@ -15,7 +15,8 @@ The four methods that will be discussed in this section are summarised in \cref{
     % increase padding
     \renewcommand{\arraystretch}{1.5}
     % \setlength\extrarowheight{5pt}
-    \begin{tabularx}{\textwidth}{p{4cm}XXX}
+    \newcolumntype{Y}{>{\centering\arraybackslash}X}
+    \begin{tabularx}{\textwidth}{p{4cm}YYY}
         \toprule
         Encoding strategy                      & Qubits needed           & Circuit depth       & {Hard to simulate \newline classically} \\
         \midrule
