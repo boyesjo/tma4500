@@ -32,7 +32,7 @@ def test_x_rotations(n: int):
 
 
 # %%
-l = [test_x_rotations(n) for n in range(1, 500)]
+l = [test_x_rotations(n) for n in range(1, 1000)]
 l[::2] = [shots - i for i in l[::2]]
 l = np.array(l) / shots
 

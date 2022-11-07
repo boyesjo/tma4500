@@ -108,27 +108,44 @@ When a gate like the $X$ is applied many times, even small errors will add up, w
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-                width=0.8\textwidth,
+                width=0.7\textwidth,
                 height=0.5\textwidth,
                 xlabel = {Number of $X$ gates applied},
                 ylabel = {Proportion of correct measurements},
                 grid = major,
-                ytick = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1},
+                % ytick = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1},
             ]
             \addplot[
                 color = blue,
                 mark = none,
-                samples = 100,
-                domain = 0:100,
+                % samples = 100,
+                % domain = 0:100,
             ]
             table[x = n, y = p, col sep=comma] {../code/noise_fig/noise.csv};
+            % add exponential dampening to the plot
+            \addplot[
+                color = gray,
+                dashed,
+                mark = none,
+                samples = 100,
+                domain = 0:1000,
+            ]
+            {0.5*(1+exp(-x*0.003))};
+            \addplot[
+                color = gray,
+                densely dotted,
+                mark = none,
+                samples = 100,
+                domain = 0:1000,
+            ]
+            {0.5*(1 + cos(x)};
         \end{axis}
     \end{tikzpicture}
     \caption{
         Proportion of correct measurements of a qubit after applying several noisy $X$ gates.
         The error in the rotation is \ang{1}, while the probability of failing to apply the gate is $p=0.3\%$.
         For each number of gates, the measurement is repeated 1000 times.
-        The coherent error causes a sinusoidal pattern, in which 180 rotations causes the overall rotation to be completely opposite.
+        The coherent error causes a sinusoidal behaviour, in which 180 rotations causes the overall rotation to be completely opposite.
         The decoherent error causes an exponential dampening, as the state becomes more and more mixed.
         The wiggly pattern is simply classical randomness stemming from the probabilistic measurement with a finite number of samples.
     }
@@ -146,4 +163,4 @@ Current hardware has around 10 to 100 qubits, which though still may be enough t
 Recent estimates require millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
 Another current limitation is the connectivity between the qubits.
 Not all qubits are directly linked, which means that applying a multi-qubit gate may require intermediate swapping of qubits.
-This increases circuit depth which in turn increases the error rate.
+This increases circuit depth which in turn increases error rates.

@@ -37,6 +37,15 @@ The CNOT gate can be expressed in matrix form as
     \text{CNOT} = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0 \end{pmatrix}.
 \end{equation}
 
+In theory, any unitary single-qubit operation can be controlled.
+Another interesting two-qubit gate is the controlled $Z$ gate, CZ, expressible as the matrix
+\begin{equation}
+    \text{CZ} = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & -1 \end{pmatrix}.
+\end{equation}
+Because it only alters the amplitude of $\ket{11}$, it does not actually matter which qubit is the control and which is the target.
+
+
+
 \subsection{Observables and measurements}
 For an output to be obtained from a quantum computer, a measurement must be performed.
 This is typically done at the end of all operations and of all qubits, thus yielding a single output of zeroes and ones, a bit-string.
@@ -80,7 +89,7 @@ Slightly more interesting is the circuit
 \end{equation}
 in which the first qubit is put into a superposition using the Hadamard gate before a CNOT gate is applied to the second, controlled on the first.
 This creates the state $\frac{1}{\sqrt{2}}\left(\ket{00} + \ket{11}\right)$.
-The measurement probabilities of the two qubits are now correlated; if the first qubit is measured to be 1, the second will always be 1, and vice versa.
+The measurement probabilities of the two qubits are now correlated; if the first qubit is measured to be $\ket{1}$, the second will always be $\ket{1}$ and vice versa.
 The probability of measuring the qubits to be different is nil.
 
 To create a mixed state, an intermediate measurement can be used to control a gate.
@@ -92,19 +101,25 @@ For instance, the circuit
     \end{quantikz}
 \end{equation}
 places the second qubit in the mixed state $\frac{1}{2}(\ketbra{0}{0} + \ketbra{1}{1})$.
-If it were immediately to be measured, it would have a 50\% chance of being 0 and a 50\% chance of being 1.
+If it were immediately to be measured, it would have a 50\% chance of being $\ket{0}$ and a 50\% chance of being $\ket{1}$.
 The uncertainty is only classical, and it could therefore not be used to create entanglement or for any other quantum spookiness.
 
 \subsection{Quantum supremacy}
-Exponential speed-ups do not come for free.
-Quantum computers do only solve certain problems more efficiently than classical computers, and finding the algorithms to do so is no easy task.
-Shor's algorithm has time complexity $\mathcal{O}((\log N)^2 (\log \log N) (\log \log \log N))$ while the most efficient known classical algorithm has time complexity $\mathcal{O}(\exp{1.9(\log N)^{1/3}(\log \log N)^{2/3}})$.
-To solve linear system algorithms, the HHL algorithm has time complexity $\mathcal{O}(\log(N)\kappa^2)$ where $\kappa$ is the condition number, which is an exponential speed-up over the fastest known classical algorithm has time complexity $\mathcal{O}(N \kappa)$.
-Still, discovering these algorithms is not trivial.
+\begin{sloppypar}
+    Exponential speed-ups do not come for free.
+    Quantum computers do only solve certain problems more efficiently than classical computers, and finding the algorithms to do so is no easy task.
+    \sloppy Shor's algorithm has time complexity $O((\log N)^2 (\log \log N) (\log \log \log N))$ while the most efficient known classical algorithm has time complexity $O(\exp{1.9(\log N)^{1/3} \text{} (\log \log N)^{2/3}})$.
+    To solve linear system algorithms, the HHL algorithm has time complexity $O(\log(N)\kappa^2)$ where $\kappa$ is the condition number, which is an exponential speed-up over the fastest known classical algorithm has time complexity $O(N \kappa)$.
+    Still, discovering these algorithms is not trivial.
+\end{sloppypar}
 
 Polynomial speed-ups are also found.
-For example, the Grover algorithm which is used to search for an element in an unsorted list has time complexity $\mathcal{O}(\sqrt{N})$.
-Classically, this can not be done in less than $\mathcal{O}(N)$ time.
+For example, the Grover algorithm which is used to search for an element in an unsorted list has time complexity $O(\sqrt{N})$.
+Classically, this can not be done in less than $O(N)$ time.
 This algorithm, or the more general amplitude amplification on which it builds, solves a very general problem and is often used a subroutine to achieve quadratic speed-ups in other algorithms.
 Being only a quadratic speed-up, it is not as impressive as the exponential speed-ups,
 and achieving quantum supremacy in that manner would require larger quantum computers than if the speed-up were exponential.
+
+It is proven that the class of problems quantum computers can solve in polynomial time contains P.
+This follows from the fact than quantum computers can do any classical algorithm by also solving problems like discrete logarithm factorisation in polynomial time.
+However, it is not known if quantum computers can solve NP-hard problems in efficiently.

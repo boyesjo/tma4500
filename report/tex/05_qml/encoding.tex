@@ -12,16 +12,19 @@ The four methods that will be discussed in this section are summarised in \cref{
         Given $N$-dimensional data set of $M$ data points, qubits needed is a lower bound for qubits required to represent the data, and circuit depth is the number of gates needed for the encoding algorithm.
         For basis encoding, $b(N)>N$ is the number of bits needed to represent an $N$-dimensional data point.
     }
+    % increase padding
     \renewcommand{\arraystretch}{1.5}
-    \begin{tabular}{l|c|c|c}
-
-                                    & Qubits needed           & Circuit depth       & Hard to simulate classically    \\
-        \hline
-        Basis encoding              & $b(N)$                  & $\mathcal{O}(b(N))$ & No                              \\
-        Amplitude encoding          & $\lceil\log_2{N}\rceil$ & $\mathcal{O}(N)$    & Yes                             \\
-        Angle encoding              & $N$                     & $\mathcal{O}(N)$    & No                              \\
-        Second order angle encoding & $N$                     & $\mathcal{O}(N^2)$  & Yes\tablefootnote{Conjectured.}
-    \end{tabular}
+    % \setlength\extrarowheight{5pt}
+    \begin{tabularx}{\textwidth}{p{4cm}XXX}
+        \toprule
+        Encoding strategy                      & Qubits needed           & Circuit depth       & {Hard to simulate \newline classically} \\
+        \midrule
+        Basis encoding                         & $b(N)$                  & $\mathcal{O}(b(N))$ & No                                      \\
+        Amplitude encoding                     & $\lceil\log_2{N}\rceil$ & $\mathcal{O}(N)$    & Yes                                     \\
+        Angle encoding                         & $N$                     & $\mathcal{O}(N)$    & No                                      \\
+        {Second order \newline angle encoding} & $N$                     & $\mathcal{O}(N^2)$  & Yes (conjectured)                       \\
+        \bottomrule
+    \end{tabularx}
     \label{tab:data_encoding}
 \end{table}
 

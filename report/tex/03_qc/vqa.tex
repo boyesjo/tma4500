@@ -1,6 +1,6 @@
 \section{Variational quantum algorithms}
 \label{sec:vqa}
-Variational quantum algorithms (VQAs) are envisioned as the most likely candidate for quantum advantage to be achieved.
+Variational quantum algorithms (VQAs) are envisioned as the most likely candidate for quantum advantage to be achieved in the NISQ-era.
 By optimising a set of parameters that describe the quantum circuit, classical optimisation techniques are applicable, and only using the quantum hardware for what can be interpreted as function calls limits the circuit depths needed.
 Running the same circuit many times with slightly different parameters and inputs in a classical-quantum-hybrid fashion, rather than a complete quantum implementation, means that the quantum operations can be simple enough for the noise and decoherence to be manageable.
 This loop of running the circuit, measuring the output to evaluate a cost, optimising and updating the parameters is pictured in \cref{fig:vqa}.
