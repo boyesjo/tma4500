@@ -8,8 +8,8 @@ These operations are often thought of as gates, paralleling the classical gates 
 
 
 The most basic gates are the Pauli gates, which are applications of the Pauli matrices from \cref{eq:pauli} and are as gates simply denoted as $X$, $Y$, and $Z$ respectively.
-These gates can be seen as half turns around the $x$, $y$ and $z$ axes, respectively, of the Bloch sphere.
-The $X$ gate is also known as the NOT gate, as it mirrors the classical NOT gate by mapping $\ket{0}$ to $\ket{1}$ and vice versa, though it of course is more general, being also applicable to superposition states.
+These gates can be seen as half turns around the $x$-, $y$- and $z$-axes, respectively, of the Bloch sphere.
+The $X$-gate is also known as the NOT gate, as it mirrors the classical NOT gate by mapping $\ket{0}$ to $\ket{1}$ and vice versa, though it of course is more general, being also applicable to superposition states.
 
 The Hadamard gate
 \begin{equation}
@@ -19,7 +19,7 @@ is a rotation around the $x$-axis by $\pi/2$.
 It is a very important gate in quantum computing, as it is used to create superpositions of the computational basis states.
 
 
-The $R_X$, $R_Y$ and $R_Z$ gates are rotations around the $x$, $y$ and $z$ axes, respectively, by an arbitrary angle $\theta$:
+The $R_X$-, $R_Y$- and $R_Z$-gates are rotations around the $x$-, $y$- and $z$-axes, respectively, by an arbitrary angle $\theta$:
 \begin{align*}
     R_X(\theta) & = \begin{pmatrix} \cos\left(\frac{\theta}{2}\right) & -i \sin\left(\frac{\theta}{2}\right) \\ -i \sin\left(\frac{\theta}{2}\right) & \cos\left(\frac{\theta}{2}\right) \end{pmatrix}, \\
     R_Y(\theta) & = \begin{pmatrix} \cos\left(\frac{\theta}{2}\right) & -\sin\left(\frac{\theta}{2}\right) \\ \sin\left(\frac{\theta}{2}\right) & \cos\left(\frac{\theta}{2}\right) \end{pmatrix},      \\
@@ -28,7 +28,7 @@ The $R_X$, $R_Y$ and $R_Z$ gates are rotations around the $x$, $y$ and $z$ axes,
 These parametrised gates will be useful in \cref{sec:vqa}.
 
 \subsection{Multi-qubit gates}
-The most important multi-qubit gate is the controlled-$X$ gate, also known as the CNOT, which is a controlled version of the $X$ gate.
+The most important multi-qubit gate is the controlled $X$-gate, also known as the CNOT, which is a controlled version of the $X$-gate.
 Being controlled means that it only acts on the second qubit if the first qubit is in the state $\ket{1}$.
 Of course, the first qubit may be in a superposition, and the CNOT this way allows for the creation of entanglement between the two qubits.
 If the first qubit has probability amplitude $\alpha$ of being in the state $\ket{1}$, the second qubit will have probability amplitude $\alpha$ of being flipped.
@@ -38,7 +38,7 @@ The CNOT gate can be expressed in matrix form as
 \end{equation}
 
 In theory, any unitary single-qubit operation can be controlled.
-Another interesting two-qubit gate is the controlled $Z$ gate, CZ, expressible as the matrix
+Another interesting two-qubit gate is the controlled $Z$-gate, CZ, expressible as the matrix
 \begin{equation}
     \text{CZ} = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & -1 \end{pmatrix}.
 \end{equation}
@@ -55,7 +55,7 @@ Therefore, many measurements are performed.
 Usually, these results are averaged to obtain an estimate, but more complicated post-processing methods are also possible.
 For instance, neural networks have shown useful properties in regard of reducing variance in the estimates, though at the cost of some bias \cite{torlai2020}.
 
-The $Z$ basis is the canonical basis for measurements, but any other basis can be used, at least in theory.
+The $Z$-basis is the canonical basis for measurements, but any other basis can be used, at least in theory.
 Often, only canonical basis measurements are implemented in the hardware.
 Using another basis can be done by properly preparing the state before the measurement.
 

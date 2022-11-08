@@ -69,7 +69,7 @@ Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
 \begin{equation}
     \ket{\mathcal{D}} = \sum_{m=1}^M \sum_{i=1}^{N} x_i^{(m)} \ket{i} \ket{m}
 \end{equation}
-where $x_i^{(m)}$ is the $i$-th component of the $m$-th data point.
+where $x_i^{(m)}$ is the $i$th component of the $m$th data point.
 For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.
 
 The main drawback of amplitude encoding is the practical difficulties of preparing such states.
@@ -97,7 +97,7 @@ or
     \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_Z(x) H \ket{0},
 \end{equation}
 depending on which rotation is used.
-For Z-rotations, a Hadamard gate is needed for the operation to do something.
+For $Z$-rotations, a Hadamard gate is needed for the operation to do something.
 $N$ qubits are still required, but with native support for continuous variables, angle encoding can be more efficient than basis encoding.
 A constant number of gates are needed to prepare the state, which is a significant advantage over amplitude encoding.
 Still, being a product state, it offers no inherent quantum advantage.

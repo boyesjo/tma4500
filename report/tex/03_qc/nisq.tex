@@ -10,14 +10,14 @@ The unitary gates from \cref{sec:quantum_operations} are an idealisation, and in
 A more realistic description of the gates is given by quantum channels, which can take noise into account.
 In an unmeasured, ideal quantum system, the state evolution is veritably unitary, but as the system in practice does interact with the environment, this can be modelled as a quantum channel in which traditionally probabilistic noise is introduced.
 
-Take the $X$ gate as an example.
+Take the $X$-gate as an example.
 If the fails to apply with probability $p$, the resulting density operator $\rho'$ can be expressed as
 \begin{equation}
     \rho' = p\rho + (1-p)X\rho X^\dagger
 \end{equation}
 where $\rho$ is the initial density.
-Such a channel has eigenvalues $p$ and $1-2p$, where $I$ and $X$ share the former and $Y$ and $Z$ the latter.
-Consequently, states with $Y$ or $Z$ components will have mixing introduced.
+Such a channel has eigenvalues $p$ and $1-2p$, where $I$ and $X$ share the former and $Y$and $Z$ the latter.
+Consequently, states with $Y$- or $Z$-components will have mixing introduced.
 Geometrically, this can be interpreted as contraction of states on the Bloch sphere towards the centre, illustrated in \cref{fig:noise_bloch}.
 
 \begin{figure}
@@ -98,11 +98,11 @@ This means that there will be limits to the number of operations that can be per
 \subsection{Coherent noise}
 There may also be systematic errors in the unitary gates applied.
 This kind of noise, known as coherent noise does not need quantum channels to be modelled, but may rather be modelled simply by slightly different unitary gates.
-Here too, the $X$ gate can serve as an example.
+Here too, the $X$-gate can serve as an example.
 Such a gate is typically implemented by applying a Hamiltonian for some time, requiring calibration of said time.
 
 If it is not calibrated correctly, the effective operation will be a rotation that slightly deviates from the intended half turn.
-When a gate like the $X$ is applied many times, even small errors will add up, which could cause an overall rotation of the state by a significant angle.
+When a gate like the $X$-is applied many times, even small errors will add up, which could cause an overall rotation of the state by a significant angle.
 
 \begin{figure}
     \centering
@@ -110,7 +110,7 @@ When a gate like the $X$ is applied many times, even small errors will add up, w
         \begin{axis}[
                 width=0.7\textwidth,
                 height=0.5\textwidth,
-                xlabel = {Number of $X$ gates applied},
+                xlabel = {Number of $X$-gates applied},
                 ylabel = {Proportion of correct measurements},
                 grid = major,
                 % ytick = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1},
@@ -142,7 +142,7 @@ When a gate like the $X$ is applied many times, even small errors will add up, w
         \end{axis}
     \end{tikzpicture}
     \caption{
-        Proportion of correct measurements of a qubit after applying several noisy $X$ gates.
+        Proportion of correct measurements of a qubit after applying several noisy $X$-gates.
         The error in the rotation is \ang{1}, while the probability of failing to apply the gate is $p=0.3\%$.
         For each number of gates, the measurement is repeated 1000 times.
         The coherent error causes a sinusoidal behaviour, in which 180 rotations causes the overall rotation to be completely opposite.
@@ -152,7 +152,7 @@ When a gate like the $X$ is applied many times, even small errors will add up, w
     \label{fig:noise_graph}
 \end{figure}
 
-\Cref{fig:noise_graph} shows the effects of both coherent and decoherent noise on the measurement of a qubit after applying several noisy $X$ gates.
+\Cref{fig:noise_graph} shows the effects of both coherent and decoherent noise on the measurement of a qubit after applying several noisy $X$-gates.
 Clearly, information is quickly lost as the quantum state ends up different from what is expected and as the system becomes more and more mixed, losing quantum properties and instead obeying classical probabilities.
 Even though current hardware suffers much less noise than the figure shows, NISQ algorithms must nonetheless be shallow, meaning that the amount of gates applied before measurement is small.
 There are more sources of noise than the two included in the figure, and having to deal with multiple qubits certainly does not help.

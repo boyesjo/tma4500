@@ -1,0 +1,229 @@
+\section{QCNN with mid-circuit measurements}
+\label{sec:qcnn2}
+A more complex QCNN structure was described by \textcite{pesah2021}, where the pooling modules measure a qubit and use the result to control a unitary gate on its neighbour.
+The use of mid-circuit measurements complicates the circuit and its implementation, but allows for a non-linear and potentially more powerful model.
+With the aim of seeing if this provides any benefit, such a QCNN was implemnted and compared with that of \cref{sec:qcnn1} of the data thence.
+
+\subsection{Model}
+First, the data was encoded using angle encoding in the $X$-direction.
+The convolutional layers consisted of pairwise $W$-gates, a mix of parametrised rotations and CNOTs, with total of 15 parameters
+As circuits, they appear as
+\begin{equation}
+    \begin{quantikz}
+        \qw
+        &
+        \gate[wires=2]{W}
+        &
+        \qw
+        \midstick[2,brackets=none]{=}
+        &
+        \gate{R_G}
+        &
+        \targ{}
+        &
+        \gate{R_Z}
+        &
+        \ctrl{1}
+        &
+        \qw
+        &
+        \targ{}
+        &
+        \gate{R_G}
+        &
+        \qw
+        \\
+        \qw
+        &
+        &
+        \qw
+        &
+        \gate{R_G}
+        &
+        \ctrl{-1}
+        &
+        \gate{R_Y}
+        &
+        \targ{}
+        &
+        \gate{R_Y}
+        &
+        \ctrl{-1}
+        &
+        \gate{R_G}
+        &
+        \qw
+    \end{quantikz}
+    \label{eq:w_gate}
+\end{equation}
+where $R_G$ is are general rotations around all three axes and so have three parameters.
+
+The pooling layers consisted of a measurement and a conditional single-qubit unitary gate.
+Without any particular recommendation in the original paper, a simple $X$-gate was used.
+Combined, the convultion and pooling modules appear as in \cref{fig:qcnnm}.
+
+Like in \cref{sec:qcnn}, the network used 8 qubits to handle the 8-dimensional data.
+Three convolutional and pooling layers were used, reducing the data from 8 to 2 dimensions
+Lastly, a final general two-qubit ansatz was used, and a single qubit was measured and interpreted as a prediction.
+This was a simple parametrised entangler, similar to the \texttt{RealAmplitudes} in \cref{sec:qnn-vs-nn}, but with $X$-rotations.
+In total, the network had 154 parameters.
+
+\begin{figure}
+    \centering
+    \begin{quantikz}
+        % \lstick[wires=4]{$\ket{\psi(\bm{x})}$}
+        &
+        \qw
+        \gategroup[
+            wires=4,
+            steps=2,
+            style={dashed, rounded corners, inner sep=2pt},
+            label style={label position=below, anchor=north, yshift=-0.2cm},
+        ]{Convolution}
+        &
+        \gate[wires=2]{W}
+        &
+        \qw
+        &
+        \meter{}
+        \gategroup[
+            wires=4,
+            steps=2,
+            style={dashed, rounded corners, inner sep=2pt},
+            label style={label position=below, anchor=north, yshift=-0.2cm},
+        ]{Pooling}
+        &
+        \cwbend{1}
+        \\
+        &
+        \gate[wires=2]{W}
+        &
+        \qw
+        &
+        \qw
+        &
+        \qw
+        &
+        \gate{X}
+        &
+        \qw
+        \\
+        &
+        \qw
+        &
+        \gate[wires=2]{W}
+        &
+        \qw
+        &
+        \qw
+        &
+        \gate{X}
+        &
+        \qw
+        \\
+        &
+        \qw
+        &
+        \qw
+        &
+        \qw
+        &
+        \meter{}
+        &
+        \cwbend{-1}
+    \end{quantikz}
+    \caption{
+        QCNN convolution and pooling layer structure with intermediate measurements.
+        Some encoded data or already pooled data enter the convolution layer where parametrised gates $W$ entangle the qubits.
+        The pooling modules measure a qubit and use the result to control a unitary gate on a neighbour (here the $X$ gate).
+    }
+    \label{fig:qcnnm}
+\end{figure}
+
+\subsection{Implementation}
+The QCNN was implemented using the PennyLane framework and trained with the Adam optimiser with a learning rate of 0.01.
+With the PennyLane implementation, there were no problems using gradient based optimisation.
+This prompted the reimplementation of the former QCNN, which was here also trained with the same Adam optimiser.
+
+\subsection{Results}
+The results are shown in \cref{fig:qcnnm_training}.
+The training loss was lower than for the QCNN in \cref{sec:qcnn}, despite the fewer iterations, showing expected advantages of using gradient based optimisation.
+Furthermore, the new model with intermediate measurements achieves a perfect accuracy on both the training and test sets in only 10 iterations.
+Looking at the loss curves, the model with intermediate measurements seems only to converge slightly faster than the model without intermediate measurements.
+
+However, by extending the model without mid-circuit measurements to have a more comparable parameter count of 231, it overtakes the model with intermediate measurements in terms of training loss.
+This extension was done by switching out the convolutional gates from \cref{eq:qcnn_conv_gate} with the $W$-gates from \cref{eq:w_gate}.
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                    width=\textwidth,
+                    height=\textwidth,
+                    xlabel={Iteration},
+                    ylabel={Loss (MSE)},
+                    % legend pos=north west,
+                    % legend style={at={(0.5,1.03)},anchor=north},
+                    grid=major,
+                    legend pos=north east,
+                    ymode=log,
+                ]
+                \addplot[mark=none, color=blue] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
+                \addplot[mark=none, color=red] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
+                \addplot[mark=none, color=green] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_simple_ext.csv};
+                \legend{
+                    With intermediate,
+                    Without,
+                    Without extended
+                }
+            \end{axis}
+        \end{tikzpicture}
+        \caption{}
+        \label{fig:qcnnm_loss}
+    \end{subfigure}
+    \begin{subfigure}{0.49\textwidth}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                    width=\textwidth,
+                    height=\textwidth,
+                    xlabel={Iteration},
+                    ylabel={Accuracy},
+                    % legend pos=north west,
+                    % legend style={at={(0.5,1.03)},anchor=north},
+                    grid=major,
+                    legend pos=south east,
+                    xmax=35,
+                ]
+                \addplot[mark=none, color=blue] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
+                \addplot[mark=none, color=blue, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
+                \addplot[mark=none, color=red] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
+                \addplot[mark=none, color=red, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
+                \addplot[mark=none, color=green] table[x=Iteration, y=Accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple_ext.csv};
+                \addplot[mark=none, color=green, dashed] table[x=Iteration, y=Test accuracy, col sep=comma] {../code/qcnn_pennylane/results_simple_ext.csv};
+                \legend{
+                    With intermediate,
+                    , %With intermediate (test),
+                    Without,
+                    , %Without (test),
+                    Without extended,
+                    , %Without extended (test)
+                }
+            \end{axis}
+        \end{tikzpicture}
+        \caption{}
+        \label{fig:qcnnm_acc}
+    \end{subfigure}
+    \caption{
+        Training of QCNNs with and without intermediate measurements.
+        With intermediate refers to the QCNN with intermediate measurements of \cite{pesah2021}.
+        Without refers to the QCNN without intermediate measurements from \Cref{sec:qcnn}, while without extended is the same with a more expressive convolutional layer.
+        (a) loss (mean square error) during training.
+        (b) accuracy on the training and test sets.
+        Solid lines are for the training set, dashed lines for the test set.
+        Note the reduced $x$-axis range; all models achieve perfect accuracy quickly.
+    }
+    \label{fig:qcnnm_training}
+\end{figure}
