@@ -23,7 +23,7 @@ The four methods that will be discussed in this section are summarised in \cref{
         Basis encoding                         & $b(N)$                  & $\mathcal{O}(b(N))$ & No                                      \\
         Amplitude encoding                     & $\lceil\log_2{N}\rceil$ & $\mathcal{O}(N)$    & Yes                                     \\
         Angle encoding                         & $N$                     & $\mathcal{O}(N)$    & No                                      \\
-        {Second order \newline angle encoding} & $N$                     & $\mathcal{O}(N^2)$  & Yes (conjectured)                       \\
+        {Second order \newline angle encoding} & $N$                     & $\mathcal{O}(N^2)$  & Yes? (Conjectured)                      \\
         \bottomrule
     \end{tabularx}
     \label{tab:data_encoding}
@@ -39,7 +39,7 @@ For multidimensional data, the bit-strings are simply concatenated.
 If for instance the data point $010101$ is to be encoded in a quantum computer, it is simply mapped to the computational basis state $\ket{010101}$.
 This allows for multiple data points to be encoded in parallel as
 \begin{equation}
-    \ket{\mathcal{D}} = \frac{1}{\sqrt M} \sum_{m=1}^M \ket{\bm{x}^{(m)}}
+    \ket{\mathcal{D}} = \frac{1}{\sqrt M} \sum_{m=1}^M \ket{\bm{x}^{(m)}},
 \end{equation}
 where $\mathcal{D}$ is the data set, $M$ the total number of data points and $\bm{x}^{(m)}$ the $m$-th binarised data point.
 This is a simple encoding and has some significant disadvantages.
@@ -53,7 +53,7 @@ A more efficient way to encode data is to use amplitude encoding, exploiting the
 This is done by mapping the bits in the bit-string to individual qubits, but to individual amplitudes in the exponentially large Hilbert space.
 Mathematically, for some $N$-dimensional data point $\bm{x}$, this reads
 \begin{equation}
-    \ket{\psi(\bm{x})} = \sum_{i=1}^{N} x_i \ket{i}
+    \ket{\psi(\bm{x})} = \sum_{i=1}^{N} x_i \ket{i},
 \end{equation}
 where $x_i$ is the $i$th component of the data point and $\ket{i}$ is the $i$th computational basis state.
 This has the advantage of being able to encode any numeric type natively, and perhaps more importantly, only needing logarithmically many qubits.
@@ -75,7 +75,7 @@ For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.
 The main drawback of amplitude encoding is the practical difficulties of preparing such states.
 Any state of the form
 \begin{equation}
-    \ket{\psi} = \sum_{i} a_i \ket{i}
+    \ket{\psi} = \sum_{i} a_i \ket{i},
 \end{equation}
 must be efficiently and correctly prepared, which is not trivial.
 Unless some very specific assumptions are made, this is not possible in polynomial time (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{textbook}.
@@ -109,7 +109,7 @@ Still, being a product state, it offers no inherent quantum advantage.
 First, angles are encoded as above, but then the qubits are entangled and rotated further based on second order terms.
 In circuit notation, such an encoding with $Z$-rotations reads
 \begin{equation}
-    \begin{quantikz}
+    \begin{quantikz}[column sep=3mm]
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^1} & \ctrl{1} & \qw & \ctrl{1} & \ctrl{2} & \qw & \ctrl{2} & \qw & \qw & \qw & \qw & \dots \\
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^2} & \targ{} & \gate{R_Z^{1,2}} & \targ{} & \qw & \qw & \qw & \ctrl{1} & \qw & \ctrl{1} & \qw & \dots \\
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^3} & \qw & \qw &  \qw &  \targ{} & \gate{R_Z^{1,3}} & \targ{} & \targ{} & \gate{R_Z^{2,3}} & \targ{} & \qw & \dots \\
