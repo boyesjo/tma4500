@@ -6,10 +6,16 @@ Though state-of-the neural networks can contain billions of parameters, training
 Modern hardware is of course paramount, but also backpropagation is crucial.
 Neural networks are trained using gradient methods, and with backpropagation, the gradient can be computed efficiently.
 
+How such large models avoid overfitting is not entireliy clear.
+Seemingly concradicting the bias-variance tradeoff, the double descent phenomenon appears as model complexity increases.
+This is a phenomenon where, after some point, the variance no longer increase with model complexity.
+Instead, it decreases and converges toward some value.
+So unlike statistical methods, there is little reason not to increase the performance by expanding the model other than the increased computational cost.
+
 With the great size and complexity, interpretability is sacrificed.
 The models are often black boxes; it is difficult to understand why they make the predictions they do.
 Luckily, there have been some developments, perhaps most notably the universal approximation theorem.
-It states that a neural network with a single hidden layer can approximate any continuous function to arbitrary precision, given enough neurons\footnote{In addition to some requirements regarding the activation function.}.
+It states that a neural network with a single hidden layer can approximate any continuous function to arbitrary precision, given enough neurons\footnote{In addition to some easily met requirements regarding the activation function.}.
 This gives some credence to the idea that NNs of other structures could be used to approximate intricate functions.
 
 
