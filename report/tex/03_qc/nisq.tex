@@ -130,7 +130,15 @@ When a gate like the $X$-is applied many times, even small errors will add up, w
                 samples = 100,
                 domain = 0:1000,
             ]
-            {0.5*(1+(1-0.003)^x)};
+            {0.5*(1+(1-2*0.003)^x)};
+            \addplot[
+                color = gray,
+                dashed,
+                mark = none,
+                samples = 100,
+                domain = 0:1000,
+            ]
+            {0.5*(1-(1-2*0.003)^x)};
             \addplot[
                 color = gray,
                 densely dotted,
@@ -139,6 +147,14 @@ When a gate like the $X$-is applied many times, even small errors will add up, w
                 domain = 0:1000,
             ]
             {0.5*(1 + cos(x)};
+            \addplot[
+                color = black,
+                solid,
+                mark = none,
+                samples = 100,
+                domain = 0:1000,
+            ]
+            {0.5*(1+cos(x)*(1-2*0.003)^x)};
         \end{axis}
     \end{tikzpicture}
     \caption{
