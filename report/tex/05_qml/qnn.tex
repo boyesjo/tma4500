@@ -49,12 +49,13 @@ Often, methods like parameter-shift allows for computation of gradients, which m
 \subsection{Architectures and their applications}
 \subsubsection{Quantum convolutional neural networks}
 \label{sec:qcnn}
-Originally introduced by \textcite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before the output is made.
+Originally introduced by \textcite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before an output is made.
 In the quantum convolutional layers, neighbouring qubits are entangled with some parametrised gates.
-After that, pooling layers halve the active qubit count by yet a parametrised gate.
+After that, pooling layers reduce (usually by half) the active qubit count.
+The pooling may also be parametrised.
 When pooling, the qubits to be discarded could be measured and used to determine the operations on the still active qubits.
 Otherwise, the unused qubits are simply ignored.
-After several iterations, a gate can be employed on the remaining qubits, analogous to a fully connected layer in classical CNNs, before the final measurement and output.
+After several iterations, gates can be employed on the remaining qubits, analogous to finishing fully connected layer in classical CNNs, before the final measurement and output.
 
 Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count is only of order logarithm of the network depth, making them easier to train than dense networks of similar input size.
 In \cite{cong2019}, QCNNs were shown to be able to classify topological phases of matter, and since then, it has been shown that they have inherited they classical counterparts' ability to classify images \cite{oh2020}.
@@ -63,16 +64,15 @@ They have shown desirable properties with regard to avoiding barren plateaus \ci
 \subsubsection{Quantum generative adversarial networks}
 Quantum generative models have been shown to potentially have an exponential advantage over their peers \cite{gao2018}.
 Due to the inherent probabilistic nature of quantum machines, it should not be surprising that they more naturally learn difficult distributions than classical computers do.
-For instance, real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images \cite{huang2021}.
-
+Moreover, leveraging a classical model as the adversary ensures that the quantum model can be of reasonable scale.
+Real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images \cite{huang2021}.
 
 \subsubsection{Hybrid quantum-classical neural networks}
 Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure.
-Because parametrised quantum circuits are differentiable, they can easily be handled using the chain rule when back propagating a hybrid model.
+As parametrised quantum circuits are differentiable in their parameters, they can easily be handled using the chain rule when back propagating a hybrid model.
 \textcite{killoran2019} describe and test several such models.
 They note that for the NISQ-era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial.
 As quantum hardware develops, they can take over more and more of the hybrid models.
 
-
 More recently, \textcite{zeng2022} have explored using a hybrid model to multi-class classification on real world data sets using a CNN-inspired structure.
-There it is shown that the hybrid model outperforms a classical CNN of similar parameter size.
+There, it is shown that the hybrid model outperforms a classical CNN of similar parameter size.

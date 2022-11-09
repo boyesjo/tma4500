@@ -80,3 +80,15 @@ CNNs generally finish with one or more dense layers, which then operate on a sig
 The reduction of dimensionality is important because it reduces the number of parameters in the model and the risk of overfitting.
 Furthermore, the convolutional approach forces the model to learn local features.
 This is very beneficial for tasks such as image classification, where local features, such as edges, are more important than global ones, such as the position of the subject.
+
+
+\subsubsection{Generative adversarial networks}
+Generative adversarial networks (GANs) are a special type of developing neural networks where two models are trained by competing against each other.
+With an unlabalbed dataset, the goal is to generate data that is indistinguishable from the real data.
+The first model, the generator, attempts to generate samples from the underlying distribution.
+On the other hand, the discriminator is tasked with disguingishing between data produced by the generator and the real samples from the data set.
+Accordingly, the discrimination is a supervised problem.
+Both models are trained simultaneously by first sampling from the generator and the data set, using supervised methods to update the discriminator, and then using the discriminators predictions to update the generator.
+
+GANs are mainly used for unsupervised learning, and they have seen great success in generating random images.
+They have also seen success in more abstract tasks, such as translating text prompts to images or predicting what will happen next in a video.

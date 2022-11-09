@@ -36,7 +36,7 @@ They may be categorical, in which case the problem is called classification, or 
 
 The marginal distribution $p(y|\bm{x})$ if often thought of as decomposed into a known deterministic function $f(\bm{x})$ and a random noise term $\varepsilon$ such that the labels are given by
 \begin{equation}
-    y = f(\bm{x}) + \varepsilon
+    y = f(\bm{x}) + \varepsilon,
     \label{eq:ml_model}
 \end{equation}
 where $\varepsilon$ is assumed to be independent of $\bm{x}$.
@@ -55,7 +55,7 @@ This means that the model output is fully defined by the parameters, and the dat
 Since the model is defined by the parameters, the loss function is a function of the parameters.
 The supervised learning problem with a parametric model is rephrased into a standard optimisation problem:
 \begin{equation}
-    \bm{\theta}^* = \argmin_{\bm{\theta}} L(\bm{\theta; \mathcal{D}})
+    \bm{\theta}^* = \argmin_{\bm{\theta}} L(\bm{\theta; \mathcal{D}}),
 \end{equation}
 where $L$ is the loss as a function of the parameters and given the data.
 $\bm{\theta}^*$ is then the optimal set of parameters.
