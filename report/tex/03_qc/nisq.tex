@@ -79,7 +79,7 @@ Geometrically, this can be interpreted as contraction of states on the Bloch sph
         Illustration of applying a noisy $X$-gate on the Bloch sphere.
         The left plot shows the set of all pure states, the surface of the Bloch sphere.
         On the right, the same set of states is shown after the application of a noisy $X$-gate with probability $p=0.2$ of failing.
-        There, the $y$ and $z$ axes are contracted towards the centre by a factor $1-2p=0.6$, introducing mixing.
+        There, the $y$- and $z$-axes are contracted towards the centre by a factor $1-2p=0.6$, introducing mixing.
     }
     \label{fig:noise_bloch}
 \end{figure}
@@ -175,8 +175,8 @@ There are more sources of noise than the two included in the figure, and having 
 
 \subsection{Qubit counts and connectivity}
 Another limiting factor is the amount of qubits.
-Current hardware has around 10 to 100 qubits, which though still may be enough to express states too large to be expressed on classical computers, is not enough to perform the most demanding algorithms.
+Current hardware has around 10 to 100, which though still may be enough to express states too large for classical computers, is not enough to perform the most demanding algorithms.
 Recent estimates require millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
 Another current limitation is the connectivity between the qubits.
-Not all qubits are directly linked, which means that applying a multi-qubit gate may require intermediate swapping of qubits.
-This increases circuit depth which in turn increases error rates.
+Not all of them are directly linked, which means that applying a multi-qubit gate may require intermediate swapping.
+This increases circuit depth, which in turn increases error rates.

@@ -124,6 +124,7 @@ This algorithm, or the more general amplitude amplification on which it builds, 
 Being only a quadratic speed-up, it is not as impressive as the exponential speed-ups,
 and achieving quantum supremacy in that manner would require larger quantum computers than if the speed-up were exponential.
 
-It is proven that the class of problems quantum computers can solve in polynomial time contains P.
-This follows from the fact than quantum computers can do any classical algorithm by also solving problems like discrete logarithm factorisation in polynomial time.
-However, it is not known if quantum computers can solve NP-hard problems in efficiently.
+It is proven that the class of problems quantum computers can solve in polynomial time (with high probability), BQP, contains the complexity class P.
+This follows from the fact than quantum computers can do any classical algorithm.
+Since quantum computers can solve problems like integer factorisation and discrete logarithms efficiently, it is believed that BQP is strictly greater than P, but as whether P=NP remains unknown, these problems could actually be in P.
+In a similar vein, NP-complete problems are believed to lie outside of BQP.
