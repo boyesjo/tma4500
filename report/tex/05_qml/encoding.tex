@@ -78,7 +78,7 @@ Any state of the form
     \ket{\psi} = \sum_{i} a_i \ket{i},
 \end{equation}
 must be efficiently and correctly prepared, which is not trivial.
-Unless some very specific assumptions are made, this is not possible in polynomial time (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{textbook}.
+Unless some very specific assumptions are made, this is not possible in polynomial time (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{schuld2018}.
 In general, for classical data, circuits must be linearly deep in the size of the data and ergo exponentially deep in the amount of qubits, which makes it beyond the reach of NISQ hardware.
 
 \subsection{Angle encoding}
@@ -105,7 +105,7 @@ Still, being a product state, it offers no inherent quantum advantage.
 
 \subsection{Second order angle encoding}
 \label{sec:second_order_angle_encoding}
-\textcite{havlicek2018} propose a second-order angle encoding, which they conjecture to be hard to simulate classically.
+\textcite{havlicek2019} propose a second-order angle encoding, which they conjecture to be hard to simulate classically.
 First, angles are encoded as above, but then the qubits are entangled and rotated further based on second order terms.
 In circuit notation, such an encoding with $Z$-rotations reads
 \begin{equation}
