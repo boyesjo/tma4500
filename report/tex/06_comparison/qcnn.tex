@@ -116,7 +116,7 @@ In total, the circuit appears as in \cref{fig:qcnn_circuit} with a total of 63 p
 
 \begin{figure}
     \centering
-    \begin{quantikz}
+    \begin{quantikz}[row sep={0.85cm,between origins}]
         \lstick[wires=8]{$\ket{0}^{\otimes 8}$}
         &
         \gate[wires=8, disable auto height]{{\rotatebox{90}{\texttt{ZFeatureMap}$(\bm{x})$}}}
