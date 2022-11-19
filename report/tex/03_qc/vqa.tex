@@ -61,7 +61,7 @@ Additionally, the cost function should be complicated enough to warrant quantum 
 Important to the success of a VQA is the choice of the quantum circuit.
 The circuit selected is known as the ansatz, and there are a plethora of different ansätze to choose from.
 An example are hardware-efficient ansätze, which, as the name implies, is a general term used for ansätze designed in accord with the hardware properties of a given quantum computer, taking for instance the physical gates available into account and minimising the circuit depth.
-Other ansätze may be problem-specific, like the quantum alternating operator ansatz used for the quantum approximate optimisation algorithm (QAOA) (both confusingly sharing the QAOA acronym), while others are more general and can be used to solve a variety of problems.
+Other ansätze may be problem-specific, like the quantum alternating operator ansatz used for the quantum approximate optimisation algorithm (QAOA) (both sharing the QAOA acronym, confusingly), while others are more general and can be used to solve a variety of problems.
 
 The optimisation of the cost function is often done with gradient descent methods.
 To evaluate the gradient of the quantum circuit with respect to the parameters, the very convenient parameter shift rule is commonly used.

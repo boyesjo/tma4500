@@ -24,18 +24,20 @@ A model belongs to some family, a set of models with similar properties, where f
 Parametric models are defined by a finite set of parameters $\bm{\theta}= \{\theta_1, \ldots, \theta_n\}$, where each parameter $\theta_i$ is a real number.
 
 \subsubsection{Probabilistic models}
-With probabilistic models, a conditional probability distribution $p(y|\bm{x})$ is used instead of a deterministic function.
-Alternatively, the distribution may be thought of as being defined by
+With probabilistic models, the model insteads attemps to reconstruct the conditional probability distribution $p(y|\bm{x})$.
+In statistics, this distribution will often be of a known type which is paramatrised by a function of the data and some parameters.
+For instance, in linear regression, the distribution is assumed to be Gaussian with mean $\bm{\theta}^\top\bm{x}$ and variance given by another parameter $\sigma^2$.
+
+Alternatively, the conditional distributions may be thought of as being defined by
 \begin{equation}
-    p(y|\bm{x}) = f(\bm{x}) + \epsilon,
+    p(y|\bm{x}) = f(\bm{x}) + \varepsilon,
     \label{eq:probabilistic_model}
 \end{equation}
-where $\epsilon$ is a random variable and $f$ a deterministic function.
-The $\epsilon$ can be seen as some inherent randomness or noise in the data, or as a result of lacking information.
+where $\varepsilon$ is a random variable and $f$ a deterministic function.
+The $\varepsilon$ can be seen as some inherent randomness or noise in the data, or as a result of lacking information.
 It is often assumed to be independent of the input.
-These models are also often assumed to be parametrised by some parameters $\bm{\theta}$.
 
-Probabilistic models can be converted to deterministic models using a method to extract a single output from the distribution, such as the maximum a posterior
+Probabilistic models can be converted to deterministic models using a method to extract a single output from the distribution, such as the maximum a posteriori
 \begin{equation}
     \hat{y} = \argmax_{y\in\mathcal{Y}} p(y|\bm{x})
 \end{equation}
@@ -44,9 +46,11 @@ or the mean
     \hat{y} = \int_{\mathcal{Y}} y \, p(y|\bm{x})\mathrm{d}y.
 \end{equation}
 
+Probabilistic has the benefit of being able to provide a measure of uncertainty in the prediction, which is often useful.
+However, the simpler design of deterministic models makes them more suitable for computationally demanding tasks.
 
 \subsection{Measuring and optimising performance}
-The loss function $L(y, \hat{y})$ is used to measure the performance of a model by comparing a predicted output $\hat{y}$ to the true output $y$.
+A loss function $L(y, \hat{y})$ is used to measure the performance of a model by comparing a predicted output $\hat{y}$ to the true output $y$.
 It is usually chosen to be differentiable, as this allows for the use of gradient descent methods.
 Therefore, losses like the square loss,
 \begin{equation}
@@ -57,6 +61,8 @@ is often used for regression problems and the cross-entropy,
     L(y, \hat{y}) = -y\log(\hat{y}) - (1-y)\log(1-\hat{y}),
 \end{equation}
 for classification problems.
+If the model is probabilistic and assumed to be a particular type of distribution, its structure can be used to define a loss.
+Maximum likelihood estimatiom can be used, switching only the sign to conform with machine learning conventions, leading to the negative log-likelihood loss.
 
 With some loss, one can consider the risk, defined as
 \begin{equation}
@@ -81,7 +87,7 @@ For a chosen parametric model family, the supervised learning problem can be for
 \end{equation}
 where $C$ is the cost function.
 The loss function and models are often chosen to be differentiable, giving differentiable costs, which allows for the use of gradient descent methods.
-In the simplest case, that means that the parameters are updated until some convergence criteria is met by
+In the simplest case, that means that the parameters are updated until some convergence criterion is met by
 \begin{equation}
     \bm{\theta}^{(t+1)} = \bm{\theta}^{(t)} - \eta \nabla_{\bm{\theta}} C(\bm{\theta}^{(t)}, \mathcal{D}),
 \end{equation}
@@ -91,8 +97,12 @@ In practice, more sophisticated methods are often used, such as the Adam optimis
 The process of optimising the cost function is called training.
 As the model improves, it is said to learn.
 
-\subsection{Bias-variance trade-off}
-In machine learning, there is a constant struggle between having models with lots of parameters and great expressive power versus simpler models with fewer parameters.
+\subsection{Generalisation: the bias-variance trade-off}
+The goal of supervised learning is to find a model that performs well on unseen data.
+Optimising the cost function on the training data will lead to a model that performs well on the training data, but may not generalise well to unseen data.
+Therefore, the model is evaluated on a test set, which is not used for training.
+
+There is a constant struggle between having models with lots of parameters and great expressive power versus simpler models with fewer parameters.
 The former are more likely to overfit the data, while the latter are more likely to underfit the data.
 This is known as the bias-variance trade-off.
 The main goal is of course to generalise, that is to have a model that truly captures the underlying properties of the data and subsequently performs well on data that it has not seen before.

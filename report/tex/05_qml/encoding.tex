@@ -10,23 +10,20 @@ The four methods that will be discussed in this section are summarised in \cref{
     \caption{
         Properties of different data encodings.
         Given $N$-dimensional data set of $M$ data points, qubits needed is a lower bound for qubits required to represent the data, and circuit depth is the number of gates needed for the encoding algorithm.
-        For basis encoding, $b(N)>N$ is the number of bits needed to represent an $N$-dimensional data point.
+        For basis encoding, $b(N) \geq N$ is the number of bits needed to represent an $N$-dimensional data point, for instance by using floating point representations of continuous data.
     }
-    % increase padding
-    \renewcommand{\arraystretch}{1.5}
-    % \setlength\extrarowheight{5pt}
-    \newcolumntype{Y}{>{\centering\arraybackslash}X}
-    \begin{tabularx}{\textwidth}{p{4cm}YYY}
-        \toprule
-        Encoding strategy                      & Qubits needed           & Circuit depth       & {Hard to simulate \newline classically} \\
-        \midrule
-        Basis encoding                         & $b(N)$                  & $\mathcal{O}(b(N))$ & No                                      \\
-        Amplitude encoding                     & $\lceil\log_2{N}\rceil$ & $\mathcal{O}(N)$    & Yes                                     \\
-        Angle encoding                         & $N$                     & $\mathcal{O}(N)$    & No                                      \\
-        {Second order \newline angle encoding} & $N$                     & $\mathcal{O}(N^2)$  & Yes? (Conjectured)                      \\
-        \bottomrule
-    \end{tabularx}
     \label{tab:data_encoding}
+    \begin{tblr}{
+            width=\linewidth,
+            colspec={Q[l,m,co=1] Q[c,m,co=1] Q[c,m,co=1] Q[c,m,co=1]},
+        }
+        \toprule
+        \textbf{Encoding strategy}    & \textbf{Qubits needed}  & \textbf{Circuit depth} & \textbf{Hard to simulate lassically} \\ \midrule
+        Basis encoding                & $b(N)$                  & $O(b(N))$              & No                                   \\ \cmidrule{1-4}
+        Amplitude encoding            & $\lceil\log_2{N}\rceil$ & $O(N)$                 & Yes                                  \\ \cmidrule{1-4}
+        Angle encoding                & $N$                     & $O(N)$                 & No                                   \\ \cmidrule{1-4}
+        {Second order angle encoding} & $N$                     & $O(N^2)$               & {Yes? (Conjectured)}                 \\ \bottomrule
+    \end{tblr}
 \end{table}
 
 
@@ -86,22 +83,17 @@ A third option is angle encoding.
 Here, the potentially continuous components of the data are mapped to rotations of the qubits.
 For the rotations to be meaningful angles and not loop around, the data needs be normalised.
 An $N$-dimensional data point $\bm{x}$ is then encoded as
-\begin{equation}
-    \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_X(x) \ket{0},
-\end{equation}
-\begin{equation}
-    \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_Y(x) \ket{0}
-\end{equation}
-or
-\begin{equation}
-    \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_Z(x) H \ket{0},
-\end{equation}
+\begin{align}
+    \ket{\psi(\bm{x})} & = \bigotimes_{i=1}^{N} R_X(x) \ket{0},   \\
+    \ket{\psi(\bm{x})} & = \bigotimes_{i=1}^{N} R_Y(x) \ket{0}    \\
+    \intertext{or}
+    \ket{\psi(\bm{x})} & = \bigotimes_{i=1}^{N} R_Z(x) H \ket{0},
+\end{align}
 depending on which rotation is used.
-For $Z$-rotations, a Hadamard gate is needed for the operation to do something.
+For $Z$-rotations, a Hadamard gate is needed for the operation to have an effect.
 $N$ qubits are still required, but with native support for continuous variables, angle encoding can be more efficient than basis encoding.
 A constant number of gates are needed to prepare the state, which is a significant advantage over amplitude encoding.
 Still, being a product state, it offers no inherent quantum advantage.
-
 
 \subsection{Second order angle encoding}
 \label{sec:second_order_angle_encoding}
@@ -118,12 +110,12 @@ In circuit notation, such an encoding with $Z$-rotations reads
     \end{quantikz},
 \end{equation}
 where $R_Z^i = R_Z(x_i)$ and $R_Z^{i,j} = R_Z((\pi-x_i)(\pi-x_j))$ and with the entanglements and second-order rotations being applied pairwise for all $N$ qubits.
-This increases the circuit depth to order $N^2$ and full connectivity is needed.
+This increases the circuit depth to order $N^2$, and full connectivity is needed.
 Nonetheless, it may be feasible for data of moderate dimensionality on NISQ hardware, and were it indeed classically hard to simulate, it could provide quantum advantage.
 
 \subsection{Repeats}
 The expressive power of models heavily rely on the encoding strategy.
 For instance, a single qubit rotation only allows the model to learn sine functions, where the frequency is determined by the scaling of the data.
 Generally, quantum models will learn periodic functions, and thus Fourier analysis is a useful tool.
-\textcite{schuld2021} study the implications of this, and they show that simply repeating basic encoding blocks allows for learning of more frequencies and thus more complex functions.
+\textcite{schuld2021} study the implications of this, and they show that simply repeating simple encoding blocks allows for learning of more frequencies and thus more complex functions.
 Asymptotically, such repeats lets a quantum model learn arbitrary functions.

@@ -15,7 +15,7 @@ Like in \cite{abbas2021}, only the two first species are considered, reducing th
 These are linearly separable, so the models should be able to learn to classify them.
 
 
-\subsection{Quantum NN}
+\subsection{Quantum model}
 First, the four-dimensional input data is first scaled to have zero mean and unit variance.
 Some scaling is necessary for the encoding to work properly, and standardising the data is a natural choice, common in machine learning.
 Then, it is encoded into a quantum state a second order angle encoding with $Z$-rotations, discussed in \cref{sec:second_order_angle_encoding}, with two repetitions.
@@ -104,17 +104,10 @@ To model noise, the Qiskit simulator was set to simulate the 27-qubit IBM Montre
 \end{figure}
 
 
-\subsection{Classical NN}
+\subsection{Classical model}
 The classical neural network was a standard dense feed-forward model.
 To make in comparable to the QNN, it used a 4-1-1-1-2 layered structure without biases, giving a total of 8 parameters.
-The activation functions were leaky ReLUs,
-\begin{equation}
-    \text{LeakyReLU}(x) = \begin{cases}
-        x     & x \geq 0 \\
-        0.01x & x < 0
-    \end{cases},
-\end{equation}
-and the output layer used a softmax activation function.
+The activation functions were leaky ReLUs, and the output layer used a softmax activation function.
 Whether such an architecture makes sense is arguable, and it was likely made so mainly to ensure that the number of parameters would be the same as the QNN.
 
 
@@ -166,6 +159,8 @@ As in the original paper, the QNN converges much quicker and more consistently, 
 The classical network, on the other hand, requires more iterations to converge and does not always do so.
 In some cases, the model did not converge, only predicting one class, which is why the out-of-fold accuracy was not 100\% for all folds.
 This is in line with the original paper, underlining the potential advantage of quantum neural networks.
+For such a simple case, statistical methods like logistic regression or discriminant analysis are better suited than neural networks, but simulating quantum hardware limits the problem size that can be solved.
+Hopefully, the results extrapolate to more complex problems.
 
 Why parity was chosen as output interpretation is not clear, other than being cited as a \enquote{standard in practice}.
 However, it is not the only possible interpretation, and a perhaps more intuitive one would be to use the sign of just one of the qubits.

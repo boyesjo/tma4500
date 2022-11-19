@@ -18,13 +18,16 @@ Variational quantum algorithms (VQAs) have been seen as a promising approach to 
 Such algorithms use a classical optimiser to find the best parameters for a general algorithm.
 In this way, the quantum hardware is only used for a small part of the algorithm, and the rest is done classically.
 Consequently, there is less time for noise and decoherence to compound, which could ruin the computation, and the efficiency of classical hardware can still be utilised.
+
 VQAs are in a sense a very natural approach, as most quantum hardware are inherently parametrised; microwave pulses for superconducting circuits, laser pulses for trapped ions and so on must use a particular pulse length, frequency et cetera.
+Instead of calibrating the hardware to follow a platonic algorithm, it could instead be better to calibrate it to map the input to the desired output.
+
 Applications of VQAs are numerous.
 A typical example is finding the ground state of a Hamiltonian for a molecule.
 Such problems are exponential in the particle count, and thus intractable on classical hardware for larger molecules, while the process of evaluating the Hamiltonian on quantum hardware is typically polynomial.
 VQAs are also well suited for general mathematical tasks such as optimisation.
 
-Machine learning (ML) and VQAs are a natural fit, as the optimisation of parameters is how many machine learning models are trained.
+Machine learning (ML) and VQAs are a good fit, as the optimisation of parameters is how many machine learning models are trained.
 With some way of encoding data into quantum hardware, VQAs are easily interpreted as machine learning models.
 The output of the quantum algorithm can be seen as a prediction in supervised learning, and so the quantum model can be trained to predict.
 With gate-based quantum computers, the quantum model can show some similarities to classical neural networks, bringing forth the notion of quantum neural nets.

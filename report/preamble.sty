@@ -81,8 +81,28 @@
 \usepackage{nicematrix}
 \usepackage{tablefootnote}
 \usepackage{ragged2e}  % for '\RaggedRight' macro (allows hyphenation)
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs}
+% fix the category code problem
+\catcode`&=4
+% change the quantikz environment
+\ExplSyntaxOn\makeatletter
+
+\RenewDocumentEnvironment{quantikz}{O{} +b}
+ {
+  \tl_set:Nn \l__quantikz_body_tl { \tikzcd@ [#1] #2 }
+  \regex_replace_all:nnN { \& } { \cA\& } \l__quantikz_body_tl
+  \tl_use:N \l__quantikz_body_tl
+  \endtikzcd
+ }{}
+\tl_new:N \l__quantikz_body_tl
+
+\makeatother\ExplSyntaxOff
 
 
 % ...
 \DeclareMathOperator*{\argmax}{arg\,max}
-\DeclareMathOperator*{\argmin}{arg\,smin}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+%

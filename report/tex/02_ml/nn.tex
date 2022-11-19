@@ -13,7 +13,7 @@ Instead, it decreases and converges toward some value.
 So unlike statistical methods, there is little reason not to increase the performance by expanding the model other than the increased computational cost.
 
 With the great size and complexity, interpretability is sacrificed.
-The models are often black boxes; it is difficult to understand why they make the predictions they do.
+The models are deterministic and often black boxes; it is difficult to understand why they make the predictions they do.
 Luckily, there have been some developments, perhaps most notably the universal approximation theorem.
 It states that a neural network with a single hidden layer can approximate any continuous function to arbitrary precision, given enough neurons\footnote{In addition to some easily met requirements regarding the activation function.}.
 This gives some credence to the idea that NNs of other structures could be used to approximate intricate functions.
@@ -44,23 +44,41 @@ These can be expressed as
     a_i^{(j)} = \sigma\left( \sum_{n=1}^m w^{(j)}_n a^{(j-1)}_n + b^{(j)}_n \right),
 \end{equation}
 where $j$ is the layer number, $i$ is the node number and $w$ and $b$ are the weights and biases of the network — parameters to be optimised.
-The activation function $\sigma$ is a non-linear function, such as the sigmoid function, the hyperbolic tangent or the rectified linear unit (ReLU)
-\begin{equation}
-    \sigma(x) = \begin{cases}
-        \frac{1}{1 + e^{-x}} & \text{sigmoid}            \\
-        \tanh(x)             & \text{hyperbolic tangent} \\
-        \max(0, x)           & \text{ReLU}
-    \end{cases}
-\end{equation}
-which is needed for the model not to simply be a linear transformation.
+
+The activation function $\sigma$ is a non-linear function, such as the sigmoid function, the hyperbolic tangent or the rectified linear unit (ReLU).
+Non-linearity is needed for the model not to simply be a linear transformation.
+The most used activation functions are listed in \cref{tab:activations}.
+
 The output layer is similar to the hidden layers, though perhaps with different activation functions and fewer nodes.
 For instance, if the goal is to classify the data into $k$ classes, the output layer could have $k$ nodes with an activation function that ensures the sum of the outputs is one.
 In that way, the output can be interpreted as probabilities.
 
-A model like this is dense, because each node in one layer depends on every node in the previous layer.
+\begin{table}
+    \centering
+    \caption{
+        Common activation functions.
+        Usually, they are applied element-wise to the output of a linear transformation.
+        However, in the case of the softmax function, it is applied to the entire output layer.
+    }
+    \label{tab:activations}
+    \SetTblrInner{rowsep=3pt}
+    \begin{tblr}{
+            width=\linewidth,
+            colspec={Q[l,m,co=1] Q[l,m,co=1,2] Q[r,m,co=1, 2]},
+        }
+        \toprule
+        \textbf{Name}      & \textbf{Definition}                & \textbf{Typical usecase}                      \\ \midrule
+        Identity           & $x_i$                              & Regression output                             \\ \cmidrule{1-3}
+        Sigmoid            & ${1}/{1 + e^{-x_i}}$               & {Hidden layers, binary classification output} \\ \cmidrule{1-3}
+        Hyperbolic tangent & $\tanh(x_i)$                       & {Hidden layers, binary classification output} \\ \cmidrule{1-3}
+        ReLU               & $\max(0, x_i)$                     & Hidden layers                                 \\ \cmidrule{1-3}
+        Leaky ReLU         & $\max(0, x_i) - 0.01\max(0, -x_i)$ & Hidden layers                                 \\ \cmidrule{1-3}
+        Softmax            & ${e^x_i}/{\sum_{j=1}^k e^{x_j}}$   & {Multi-class classification output}           \\ \bottomrule
+    \end{tblr}
+\end{table}
+
+Dense models mean that each node in one layer depends on all nodes in the previous layer.
 It is feed-forward, because the data flows in one direction; the perceptrons in a layer depends only on those in the former.
-
-
 
 \subsubsection{Convolutional neural networks}
 Convolutional neural networks (CNNs) are a special type of neural network that are particularly suited for certain tasks like image processing.
