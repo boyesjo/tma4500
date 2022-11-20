@@ -6,51 +6,96 @@ Running the same circuit many times with slightly different parameters and input
 This loop of running the circuit, measuring the output to evaluate a cost, optimising and updating the parameters is pictured in \cref{fig:vqa}.
 
 \begin{figure}
-    \centering
-    \begin{tikzpicture}
-        \tikzstyle{box} = [
-        rectangle,
-        draw,
-        dashed,
-        rounded corners,
-        outer sep=0.2cm,
-        inner sep=0.2cm,
-        ]
+\centering
+\begin{tikzpicture}
+\tikzstyle{box} = [
+rectangle,
+draw,
+dashed,
+rounded corners,
+outer sep=0.2cm,
+inner sep=0.2cm,
+fill = white,
+]
+\tikzset{%
+    cascaded/.style = {%
+            general shadow = {%
+                    shadow scale = 1,
+                    shadow xshift = -1.5ex,
+                    shadow yshift = - 1.5ex,
+                    draw,
+                    % thick,
+                    fill = white,
+                    draw opacity = 0.1,
+                },
+            general shadow = {%
+                    shadow scale = 1,
+                    shadow xshift = -1ex,
+                    shadow yshift = - 1ex,
+                    draw,
+                    % thick,
+                    fill = white,
+                    draw opacity = 0.2,
+                },
+            general shadow = {%
+                    shadow scale = 1,
+                    shadow xshift = -.5ex,
+                    shadow yshift = -.5ex,
+                    draw,
+                    % thick,
+                    fill = white,
+                    draw opacity = 0.4
+                },
+            % fill = white,
+            % draw,
+            % thick,
+            % minimum width = 1.5cm,
+            % minimum height = 2cm
+        }
+}
 
-        \node[box, label=below:{Parametrised circuit}] (qc) at (-4, -1) {
-                \begin{quantikz}[
-                        % manually have to avoid inheriting the nod style
-                        solid,
-                        rounded corners=0,
-                        outer sep=0,
-                        inner sep=0.2cm,
-                    ]
-                    \lstick{$\ket{0}$}
-                    &
-                    \gate[wires=3, nwires=2]{U(\bm{\theta})}
-                    &
-                    \meter{}
-                    \rstick[wires=3]{\rotatebox{90}{Measurement}}
-                    \\
-                    \lstick{\vdots} & &
-                    \\
-                    \lstick{$\ket{0}$} & \qw & \meter{}
-                \end{quantikz}
-            };
-        \node[box] (cf) at (2, -1) {$\text{Cost}(\bm{\theta})$};
-        \node[box] (opt) at (2, 2) {Classical optimiser};
-        \node[box] (up) at (-4, 2) {Updated $\bm{\theta}$};
-        \draw[->] (qc) -- (cf);
-        \draw[->] (cf) -- (opt);
-        \draw[->] (opt) -- (up);
-        \draw[->] (up) -- (qc);
-    \end{tikzpicture}
-    \caption{
-        The general structure of a VQA.
-        A parametrised quantum circuit is run multiple times on a quantum computer, after which a cost function is calculated based on the measurements.
-        The parameters of the quantum circuit are subsequently updated by a classical optimiser, and the process is repeated until some convergence criterion is met.
-    }
-    \label{fig:vqa}
+\node[box, cascaded, label=below:{Parametrised circuit}] (qc) at (-4, -1) {
+        \begin{quantikz}[
+                % manually have to avoid inheriting the node style
+                solid,
+                rounded corners=0,
+                outer sep=0,
+                inner sep=0.2cm,
+            ]
+            \lstick{$\ket{0}$}
+            &
+            \gate[wires=3, nwires=2]{U(\bm{\theta})}
+            &
+            \meter{}
+            \rstick[wires=3]{\rotatebox{90}{Measurements}}
+            \\
+            \lstick{\vdots} & &
+            \\
+            \lstick{$\ket{0}$} & \qw & \meter{}
+        \end{quantikz}
+    };
+\node[box, label=below:{Cost and its gradient}] (cf) at (2, -1) {
+        $
+            \begin{+matrix}
+            C(\bm{\theta}) \\
+            \nabla_{\bm{\theta}} C(\bm{\theta})
+            \end{+matrix}
+        $
+    };
+\node[box] (opt) at (2, 2) {Classical optimiser};
+\node[box] (up) at (-4, 2) {Updated $\bm{\theta}$};
+\draw[->] (qc) -- (cf);
+\draw[->] (cf) -- (opt);
+\draw[->] (opt) -- (up);
+\draw[->] (up) -- (qc);
+\end{tikzpicture}
+\caption{
+    The general structure of a VQA.
+    Given some initial parameters $\bm{\theta}$, a parametrised quantum circuit is run multiple times on quantum hardware, after which a cost $C(\bm{\theta})$ function is calculated based on the measurements.
+    Additionally, using e.g., the parameter-shift rule, the gradient of the cost function with respect to the parameters can also be calculated.
+    The parameters of the quantum circuit are subsequently updated by a classical optimiser, and the process is repeated until some convergence criterion is met.
+}
+\label{fig:vqa}
 \end{figure}
 
 Generally, VQAs start with defining a cost function, depending on some input data (states) and the parametrised circuit, to be minimised with respect to the parameters of the quantum circuit.

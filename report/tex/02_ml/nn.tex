@@ -51,29 +51,31 @@ The most used activation functions are listed in \cref{tab:activations}.
 
 The output layer is similar to the hidden layers, though perhaps with different activation functions and fewer nodes.
 For instance, if the goal is to classify the data into $k$ classes, the output layer could have $k$ nodes with an activation function that ensures the sum of the outputs is one.
-In that way, the output can be interpreted as probabilities.
+In that way, the output can be interpreted as probabilities of the data belonging to the respective classes.
 
 \begin{table}
     \centering
     \caption{
         Common activation functions.
         Usually, they are applied element-wise to the output of a linear transformation.
-        However, in the case of the softmax function, it is applied to the entire output layer.
+        However, in the case of the softmax function, it depends on the whole layer.
     }
     \label{tab:activations}
     \SetTblrInner{rowsep=3pt}
     \begin{tblr}{
             width=\linewidth,
-            colspec={Q[l,m,co=1] Q[l,m,co=1,2] Q[r,m,co=1, 2]},
+            colspec={Q[l,m,co=1] Q[l,m,co=2.5] Q[r,m,co=3.5]},
         }
         \toprule
-        \textbf{Name}      & \textbf{Definition}                & \textbf{Typical use case}                     \\ \midrule
-        Identity           & $x_i$                              & Regression output                             \\ \cmidrule{1-3}
-        Sigmoid            & ${1}/{1 + e^{-x_i}}$               & {Hidden layers, binary classification output} \\ \cmidrule{1-3}
-        Hyperbolic tangent & $\tanh(x_i)$                       & {Hidden layers, binary classification output} \\ \cmidrule{1-3}
-        ReLU               & $\max(0, x_i)$                     & Hidden layers                                 \\ \cmidrule{1-3}
-        Leaky ReLU         & $\max(0, x_i) - 0.01\max(0, -x_i)$ & Hidden layers                                 \\ \cmidrule{1-3}
-        Softmax            & ${e^x_i}/{\sum_{j=1}^k e^{x_j}}$   & {Multi-class classification output}           \\ \bottomrule
+        \textbf{Name}      & \textbf{Definition}                                                   & \textbf{Typical use case}           \\ \midrule
+        Identity           & $\sigma(x_i) = x_i$                                                   & Regression output                   \\ \cmidrule{1-3}
+        Sigmoid            & $\sigma(x_i) = {1}/(1 + e^{-x_i})$                                    & {Hidden layers,                     \\ binary classification output} \\ \cmidrule{1-3}
+        Hyperbolic tangent & $\sigma(x_i) = \tanh(x_i)$                                            & {Hidden layers,                     \\ binary classification output} \\ \cmidrule{1-3}
+        % ReLU               & $\max(0, x_i)$                                                        & Hidden layers                       \\ \cmidrule{1-3}
+        ReLU               & $\sigma(x_i)=\begin{cases}x_i, &x \geq 0 \\ 0 &x<0\end{cases}$        & Hidden layers                       \\ \cmidrule{1-3}
+        % Leaky ReLU         & $\max(0, x_i) - 0.01\max(0, -x_i)$                                    & Hidden layers                       \\ \cmidrule{1-3}
+        Leaky ReLU         & $\sigma(x_i)=\begin{cases}x_i, &x \geq 0 \\ 0.01x_i, &x<0\end{cases}$ & Hidden layers                       \\ \cmidrule{1-3}
+        Softmax            & $\sigma(x_i)={e^x_i}/{\sum_{j=1}^k e^{x_j}}$                          & {Multi-class classification output} \\ \bottomrule
     \end{tblr}
 \end{table}
 
