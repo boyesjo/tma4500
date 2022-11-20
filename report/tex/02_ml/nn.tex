@@ -7,10 +7,57 @@ Modern hardware is of course paramount, but also backpropagation is crucial.
 Neural networks are trained using gradient methods, and with backpropagation, the gradient can be computed efficiently.
 
 How such large models avoid overfitting is not entirely clear.
-Seemingly contradicting the bias-variance trade-off, the double descent phenomenon appears as model complexity increases.
+Seemingly contradicting the bias-variance trade-off, the double descent phenomenon appears as model complexity increases or as more gradient descent iterations are done.
 This is a phenomenon where, after some point, the variance no longer increase with model complexity.
 Instead, it decreases and converges toward some value.
-So unlike statistical methods, there is little reason not to increase the performance by expanding the model other than the increased computational cost.
+This can be seen in \cref{fig:double_descent}, where convolutional networks\footnote{See \cref{sec:cnn}.} were tested with different layer sizes.
+Unlike statistical methods, once past this complexity threshold, there is little reason not to increase the performance by expanding the model other than the increased computational cost.
+
+\begin{figure}[htbp]
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+                width=0.7\textwidth,
+                height=0.4\textwidth,
+                xlabel={ResNet18 layer width},
+                ylabel={Missclassification rate},
+                grid = major,
+                legend pos=north east,
+                legend cell align={left},
+                % ymode=log,
+                % xmode=log,
+                clip = false,
+            ]
+            \addplot[
+                color=blue,
+                mark=none,
+            ]
+            table[x=model_size, y=test_err, col sep=comma] {../code/double_descent/double_descent.csv};
+            \addplot[
+                color=red,
+                mark=none,
+            ]
+            table[x=model_size, y=train_err, col sep=comma] {../code/double_descent/double_descent.csv};
+            \legend{
+                Test data,
+                Training data,
+            }
+            \def\myY{0.66}
+            \draw[decoration={brace,raise=-10pt}, decorate]
+            (axis cs:0,\myY) -- (axis cs:9,\myY) node[midway]{\footnotesize Classical};
+            \draw[decoration={brace,raise=-10pt}, decorate]
+            (axis cs:12,\myY) -- (axis cs:65,\myY) node[midway]{\footnotesize Modern};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{
+        Double descent phenomenon.
+        As model complexity increases, the train error decreases steadily, but the test error reaches a minimum and after which the test error starts to increase again.
+        However, past a certain point, the test error decreases again.
+        This defines two regimes: the first classical regime, where the bias-variance trade-off applies, and model complexity must remain low to avoid overfitting, compared to the modern ML regime, where more complexity is always better.
+        The data is from \cite{nakkiran2021}, where ResNet18 models was used for image classification with added label noise.
+    }
+    \label{fig:double_descent}
+\end{figure}
 
 With the great size and complexity, interpretability is sacrificed.
 The models are deterministic and often black boxes; it is difficult to understand why they make the predictions they do.
@@ -79,10 +126,11 @@ In that way, the output can be interpreted as probabilities of the data belongin
     \end{tblr}
 \end{table}
 
-Dense models mean that each node in one layer depends on all nodes in the previous layer.
+Models being dense mean that each node in one layer depends on all nodes in the previous layer.
 It is feed-forward, because the data flows in one direction; the perceptrons in a layer depends only on those in the former.
 
 \subsubsection{Convolutional neural networks}
+\label{sec:cnn}
 Convolutional neural networks (CNNs) are a special type of neural network that are particularly suited for certain tasks like image processing.
 A greatly simplified CNN is shown in \cref{fig:cnn}.
 

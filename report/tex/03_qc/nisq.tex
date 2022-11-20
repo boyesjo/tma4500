@@ -74,6 +74,12 @@ Geometrically, this can be interpreted as contraction of states on the Bloch sph
             ]
             ({cos(u)*sin(v)}, {0.6*sin(u)*sin(v)}, {0.6*cos(v)});
         \end{groupplot}
+        % add arrow from north on fig 1 to north on fig 2 
+        \draw[->, shorten >=0.5cm,shorten <=1cm]
+        ([yshift=-2.5cm] group c1r1.north)
+        edge[bend left]
+        node[midway,above] {\footnotesize Noisy $X$-gate}
+        ([yshift=-2.5cm] group c2r1.north);
     \end{tikzpicture}
     \caption{
         Illustration of applying a noisy $X$-gate on the Bloch sphere.
@@ -146,7 +152,7 @@ When a gate like the $X$-is applied many times, even small errors will add up, w
                 samples = 100,
                 domain = 0:1000,
             ]
-            {0.5*(1 + cos(x)};
+            {0.5*(1 + cos(x))};
             \addplot[
                 color = black,
                 solid,
