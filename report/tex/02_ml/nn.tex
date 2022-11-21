@@ -13,12 +13,12 @@ Instead, it decreases and converges toward some value.
 This can be seen in \cref{fig:double_descent}, where convolutional networks\footnote{See \cref{sec:cnn}.} were tested with different layer sizes.
 Unlike statistical methods, once past this complexity threshold, there is little reason not to increase the performance by expanding the model other than the increased computational cost.
 
-\begin{figure}[htbp]
+\begin{figure}
     \centering
     \begin{tikzpicture}
         \begin{axis}[
                 width=0.7\textwidth,
-                height=0.4\textwidth,
+                height=0.45\textwidth,
                 xlabel={ResNet18 layer width},
                 ylabel={Missclassification rate},
                 grid = major,
@@ -26,6 +26,7 @@ Unlike statistical methods, once past this complexity threshold, there is little
                 legend cell align={left},
                 % ymode=log,
                 % xmode=log,
+                % log basis x={2},
                 clip = false,
             ]
             \addplot[
@@ -43,10 +44,11 @@ Unlike statistical methods, once past this complexity threshold, there is little
                 Training data,
             }
             \def\myY{0.66}
+
             \draw[decoration={brace,raise=-10pt}, decorate]
-            (axis cs:0,\myY) -- (axis cs:9,\myY) node[midway]{\footnotesize Classical};
+            (0,\myY) -- (9,\myY) node[midway]{\footnotesize Classical};
             \draw[decoration={brace,raise=-10pt}, decorate]
-            (axis cs:12,\myY) -- (axis cs:65,\myY) node[midway]{\footnotesize Modern};
+            (12,\myY) -- (65,\myY) node[midway]{\footnotesize Modern};
         \end{axis}
     \end{tikzpicture}
     \caption{
@@ -157,7 +159,7 @@ This is very beneficial for tasks such as image classification, where local feat
 
 
 \subsubsection{Generative adversarial networks}
-Generative adversarial networks (GANs) are a special type of developing neural networks where two models are trained by competing against each other.
+Generative adversarial networks (GANs) refer to special kind of design where two different networks are trained by competing against each other.
 With an unlabelled dataset, the goal is to generate data that is indistinguishable from the real data.
 The first model, the generator, attempts to generate samples from the underlying distribution.
 On the other hand, the discriminator is tasked with distinguishing between data produced by the generator and the real samples from the data set.

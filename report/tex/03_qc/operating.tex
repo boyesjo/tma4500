@@ -16,12 +16,14 @@ These gates can be seen as half turns around the $x$-, $y$- and $z$-axes, respec
 The $X$-gate is also known as the NOT gate, as it mirrors the classical NOT gate by mapping $\ket{0}$ to $\ket{1}$ and vice versa.
 It is however more general, being also applicable to superposition states.
 
-The Hadamard gate
+The Hadamard gate,
 \begin{equation}
-    H = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}
+    H = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix},
 \end{equation}
-is a rotation around the $x$-axis by $\pi/2$.
+is a rotation around the line between the $x$- and $z$-axes by $\pi/2$.
 It is an important gate in quantum computing, as it is used to create superpositions of the computational basis states.
+Applied on the initial $\ket{0}$ state, it creates the entangled state $\frac{1}{\sqrt{2}}(\ket{0} + \ket{1})$.
+Two consecutive applications thereof is a no-op, the second returns the state to the initial state, as can be seen from the matrix squaring to the identity.
 
 The $R_X$-, $R_Y$- and $R_Z$-gates are rotations around the $x$-, $y$- and $z$-axes, respectively, by an arbitrary angle $\theta$:
 \begin{align*}
