@@ -113,10 +113,11 @@ When a gate like the $X$-is applied many times, even small errors will add up, w
     \centering
     \begin{tikzpicture}
         \begin{axis}[
-                width=0.7\textwidth,
-                height=0.5\textwidth,
+                width=0.6\textwidth,
+                height=0.4\textwidth,
                 xlabel = {Number of $X$-gates applied},
-                ylabel = {Proportion of correct measurements},
+                ylabel = {Correct measurements (\%)},
+                y filter/.code={\pgfmathparse{#1*100}\pgfmathresult},
                 grid = major,
                 % ytick = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1},
             ]
