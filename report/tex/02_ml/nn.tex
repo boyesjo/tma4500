@@ -12,6 +12,7 @@ This is a phenomenon where, after some point, the variance no longer increase wi
 Instead, it decreases and converges toward some value.
 This can be seen in \cref{fig:double_descent}, where convolutional networks\footnote{See \cref{sec:cnn}.} were tested with different layer sizes.
 Unlike statistical methods, once past this complexity threshold, there is little reason not to increase the performance by expanding the model other than the increased computational cost.
+Double descent have been shown to appear for a variety of models \cite{nakkiran2021}.
 
 \begin{figure}
     \centering
@@ -25,9 +26,10 @@ Unlike statistical methods, once past this complexity threshold, there is little
                 legend pos=north east,
                 legend cell align={left},
                 % ymode=log,
-                % xmode=log,
-                % log basis x={2},
+                xmode=log,
+                log basis x={2},
                 clip = false,
+                log ticks with fixed point,
             ]
             \addplot[
                 color=blue,
@@ -45,10 +47,19 @@ Unlike statistical methods, once past this complexity threshold, there is little
             }
             \def\myY{0.66}
 
-            \draw[decoration={brace,raise=-10pt}, decorate]
-            (0,\myY) -- (9,\myY) node[midway]{\footnotesize Classical};
-            \draw[decoration={brace,raise=-10pt}, decorate]
-            (12,\myY) -- (65,\myY) node[midway]{\footnotesize Modern};
+            \node (a) at (rel axis cs:0,1.15) {};
+            \node (b) at (rel axis cs:1,1.15) {};
+
+            \draw[decoration={brace,raise=-16pt}, decorate]
+            (a) -- (a -| 7,7)
+            node[midway, text width=5cm, align=center]
+            {\footnotesize Classical: \\[-2pt] \scriptsize Bias-variance trade-off};
+
+            \draw[decoration={brace,raise=-16pt, mirror}, decorate]
+            (b) -- (b -| 10,10)
+            node[midway, text width=5cm, align=center]
+            {\footnotesize Modern: \\[-2pt] \scriptsize	More is better};
+
         \end{axis}
     \end{tikzpicture}
     \caption{

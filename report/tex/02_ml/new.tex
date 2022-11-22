@@ -37,18 +37,18 @@ where $\varepsilon$ is a random variable and $f$ a deterministic function.
 The $\varepsilon$ can be seen as some inherent randomness or noise in the data, or as a result of lacking information.
 It is often assumed to be independent of the input.
 
-Probabilistic models can be converted to deterministic models using a method to extract a single output from the distribution, such as the maximum a posteriori
+Probabilistic models can be converted to deterministic models using a method to extract a single output from the distribution, such as the maximum a posteriori,
 \begin{equation}
-    \hat{y} = \argmax_{y\in\mathcal{Y}} p(y|\bm{x})
+    \hat{y} = \argmax_{y\in\mathcal{Y}} p(y|\bm{x}),
 \end{equation}
-or the mean
+or the mean,
 \begin{equation}
     \hat{y} = \int_{\mathcal{Y}} y \, p(y|\bm{x})\mathrm{d}y.
 \end{equation}
 
 Probabilistic has the benefit of being able to provide a measure of uncertainty in the prediction, which is often useful.
 With simpler settings, statistical arguments can be made about the relationship between the input and output, which can be used to make inferences about the data.
-However, the simpler design of deterministic models makes them more suitable for computationally demanding tasks.
+However, the simpler design of deterministic models makes them more suitable for computationally demanding tasks, such as deep learning.
 
 \subsection{Measuring and optimising performance}
 A loss function $L(y, \hat{y})$ is used to measure the performance of a model by comparing a predicted output $\hat{y}$ to the true output $y$.
