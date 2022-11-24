@@ -4,7 +4,6 @@ As quantum CNNs have been studied and shown to have favourable properties (as di
 To do so, Qiskit's online tutorials \cite{qiskit_qcnn} were closely followed.
 
 \subsection{Data}
-To implement and test a quantum CNN, Qiskit's online tutorials were closely followed \cite{qiskit_qcnn}.
 Being limited to few qubits, images with resolution $2\times4$ were generated, containing either vertical or horizontal with some Gaussian noise.
 \Cref{fig:qcnn_data} shows examples thereof.
 The task of the QCNN was to classify the images as either vertical or horizontal lines.
@@ -14,7 +13,7 @@ The task of the QCNN was to classify the images as either vertical or horizontal
     \includegraphics[width=\textwidth]{../code/qcnn/data.pdf}
     \caption{
         Data for the QCNN.
-        With a total of 64 training images and 16 for testing, they form balanced dataset of $2\times4$ pixels, with either a vertical or horizontal line encoded as $1$ and $-1$.
+        With a total of 64 training images and 16 for testing, they form balanced data set of $2\times4$ pixels, with either a vertical or horizontal line encoded as $1$ and $-1$.
         The images are generated with some Gaussian noise.
     }
     \label{fig:qcnn_data}

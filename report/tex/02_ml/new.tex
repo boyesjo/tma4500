@@ -1,4 +1,7 @@
 \section{Supervised learning}
+\label{sec:supervised_learning}
+
+\subsection{Data regression}
 For supervised learning, some data is assumed given.
 Mathematically, this data is described by a set of input-output pairs $\mathcal{D} = \{(\bm{x}_i, y_i)\}_{i=1}^n$, where $\bm{x}_i\in\mathcal{X}$ is a vector of features in the input domain $\mathcal{X}$ and $y_i\in\mathcal{Y}$ is the corresponding label in the output domain $\mathcal{Y}$.
 The data is assumed to be drawn from a joint distribution $p(\bm{x}, y)$.
@@ -12,6 +15,61 @@ The output domain $\mathcal{Y}$ is assumed to be single-dimensional, as a multid
 It may be finite, in which case the problem is called classification, or continuous, in which case it is called regression.
 Regression methods may easily be applied to classification problems trough simple thresholds.
 
+\subsubsection{Example: Fisher's \text{iris} data set}
+\label{sec:iris}
+To have a concrete example, consider Fisher's \textit{iris} data set \cite{fisher1936} containing samples of three different species of the flowering plant in the genus \textit{iris}.
+There are 50 samples of each species, giving a total of 150 samples, and each sample has four features: sepal length, sepal width, petal length and petal width.
+\Cref{tab:iris} lists some samples.
+The goal is to predict the species of a new sample given its features, where the species is usually encoded ordinally as
+\begin{equation}
+    \label{eq:iris_encoding}
+    \begin{split}
+        \textit{setosa} &\mapsto 0,\\
+        \textit{versicolor} &\mapsto 1,\\
+        \textit{virginica} &\mapsto 2,
+    \end{split}
+\end{equation}
+or as a one-hot vector
+\begin{equation}
+    \label{eq:iris_one_hot}
+    \begin{split}
+        \textit{setosa} &\mapsto (1, 0, 0)^\top,\\
+        \textit{versicolor} &\mapsto (0, 1, 0)^\top,\\
+        \textit{virginica} &\mapsto (0, 0, 1)^\top.
+    \end{split}
+\end{equation}
+One-hot encoding is better suited for multi-class classification problems like this, allowing for instance for probabilistic predictions of the respective classes, but for binary classification problems, the ordinal encoding is more convenient, needing only a single to describe both probabilities.
+In Fisher's original paper, linear discriminant analysis was used to classify the flowers.
+Since then, the data set has become a standard benchmark for statistical classification techniques and machine learning methods like support vector machines.
+
+
+\begin{table}
+    \centering
+    \caption{
+        Fisher's \textit{iris} data set.
+        The premier column, species, is the class label.
+        The latter four columns are the features, all measured in centimetres.
+    }
+    \label{tab:iris}
+    \begin{tblr}{
+            width=\linewidth,
+            colspec={Q[l,1] Q[r,2] Q[r,2] Q[r,2] Q[r,2]},
+        }
+        \toprule
+        \textbf{Species}    & \textbf{Sepal length} & \textbf{Sepal width} & \textbf{Petal length} & \textbf{Petal width} \\
+        \midrule
+        \textit{Setosa}     & 5.1 cm                & 3.5 cm               & 1.4 cm                & 0.2 cm               \\
+        \textit{Setosa}     & 4.9 cm                & 3.0 cm               & 1.4 cm                & 0.2 cm               \\
+        \dots               & \dots                 & \dots                & \dots                 & \dots                \\
+        \textit{Versicolor} & 7.0 cm                & 3.2 cm               & 4.7 cm                & 1.4 cm               \\
+        \dots               & \dots                 & \dots                & \dots                 & \dots                \\
+        \textit{Virginica}  & 6.3 cm                & 3.3 cm               & 6.0 cm                & 2.5 cm               \\
+        \dots               & \dots                 & \dots                & \dots                 & \dots                \\
+        \bottomrule
+    \end{tblr}
+\end{table}
+
+
 \subsection{Models}
 \subsubsection{Deterministic models}
 In machine learning, models are typically deterministic and thus can be seen as functions $f:\mathcal{X}\to\mathcal{Y}$ that map inputs to outputs,
@@ -19,14 +77,17 @@ In machine learning, models are typically deterministic and thus can be seen as 
     \hat{y} = f(\bm{x}),
 \end{equation}
 where $\hat{y}$ is the predicted output.
+For instance, a deterministic model for Fisher's \textit{iris} data set would take in some $\bm{x}=(x_1,x_2,x_3,x_4)\in\mathbb{R}^4$ and output a species $y\in\{0,1,2\}$ as per \cref{eq:iris_encoding}.
 
 A model belongs to some family, a set of models with similar properties, where families often are parametric.
 Parametric models are defined by a finite set of parameters $\bm{\theta}= \{\theta_1, \ldots, \theta_k\}$, where each parameter $\theta_i$ is a real number.
+Linear regression, for example, is a parametric model with parameters $\bm{\theta} = \{w_1, \ldots, w_N, b\}$, defining a linear function $f(\bm{x}) = \bm{w}^\top\bm{x} + b$.
 
 \subsubsection{Probabilistic models}
 With probabilistic models, the model instead attempts to reconstruct the conditional probability distribution $p(y|\bm{x})$.
 In statistics, this distribution will often be of a known type which is parametrised by a function of the data and some parameters.
-For instance, in linear regression, the distribution is assumed to be Gaussian with mean $\bm{\theta}^\top\bm{x}$ and variance given by another parameter $\sigma^2$.
+For example, a linear regression model can be used as a probabilistic model with a Gaussian distribution for the output, such that the conditional distribution is given by $p(y|\bm{x}) = \mathcal{N}(y|\bm{w}^\top\bm{x} + b, \sigma^2)$, where $\bm{w}$, $b$ and $\sigma$ are the parameters of the model. A probabilistic model for Fisher's \textit{iris} data set would take in some $\bm{x}=(x_1,x_2,x_3,x_4)\in\mathbb{R}^4$ and output a probability vector $p(y|\bm{x})\in [0,1]^3$.
+Classifaction models are often probabilistic, predicting the probability of each class, allowing for more convenient continuous outputs.
 
 Alternatively, the conditional distributions may be thought of as being defined by
 \begin{equation}
@@ -43,15 +104,16 @@ Probabilistic models can be converted to deterministic models using a method to 
 \end{equation}
 or the mean,
 \begin{equation}
-    \hat{y} = \int_{\mathcal{Y}} y \, p(y|\bm{x})\mathrm{d}y.
+    \hat{y} = \int_{\mathcal{Y}} y \, p(y|\bm{x})\mathrm{d}y
 \end{equation}
+for regression problems.
 
 Probabilistic has the benefit of being able to provide a measure of uncertainty in the prediction, which is often useful.
 With simpler settings, statistical arguments can be made about the relationship between the input and output, which can be used to make inferences about the data.
 However, the simpler design of deterministic models makes them more suitable for computationally demanding tasks, such as deep learning.
 
 \subsection{Measuring and optimising performance}
-A loss function $L(y, \hat{y}): \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}^+$ is used to measure the performance of a model by comparing a predicted output $\hat{y}$ to the true output $y$, which then is used to optimise the model.
+A loss function, $L(y, \hat{y})$ for deterministic models or $L(y, p(y|\bm{x}))$ for probabilistic models, is used to optimise a model by comparing its predictions to the true labels.
 By convention, the loss should be positive, and lower values indicate better predictions, zero indicating exact agreement.
 Its main purpose is to optimise the model, so it need not be the most useful metric of performance.
 It is usually chosen to be differentiable, as this allows for the use of gradient-based optimisation.
@@ -60,13 +122,20 @@ Instead, losses like the square loss,
 \begin{equation}
     L(y, \hat{y}) = (y - \hat{y})^2,
 \end{equation}
-often is used for regression problems and the cross-entropy,
-\begin{equation}
-    L(y, \hat{y}) = -y\log(\hat{y}) - (1-y)\log(1-\hat{y}),
-\end{equation}
-for classification problems.
+is often used for regression problems.
+
 If the model is probabilistic and assumed to be a particular type of distribution, its structure can be used to define a loss.
-Maximum likelihood estimation can be used, switching only the sign to conform with machine learning conventions, leading to the negative log-likelihood loss.
+Maximum likelihood estimation can be used, switching only the sign to conform with machine learning conventions, leading to the negative log-likelihood (NLL) loss,
+\begin{equation}
+    L(y, p(y|\bm{x})) = -\log p(y|\bm{x}).
+\end{equation}
+This loss is often used for classification problems, where the output is a probability vector $(p_0, p_1, \dots, p_N)^\top$, and the true label is encoded as a one-hot vector $y=(0, 0, \dots, 1, \dots, 0)^\top$.
+It then reads
+\begin{equation}
+    L(y, p(y|\bm{x})) = \sum_{i=1}^k y_i \log p_i,
+\end{equation}
+where $k$ is the number of classes.
+This formulation is referred to as cross-entropy loss in machine learning.
 
 With some loss, one can consider the risk, defined as the expected loss over the joint distribution of the data,
 \begin{equation}
@@ -78,25 +147,28 @@ With some loss, one can consider the risk, defined as the expected loss over the
 and wish to minimise it.
 Of course, this is only possible if the joint distribution $p(\bm{x}, y)$ is known, so it is in practice replaced by the empirical risk, assuming independent and equally likely samples,
 \begin{equation}
-    \hat{R}(f) = \frac{1}{n} \sum_{i=1}^n L(y_i, f(\bm{x}_i)).
     \label{eq:empirical_risk}
+    \hat{R}(f) = \frac{1}{n} \sum_{i=1}^n L(y_i, f(\bm{x}_i)).
 \end{equation}
 This can be assumed to converge to the true risk as $n\to\infty$ by the law of large numbers.
 More data is certainly better, but it may be expensive to collect, and the deviance between the empirical and true risk may not decrease monotonically with $n$.
-It is therefore desirable to find models and training methods that minimise the risk with as few samples as possible.
+It is therefore desirable to find models and training methods that can minimise the true risk with as few samples as possible.
 
-
+These empirical risks that depend on the whole data set defines cost functions that are used to train the model.
 For instance, square loss leads to the mean squared error (MSE),
 \begin{equation}
-    \frac{1}{n} \sum_{i=1}^n (y_i - f(\bm{x}_i))^2.
+    C(f;\mathcal{D}) = \frac{1}{n} \sum_{i=1}^n (y_i - f(\bm{x}_i))^2,
 \end{equation}
-These empirical risks that depend on the whole data set defines cost functions that are used to train the model.
+while a likelihood based loss leads to
+\begin{equation}
+    C(p;\mathcal{D}) = -\frac{1}{n} \sum_{i=1}^n \log p(y_i|\bm{x}_i).
+\end{equation}
 
 For a chosen parametric model family, the supervised learning problem can be formulated as an optimisation problem to find the best parameters $\bm{\theta}^*$:
 \begin{equation}
     \bm{\theta}^* = \argmin_{\bm{\theta}} C(\bm{\theta; \mathcal{D}}),
 \end{equation}
-where $C$ is the cost function.
+where the cost function is parametrised by the model parameters $\bm{\theta}$.
 Since the loss function and models are often designed to be differentiable, giving differentiable costs, this can be solved using gradient descent methods.
 In the simplest case, that means that the parameters are updated until some convergence criterion is met by
 \begin{equation}
