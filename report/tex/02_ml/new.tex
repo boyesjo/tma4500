@@ -51,13 +51,16 @@ With simpler settings, statistical arguments can be made about the relationship 
 However, the simpler design of deterministic models makes them more suitable for computationally demanding tasks, such as deep learning.
 
 \subsection{Measuring and optimising performance}
-A loss function $L(y, \hat{y})$ is used to measure the performance of a model by comparing a predicted output $\hat{y}$ to the true output $y$.
+A loss function $L(y, \hat{y}): \mathcal{Y} \times \mathcal{Y} \to \mathbb{R}^+$ is used to measure the performance of a model by comparing a predicted output $\hat{y}$ to the true output $y$, which then is used to optimise the model.
+By convention, the loss should be positive, and lower values indicate better predictions, zero indicating exact agreement.
+Its main purpose is to optimise the model, so it need not be the most useful metric of performance.
 It is usually chosen to be differentiable, as this allows for the use of gradient-based optimisation.
-Therefore, losses like the square loss,
+Therefore, something like $I(\hat y = y)$ is not used as a loss (though often as a performance metric).
+Instead, losses like the square loss,
 \begin{equation}
     L(y, \hat{y}) = (y - \hat{y})^2,
 \end{equation}
-is often used for regression problems and the cross-entropy,
+often is used for regression problems and the cross-entropy,
 \begin{equation}
     L(y, \hat{y}) = -y\log(\hat{y}) - (1-y)\log(1-\hat{y}),
 \end{equation}
@@ -65,17 +68,24 @@ for classification problems.
 If the model is probabilistic and assumed to be a particular type of distribution, its structure can be used to define a loss.
 Maximum likelihood estimation can be used, switching only the sign to conform with machine learning conventions, leading to the negative log-likelihood loss.
 
-With some loss, one can consider the risk, defined as
+With some loss, one can consider the risk, defined as the expected loss over the joint distribution of the data,
 \begin{equation}
-    R(f) = \iint_{\mathcal{X}\times\mathcal{Y}} L(y, f(\bm{x})) \, p(\bm{x}, y) \, \mathrm{d}\bm{x} \, \mathrm{d}y,
+    R(f)
+    = \text{E}(L(y, f(\bm{x})))
+    = \iint_{\mathcal{X}\times\mathcal{Y}} L(y, f(\bm{x})) \, p(\bm{x}, y) \, \mathrm{d}\bm{x} \, \mathrm{d}y,
     \label{eq:risk}
 \end{equation}
 and wish to minimise it.
-Of course, this is only possible if the joint distribution $p(\bm{x}, y)$ is known, so it is in practice replaced by the empirical risk,
+Of course, this is only possible if the joint distribution $p(\bm{x}, y)$ is known, so it is in practice replaced by the empirical risk, assuming independent and equally likely samples,
 \begin{equation}
-    R(f) = \frac{1}{n} \sum_{i=1}^n L(y_i, f(\bm{x}_i)).
+    \hat{R}(f) = \frac{1}{n} \sum_{i=1}^n L(y_i, f(\bm{x}_i)).
     \label{eq:empirical_risk}
 \end{equation}
+This can be assumed to converge to the true risk as $n\to\infty$ by the law of large numbers.
+More data is certainly better, but it may be expensive to collect, and the deviance between the empirical and true risk may not decrease monotonically with $n$.
+It is therefore desirable to find models and training methods that minimise the risk with as few samples as possible.
+
+
 For instance, square loss leads to the mean squared error (MSE),
 \begin{equation}
     \frac{1}{n} \sum_{i=1}^n (y_i - f(\bm{x}_i))^2.

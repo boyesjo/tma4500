@@ -101,13 +101,13 @@ Then, in the hidden layers, the data is transformed by a series of linear transf
 These can be expressed as
 \begin{equation}
     \label{eq:nn}
-    a_i^{(j)} = \sigma\left( \sum_{n=1}^m w^{(j)}_n a^{(j-1)}_n + b^{(j)}_n \right),
+    a_i^{(j)} = \sigma\left( b^{(j)}_i + \sum_{n=1}^m w^{(j)}_{i,n} a^{(j-1)}_n\right),
 \end{equation}
 where $j$ is the layer number, $i$ is the node number and $w$ and $b$ are the weights and biases of the network — parameters to be optimised.
 
 The activation function $\sigma$ is a non-linear function, such as the sigmoid function, the hyperbolic tangent or the rectified linear unit (ReLU).
-Non-linearity is needed for the model not to simply be a linear transformation.
-The most used activation functions are listed in \cref{tab:activations}.
+Non-linearity is needed for the network not to collapse to one great linear transformation.
+Some commonly used activation functions are listed in \cref{tab:activations}.
 
 The output layer is similar to the hidden layers, though perhaps with different activation functions and fewer nodes.
 For instance, if the goal is to classify the data into $k$ classes, the output layer could have $k$ nodes with an activation function that ensures the sum of the outputs is one.
