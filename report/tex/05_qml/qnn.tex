@@ -74,5 +74,9 @@ As parametrised quantum circuits are differentiable in their parameters, they ca
 They note that for the NISQ-era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial.
 As quantum hardware develops, they can take over more and more of the hybrid models.
 
+Quanvolutional neural networks, proposed by \textcite{henderson2020}, are a hybrid model in which the convolutional layers are replaced by quantum layers.
+As the quantum part is restrained to a single layer and a small convolutional kernel, the design can be implemented with small quantum circuits with little requirements for error-mitigation, still being able to process high-dimensional data, thereby making it a good candidate for NISQ-era hardware.
+
 More recently, \textcite{zeng2022} have explored using a hybrid model to multi-class classification on real world data sets using a CNN-inspired structure.
+In their model, the quantum part is placed in the middle, after classical convolutions and pooling and before a classical fully connected layer.
 There, it is shown that the hybrid model outperforms a classical CNN of similar parameter size.
