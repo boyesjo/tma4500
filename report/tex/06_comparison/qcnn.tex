@@ -43,7 +43,7 @@ Effectively, each consecutive pair of qubits were entangled by
         &
         \targ{}
         &
-        \gate{R_Z(\theta_{0})}
+        \gate{R_Z(\theta_{1})}
         &
         \ctrl{1}
         &
@@ -51,16 +51,16 @@ Effectively, each consecutive pair of qubits were entangled by
         &
         \targ{}
         &
-        \gate{R_Z(\pi/2)}
+        \gate{R_Z\left(\dfrac{\pi}{2}\right)}
         &
         \qw
         \\
         &
-        \gate{R_Z(-\pi/2)}
+        \gate{R_Z\left(-\dfrac{\pi}{2}\right)}
         &
         \ctrl{-1}
         &
-        \gate{R_Y(\theta_{1})}
+        \gate{R_Y(\theta_{2})}
         &
         \targ{}
         &
@@ -86,7 +86,7 @@ This is done by acting on the first and fifth, second and sixth et cetera with t
         &
         \targ{}
         &
-        \gate{R_Z(\theta_{0})}
+        \gate{R_Z(\theta_{1})}
         &
         \ctrl{1}
         &
@@ -95,11 +95,11 @@ This is done by acting on the first and fifth, second and sixth et cetera with t
         \qw
         \\
         &
-        \gate{R_Z(-\pi/2)}
+        \gate{R_Z\left(-\dfrac{\pi}{2}\right)}
         &
         \ctrl{-1}
         &
-        \gate{R_Y(\theta_{1})}
+        \gate{R_Y(\theta_{2})}
         &
         \targ{}
         &
@@ -115,7 +115,7 @@ In total, the circuit appears as in \cref{fig:qcnn_circuit} with a total of 63 p
 
 \begin{figure}
     \centering
-    \begin{quantikz}[row sep={0.85cm,between origins}]
+    \begin{quantikz}[row sep={1cm,between origins}]
         \lstick[wires=8]{$\ket{0}^{\otimes 8}$}
         &
         \gate[wires=8, disable auto height]{{\rotatebox{90}{\texttt{ZFeatureMap}$(\bm{x})$}}}
@@ -162,11 +162,15 @@ Why this optimiser was chosen is not clear, but testing shows that simulations u
 However, as will be seen in \cref{sec:qcnn2}, that seems to have more to do with Qiskit's implementation than the optimiser itself.
 
 \subsection{Results}
-The accuracies and loss (mean square error) during training is shown in \cref{fig:qcnn_training}.
-As in \cref{sec:qnn-vs-nn}, noise is modelled after the IBM Montreal hardware.
+The accuracies and mean square error during training are shown in \cref{fig:qcnn_training}.
+As in \cref{sec:qnn-vs-nn}, noise is modelled after the 27-qubit IBM Montreal hardware.
 The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions.
 Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training.
 It seems that the noiseless QCNN is overfitting to the training data, while the noisy QCNN generalises better.
+
+Although both the exact and noisy simulations do converge and yield reasonable results, for such an easy problem, one would expect a 63-parameter network to be able to achieve perfect accuracy.
+This is not the case, and the reason for this is not clear.
+A more expressive feature map could improve matters, and the COBYLA optimiser is certainly suboptimal.
 
 \begin{figure}
     \centering

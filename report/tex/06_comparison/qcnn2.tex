@@ -1,6 +1,6 @@
 \section{QCNN with mid-circuit measurements}
 \label{sec:qcnn2}
-A more complex QCNN structure was described by \textcite{pesah2021}, where the pooling modules measure a qubit and use the result to control a unitary gate on its neighbour.
+A more intricate QCNN structure was described by \textcite{pesah2021}, where the pooling modules measure a qubit and use the result to control a unitary gate on its neighbour.
 The use of mid-circuit measurements complicates the circuit and its implementation, but allows for a non-linear and potentially more powerful model.
 With the aim of seeing if this provides any benefit, such a QCNN was implemented and compared with that of \cref{sec:qcnn1} on the data thence.
 
@@ -154,6 +154,12 @@ Looking at the loss curves, the model with intermediate measurements seems only 
 However, by extending the model without mid-circuit measurements to have a more comparable parameter count of 231, it overtakes the model with intermediate measurements in terms of training loss.
 This extension was done by switching out the convolutional gates from \cref{eq:qcnn_conv_gate} with the $W$-gates from \cref{eq:w_gate}.
 
+Evidently, gradient-based optimisation, at least Adam, makes the training much more stable and fast than the previous implementation.
+Despite large parameter counts, all three models perform just as well on the training data as on the test data, showing that the models are not overfitting.
+Is it clear that model like these, given enough parameters and an apt optimising algorithm, can be trained to perform well on unseen data.
+Still, to what extent this scales to larger data sets and more complex models is unclear.
+Furthermore, any significant advantage over classical models remains elusive.
+
 \begin{figure}
     \centering
     \begin{subfigure}{0.49\textwidth}
@@ -168,7 +174,7 @@ This extension was done by switching out the convolutional gates from \cref{eq:q
                     % legend style={at={(0.5,1.03)},anchor=north},
                     grid=major,
                     legend pos=north east,
-                    ymode=log,
+                    % ymode=log,
                 ]
                 \addplot[mark=none, color=blue] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_intermediate.csv};
                 \addplot[mark=none, color=red] table[x=Iteration, y=Loss, col sep=comma] {../code/qcnn_pennylane/results_simple.csv};
@@ -220,9 +226,9 @@ This extension was done by switching out the convolutional gates from \cref{eq:q
         Training of QCNNs with and without intermediate measurements.
         With intermediate refers to the QCNN with intermediate measurements of \cite{pesah2021}.
         Without refers to the QCNN without intermediate measurements from \Cref{sec:qcnn}, while without extended is the same with a more expressive convolutional layer.
-        (a) loss (mean square error) during training.
-        (b) accuracy on the training and test sets.
-        Solid lines are for the training set, dashed lines for the test set.
+        (a) Mean square errors during training.
+        (b) Accuracies on the training and test sets.
+        Solid lines correspond to the training set and dashed lines to the test set.
         Note the reduced $x$-axis range; all models achieve perfect accuracy quickly.
     }
     \label{fig:qcnnm_training}
