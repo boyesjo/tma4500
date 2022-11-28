@@ -2,9 +2,10 @@
 Modern machine learning owes much of its popularity to the success of artificial neural networks, or if the context is clear, just neural networks (NNs).
 With easier access to larger datasets, more powerful hardware (in particular GPUs or even dedicated TPUs) and the backpropagation algorithm, NNs have become able to solve problems far too complicated for traditional methods.
 
-Though state-of-the neural networks can contain billions of parameters, training them remains feasible.
+Though state-of-the-art neural networks can contain billions of parameters, training them remains feasible.
 Modern hardware is of course paramount, but also backpropagation is crucial.
 Neural networks are trained using gradient methods, and with backpropagation, the gradient can be computed efficiently.
+By cleverly storing intermediate results, the gradients for all parameters can be computed in a single backward pass through the network.
 
 How such large models avoid overfitting is not entirely clear.
 Seemingly contradicting the bias-variance trade-off, the double descent phenomenon appears as model complexity increases or as more gradient descent iterations are done.

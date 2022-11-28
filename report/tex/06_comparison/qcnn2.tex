@@ -142,7 +142,7 @@ In total, the network had 154 parameters.
 
 \subsection{Implementation}
 The QCNN was implemented using the PennyLane framework and trained with the Adam optimiser with a learning rate of 0.01.
-With the PennyLane implementation, there were no problems using gradient based optimisation.
+With the PennyLane implementation, there were no problems using gradient based optimisation, likely due to PennyLane defaulting to analytic evaluation of the gradients.
 This prompted the reimplementation of the former QCNN, which was here also trained with the same Adam optimiser.
 
 \subsection{Results}

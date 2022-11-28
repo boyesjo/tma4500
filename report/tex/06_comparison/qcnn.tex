@@ -158,7 +158,7 @@ In total, the circuit appears as in \cref{fig:qcnn_circuit} with a total of 63 p
 
 \subsection{Implementation}
 As in Qiskit's guide, training was done using the COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients.
-Why this optimiser was chosen is not clear, but testing shows that simulations using gradient based methods such as Adam or simple gradient descent is significantly slower.
+Why this optimiser was chosen is not clear, but testing shows that simulations using gradient based methods such as Adam or simple gradient descent was significantly slower.
 However, as will be seen in \cref{sec:qcnn2}, that seems to have more to do with Qiskit's implementation than the optimiser itself.
 
 \subsection{Results}

@@ -6,7 +6,7 @@ In their paper, they study the effective dimension of QNNs and NNs, and find tha
 The goal of this section is to reproduce their results, but also to shed some light on whether the NN used is a fair comparison to the QNN.
 
 \subsection{Data}
-The models are tested on Fisher's \textit{iris} data set, introduced in \cref{sec:iris}.
+The models are tested on Fisher's \textit{Iris} data set, introduced in \cref{sec:iris}.
 Like in \cite{abbas2021}, only the two first species are considered, reducing the task to a binary classification problem.
 These are linearly separable, so the models should be able to learn to classify them.
 
@@ -90,7 +90,7 @@ To model noise, the Qiskit simulator was set to simulate the 27-qubit IBM Montre
         \meter{}
     \end{quantikz}
     \caption{
-        Structure of the QNN used for classification of the \textit{iris} data set.
+        Structure of the QNN used for classification of the \textit{Iris} data set.
         The first block maps the input data $\bm{x}$ to the quantum state $\ket{\psi(\bm{x})}$ using a second order $Z$-rotation feature map.
         The second block is the variational circuit, parametrised by $\bm{\theta}$, a vector with eight components.
         Finally, all qubits are measured, where the parity is interpreted as the prediction.    }
@@ -108,6 +108,7 @@ Whether such an architecture makes sense is arguable, and it was likely made so 
 \subsection{Implementation and training}
 Both models were implemented using PyTorch, with code partly taken from the original paper\footnote{Available at \url{https://github.com/amyami187/effective_dimension}.}.
 The QNN was adapted to use Qiskit's PyTorch interface.
+It automatically applies parameter-shift to evaluate gradients.
 Consequently, the models could be trained in the exact same manner, using the Adam optimiser with a learning rate of 0.1 and cross-entropy loss.
 The classical and noiseless models were trained for 100 epochs, while the noisy model was only trained for 10, as simulating the noise severely impacted training time.
 
@@ -140,7 +141,7 @@ The mean accuracy over the 10 folds was used for the final performance metric, s
         \end{axis}
     \end{tikzpicture}
     \caption{
-        Mean accuracies during training for the \textit{iris} data set.
+        Mean accuracies during training for the \textit{Iris} data set.
         Ten-fold cross-validation was used, with the mean out-of-fold accuracy being used as the final performance metric.
         All models have 8 parameters and are trained using the Adam optimiser with a learning rate of 0.1, using cross-entropy as the loss function.
         Due to the computational cost, the noisy (simulated IBM Montreal backend) QNN was only trained for ten epochs.
@@ -189,7 +190,7 @@ The bigger revelation is the performance of logistic regression, which greatly o
         \end{axis}
     \end{tikzpicture}
     \caption{
-        Mean cross-entropy loss during training for the \text{iris} data set.
+        Mean cross-entropy loss during training for the \textit{Iris} data set.
         The QNN with parity interpretation has eight parameters, while the QNN with sign interpretation has effectively five.
         The classical neural network has eight and the logistic regression has five parameters.
     }

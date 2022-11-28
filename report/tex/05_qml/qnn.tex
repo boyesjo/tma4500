@@ -10,7 +10,10 @@ Next, the data is passed through a sequence of parametrised quantum gates which 
 Lastly, an output is produced, which is typically a measurement of some observable.
 Usually, the observable is a combination of Pauli operators on every qubit.
 Thence, a cost function can be evaluated.
-Often, methods like parameter-shift allows for computation of gradients, which makes it possible to train the network using classical methods.
+
+Though methods like the parameter-shift allows for computation of gradients, which makes it possible to train the network using classical methods, it is not as efficient as classical backpropagation.
+This is because the parameter-shift method requires a separate evaluation of the circuit, including numerous shots, for each parameter, whereas backpropagation is easily done after a forward pass through the network.
+Add to this the problems of noise and vanishing gradients, and it is clear that QNNs will not scale in the same manner as classical networks do.
 
 \begin{figure}
     \centering
