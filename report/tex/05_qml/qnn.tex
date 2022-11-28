@@ -10,7 +10,10 @@ Next, the data is passed through a sequence of parametrised quantum gates which 
 Lastly, an output is produced, which is typically a measurement of some observable.
 Usually, the observable is a combination of Pauli operators on every qubit.
 Thence, a cost function can be evaluated.
-Often, methods like parameter-shift allows for computation of gradients, which makes it possible to train the network using classical methods.
+
+Though methods like the parameter-shift allows for computation of gradients, which makes it possible to train the network using classical methods, it is not as efficient as classical backpropagation.
+This is because the parameter-shift method requires a separate evaluation of the circuit, including numerous shots, for each parameter, whereas backpropagation is easily done after a forward pass through the network.
+Add to this the problems of noise and vanishing gradients, and it is clear that QNNs will not scale in the same manner as classical networks do.
 
 \begin{figure}
     \centering
@@ -74,5 +77,9 @@ As parametrised quantum circuits are differentiable in their parameters, they ca
 They note that for the NISQ-era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial.
 As quantum hardware develops, they can take over more and more of the hybrid models.
 
+Quanvolutional neural networks, proposed by \textcite{henderson2020}, are a hybrid model in which the convolutional layers are replaced by quantum layers.
+As the quantum part is restrained to a single layer and a small convolutional kernel, the design can be implemented with small quantum circuits with little requirements for error-mitigation, still being able to process high-dimensional data, thereby making it a good candidate for NISQ-era hardware.
+
 More recently, \textcite{zeng2022} have explored using a hybrid model to multi-class classification on real world data sets using a CNN-inspired structure.
+In their model, the quantum part is placed in the middle, after classical convolutions and pooling and before a classical fully connected layer.
 There, it is shown that the hybrid model outperforms a classical CNN of similar parameter size.

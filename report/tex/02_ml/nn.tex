@@ -2,16 +2,17 @@
 Modern machine learning owes much of its popularity to the success of artificial neural networks, or if the context is clear, just neural networks (NNs).
 With easier access to larger datasets, more powerful hardware (in particular GPUs or even dedicated TPUs) and the backpropagation algorithm, NNs have become able to solve problems far too complicated for traditional methods.
 
-Though state-of-the neural networks can contain billions of parameters, training them remains feasible.
+Though state-of-the-art neural networks can contain billions of parameters, training them remains feasible.
 Modern hardware is of course paramount, but also backpropagation is crucial.
 Neural networks are trained using gradient methods, and with backpropagation, the gradient can be computed efficiently.
+By cleverly storing intermediate results, the gradients for all parameters can be computed in a single backward pass through the network.
 
 How such large models avoid overfitting is not entirely clear.
 Seemingly contradicting the bias-variance trade-off, the double descent phenomenon appears as model complexity increases or as more gradient descent iterations are done.
 This is a phenomenon where, after some point, the variance no longer increase with model complexity.
 Instead, it decreases and converges toward some value.
 This can be seen in \cref{fig:double_descent}, where convolutional networks\footnote{See \cref{sec:cnn}.} were tested with different layer sizes.
-Unlike statistical methods, once past this complexity threshold, there is little reason not to increase the performance by expanding the model other than the increased computational cost.
+Unlike statistical methods, once past this complexity threshold, there is little reason, other than the increased computational cost, not to increase the model complexity and thereby the performance.
 Double descent have been shown to appear for a variety of models \cite{nakkiran2021}.
 
 \begin{figure}
@@ -177,5 +178,5 @@ On the other hand, the discriminator is tasked with distinguishing between data 
 Accordingly, the discrimination is a supervised problem.
 Both models are trained simultaneously by first sampling from the generator and the data set, using supervised methods to update the discriminator, and then using the discriminators predictions to update the generator.
 
-GANs are mainly used for unsupervised learning, and they have seen great success in generating random images.
-They have also seen success in more abstract tasks, such as translating text prompts to images or predicting what will happen next in a video.
+GANs are mainly used for unsupervised learning, having had great success in generating random images.
+They have also demonstrated success in more abstract tasks, such as translating text prompts to images or predicting what will happen next in a video.

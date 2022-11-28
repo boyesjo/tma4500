@@ -1,23 +1,22 @@
 \chapter{Conclusion}
 \label{chap:conclusion}
-In this thesis, quantum machine learning has been discussed, coming from a perspective of classical machine learning and neural networks.
-Focus has been paid to various strategies of encoding classical data into quantum states and how to do so in a way that is non easily simulated classically while still being feasible for NISQ hardware.
+In this thesis, quantum machine learning has been discussed, coming from the perspective of classical machine learning and neural networks.
+Focus has been paid to various strategies of encoding classical data into quantum states and how to do so in a way that is not easily simulated classically while still being feasible for NISQ hardware.
 Particularly second-order rotations appear to be a good choice for encoding data, potentially with multiple repetitions, but it being hard to simulate classically is so far only conjecture.
 
 Designs for VQAs or QNNs inspired by classical NNs were discussed, and several have been explored by simulations.
-The results of \cite{abbas2021}, in which a simple QNN was shown to converge much quicker that classical NN of similar parameter count, were reproduced.
+The results of \cite{abbas2021}, in which a simple QNN was shown to converge significantly quicker than classical NN of similar parameter count, were reproduced.
 Whether the NN used was a fair comparison is debatable; a simpler logistic regression outperforms it.
 
 Quantum convolutional networks were also studied, where one model included intermediate measurements.
 To what degree the mid-circuit measurements bettered the results is not clear.
-Overall, being limited to models simple enough to simulate on classical computers, it is hard to draw any conclusions about the performance of quantum neural networks
-At the very least they seem to be able to learn.
+Overall, being limited to models simple enough to be simulated on classical computers, it is hard to draw any conclusions about the performance of quantum neural networks
+At least they seem able to learn.
 
-Quantum neural networks can still be studied in much more detail, and there are many more models to explore.
+Quantum neural networks can still be studied in much more detail, and there are more models to explore.
 How data encoding affects the performance of quantum neural networks is also an interesting question, and what type of encoding strategy goes best with which model could be studied.
-Classical networks can also be used for more than just supervised learning; they are successful as generative models and with reinforcement learning, so it could be worth looking more into how quantum neural networks can be used for these tasks.
-As quantum networks are necessarily probabilistic, they could have interesting properties that classical networks do not, which could prove useful in these tasks.
+Classical networks are also suited for more than just supervised learning; they have successfully been used as generative models and for reinforcement learning, so it could be worth looking more into how quantum neural networks perform at these tasks.
+As quantum networks are necessarily probabilistic, they could have interesting properties that classical networks do not, which could prove useful.
 
 Finally, it is important to remember that quantum neural networks are not the only way to combine quantum computing and machine learning.
 Interpreting quantum data encoding instead as kernel methods could be a fruitful avenue to explore.
-

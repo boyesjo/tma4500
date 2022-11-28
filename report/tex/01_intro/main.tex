@@ -5,11 +5,11 @@ Using quantum properties such as superposition and entanglement, quantum compute
 Their first conception goes back to the early 80s, often being accredited to Richard Feynman's 1982 paper \cite{feynman1982}, with the goal of simulating difficult quantum mechanical problems.
 It was however only really with the discovery of Shor's algorithm in 1994 \cite{shor1994} that the potential of quantum computers gained widespread attention.
 Shor's is a quantum algorithm that can factor large numbers in polynomial time, a problem that is believed to be practically exponentially hard and therefore intractable for classical computers.
-Since then, the search has continued for what other tasks can be solved more efficiently on quantum computers.
+Since then, the search has continued for what other tasks can be solved more efficiently on quantum hardware.
 
 How actually to construct a quantum computer is still an open question, and perhaps a more pressing one.
 There are several types of hardware being developed and researched, such as superconducting circuits used by IBM, Google and more, trapped ions used by IonQ and Honeywell, photonic quantum computers developed by Xanadu and Psi Quantum in addition to many other types.
-Although some of these have claimed quantum supremacy, that is they have solved a problem believed to be intractable for classical computers, supremacy has only been shown in very particular settings with no practical use.
+Although some of these have already claimed quantum supremacy, that is they have solved a problem believed to be intractable for classical computers, supremacy has only been shown in very particular settings with no practical use.
 Common for all current approaches are difficulties with noise and decoherence.
 Theoretically, with computers of great enough scale, errors can be mitigated, but in the near future, the systematic errors of quantum computers will be a limiting factor and something to be taken into account when designing algorithms.
 Hence, the focus of much current quantum computing research considers noisy intermediate scale quantum (NISQ) devices.
@@ -31,7 +31,8 @@ VQAs are also well suited for general mathematical tasks such as optimisation.
 Machine learning (ML) and VQAs are a good fit, as the optimisation of parameters is how many machine learning models are trained.
 With some way of encoding data into quantum hardware, VQAs are easily interpreted as machine learning models.
 The output of the quantum algorithm can be seen as a prediction in supervised learning, and so the quantum model can be trained to predict.
-With gate-based quantum computers, the quantum model can show some similarities to classical neural networks, bringing forth the notion of quantum neural nets.
+Though less efficient than classical backpropagation, gradients can be calculated for VQAs, and thus optimisation can be accomplished using classical optimisers.
+With gate-based quantum computers, the quantum model can show some similarities to classical neural networks, bringing forth the notion of quantum neural nets (QNNs).
 Moreover, the idea of encoding data into to high-dimensional quantum state is reminiscent of classical kernel methods.
 Research indicate some advantages of using quantum machine learning models over classical ones, such as requiring fewer training iterations, but the field of quantum machine learning (QML) is still in its infancy, and much work remains to be done.
 In particular, whether any quantum advantage for ML can be achieved with NISQ devices is not certain, and no exponential speed-up has yet been demonstrated.
