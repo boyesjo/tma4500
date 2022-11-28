@@ -164,7 +164,7 @@ However, as will be seen in \cref{sec:qcnn2}, that seems to have more to do with
 \subsection{Results}
 The accuracies and mean square error during training are shown in \cref{fig:qcnn_training}.
 As in \cref{sec:qnn-vs-nn}, noise is modelled after the 27-qubit IBM Montreal hardware.
-The networks were trained for 1000 epochs, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions.
+The networks were trained for 1000 iterations, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions.
 Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training.
 It seems that the noiseless QCNN is overfitting to the training data, while the noisy QCNN generalises better.
 

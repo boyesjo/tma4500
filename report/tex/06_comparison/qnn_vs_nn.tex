@@ -110,7 +110,7 @@ Both models were implemented using PyTorch, with code partly taken from the orig
 The QNN was adapted to use Qiskit's PyTorch interface.
 It automatically applies parameter-shift to evaluate gradients.
 Consequently, the models could be trained in the exact same manner, using the Adam optimiser with a learning rate of 0.1 and cross-entropy loss.
-The classical and noiseless models were trained for 100 epochs, while the noisy model was only trained for 10, as simulating the noise severely impacted training time.
+The classical and noiseless models were trained for 100 iterations, while the noisy model was only trained for 10, as simulating the noise severely impacted training time.
 
 \subsection{Results}
 For validation, 10-fold cross-validation was used.
@@ -144,7 +144,7 @@ The mean accuracy over the 10 folds was used for the final performance metric, s
         Mean accuracies during training for the \textit{Iris} data set.
         Ten-fold cross-validation was used, with the mean out-of-fold accuracy being used as the final performance metric.
         All models have 8 parameters and are trained using the Adam optimiser with a learning rate of 0.1, using cross-entropy as the loss function.
-        Due to the computational cost, the noisy (simulated IBM Montreal backend) QNN was only trained for ten epochs.
+        Due to the computational cost, the noisy (simulated IBM Montreal backend) QNN was only trained for ten iterations.
     }
     \label{fig:iris_training}
 \end{figure}
