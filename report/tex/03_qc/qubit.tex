@@ -14,7 +14,7 @@ The only requirement is that the state is normalised, $\vert\alpha\vert^2 + \ver
 
 \footnotetext{
     The $\ket{\cdot}$ notation is known as a ket and is used in quantum mechanics to denote a quantum state.
-    It is effectively a column vector in a Hilbert space, whose inner product may be taken with a bra, $\bra{\cdot}$, to give a scalar.
+    It is effectively a column vector.  The inner product may be taken with a bra, $\bra{\cdot}$, to give a scalar.
     These inner products are then denoted by $\bra{\cdot}\ket{\cdot}$.
     Similarly, outer products are well-defined and denoted by $\ketbra{\cdot}{\cdot}$.
 }
@@ -24,17 +24,17 @@ It is one of Nature's great mysteries what exactly a measurement is, but in the 
 
 \subsection{The Bloch sphere}
 A useful tool for visualising the state of a qubit is the Bloch sphere.
-First, it should be noted that states on the form \cref{eq:qubit} are not unique, only the relative complex phase matters.
+First, it should be noted that states on the form \eqref{eq:qubit} are not unique, only the relative complex phase matters.
 There is a global phase which is not measurable, and thus not relevant to the state of the qubit.
-Therefore, taking also the normalisation requirement into account, the state of the qubit can be expressed as
+Taking this and the normalisation requirement into account, the state of the qubit can be expressed as
 \begin{equation}
-    \ket{\psi} = \cos\left(\frac{\theta}{2}\right) \ket{0} + e^{i\phi} \sin\left(\frac{\theta}{2}\right) \ket{1}
+    \ket{\psi} = \cos\left(\frac{\theta}{2}\right) \ket{0} + e^{i\phi} \sin\left(\frac{\theta}{2}\right) \ket{1},
     \label{eq:bloch}
 \end{equation}
 where $\theta, \phi \in \mathbb{R}$.
-Interpreting $\theta$ as the polar angle and $\phi$ the azimuthal angle, the state of the qubit can be identified with a point a sphere, known as the Bloch sphere.
-There, the state $\ket{0}$ is typically thought of as the north pole, and $\ket{1}$ as the south pole.
-\Cref{fig:bloch} shows the Bloch sphere with the state of the qubit in \cref{eq:bloch}.
+Interpreting $\theta$ as the polar angle and $\phi$ the azimuthal angle, the state of the qubit can be identified with a point on a sphere, see Figure~\ref{fig:bloch}.
+The state $\ket{0}$ is typically thought of as the north pole, and $\ket{1}$ as the south pole of this sphere.
+% \Cref{fig:bloch} shows the Bloch sphere with the state of the qubit in \cref{eq:bloch}.
 
 \begin{figure}
     \centering
@@ -59,7 +59,7 @@ In a mixed state, some classical probabilities $p_i$ are associated with the dif
     \label{eq:density}
 \end{equation}
 where $\ket{\psi_i}$ are the states of the system, and $\bra{\psi_i}$ are the corresponding dual vectors.
-Naturally, the $p_i$ must be non-negative and sum to one.
+The $p_i$ must be non-negative and sum to one.
 Furthermore, the density operator is positive semidefinite.
 If there is no classical uncertainties, the state is called pure, and the density operator can be expressed a single ket-bra, $\rho = \ketbra{\psi}{\psi}$.
 
@@ -85,8 +85,8 @@ A pure quantum superposition of $\ket{0}$ and $\ket{1}$ with equal probabilities
 Although the continuous nature of the qubit is indeed useful, the true power of quantum computers lie in how multiple qubits interact.
 Having multiple qubits enables entanglement, which is a key feature of quantum computing.
 
-With just two qubits, there are four possible states, $\ket{00}, \ket{01}, \ket{10}, \ket{11}$.
-Each of these four have their own probability amplitude, and thus their own probability of being measured.
+With two qubits, there are four possible states, $\ket{00}, \ket{01}, \ket{10}, \ket{11}$.
+Each of these four states have their own probability amplitude, and thus their own probability of being measured.
 A two-qubit system will therefore operate with four complex numbers.
 
 Generally, the state of multiple qubits can be expressed using the tensor product as
@@ -96,7 +96,7 @@ Generally, the state of multiple qubits can be expressed using the tensor produc
     = \ket{\psi_1} \otimes \ket{\psi_2} \otimes \cdots \otimes \ket{\psi_n}
     \label{eq:tensor}.
 \end{equation}
-What makes this so powerful is that the state of a multi-qubit system can be anything on the form
+What makes this so powerful is that the state of a multi-qubit system has the general form
 \begin{equation}
     \ket{\psi_1 \psi_2 \cdots  \psi_n}
     = c_1 \ket{0\dots 00} + c_2 \ket{0\dots 01} + \cdots + c_{2^n} \ket{1\dots 11}

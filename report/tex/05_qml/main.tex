@@ -1,19 +1,17 @@
 \chapter{Quantum machine learning}
 \label{chap:qml}
-How to combine quantum computing and machine learning is not easily answered.
-In the discussion of quantum machine learning, it is standard practice to reference the four quadrants of \cref{tab:qml_quadrants}, first described by \textcite{schuld2018}.
-
+There are four fundamental ways to combine machine learning and quantum computing\cite{schuld2018}. One can differentiate between the type of the data being processed and the way of processing these data, see Table~\ref{tab:qml_quadrants}.
 \begin{table}
     \centering
     % increase padding
     \renewcommand{\arraystretch}{1.5}
     \caption{
-        The four fundamental ways in which quantum computing and machine learning can be combined.
-        CC: classical computer and classical data.
-        CQ: classical computer and quantum data.
-        QC: quantum computer and classical data.
-        QQ: quantum computer and quantum data.
-        Adapted from \cite{schuld2018}.
+        The four fundamental ways to combine quantum computing and machine learning\cite{schuld2018}.
+        % CC: classical computer and classical data.
+        % CQ: classical computer and quantum data.
+        % QC: quantum computer and classical data.
+        % QQ: quantum computer and quantum data.
+        % Adapted from \cite{schuld2018}.
     }
     \begin{tabular}{cc|cc}
         \begin{tabular}{cc|cc}
@@ -27,22 +25,24 @@ In the discussion of quantum machine learning, it is standard practice to refere
 \end{table}
 
 
-Classical data being processed on classical computers is classical machine learning.
-Though not explicitly linked to quantum computing, there are some ways in which quantum computing influences classical machine learning, such as the quantum-inspired application of tensor networks in \cite{felser2021}.
 
-Using classical machine learning for quantum data includes improving quantum computers' general performance.
-For example, with machine learning algorithms, the variance of the measurements can be reduced, as shown in \cite{torlai2020}.
+\textbf{CQ}. \textit{Classical data} being processed on \textit{classical computers} is classical machine learning.
+Though not explicitly linked to quantum computing, there are some ways in which quantum computing influences classical machine learning, such as the quantum-inspired application of tensor networks \cite{felser2021}.
+
+\textbf{QC}. Using \textit{classical machine learning} for \textit{quantum data} includes improving quantum computers' general performance.
+For example, with machine learning algorithms, the variance of the measurements can be reduced \cite{torlai2020}.
 Alternatively, advanced machine learning models like neural networks can be employed to describe quantum states more efficiently.
 
-How to use quantum algorithms to solve machine learning problems is the main topic of this thesis and is what will be meant when quantum machine learning (QML) is mentioned.
-QML concerns itself with how better to do what classical machine learning already does.
+\textbf{QQ}. Using \textit{quantum computing} for handling \textit{quantum data} is another way to combine quantum computing and machine learning.
+An example is to perform quantum machine learning directly on data from quantum experiments or machine learning when the data is inherently quantum states.
+With NISQ hardware, fully quantum procedures are difficult, so this field is not of immediate interest.
+There is obviously a large overlap with CQ as the data is quantum once encoded into the quantum computer, but as will be made clear, the encoding is such a big part of CQ that results thence are not necessarily applicable to QQ.
+
+\textbf{CQ}. How to use \textit{quantum computers} to process \textit{classical data} is the main topic of this thesis and is what will be meant when quantum machine learning (QML) is mentioned.
+QML concerns itself with how to improve classical machine learning in some way.
 Quantum algorithms are most often advertised with speed-ups contra classical algorithms, often exponentially so as with Shor's algorithm.
 While this is true, there are major difficulties in achieving these speed-ups.
 However, there may be other advantages to be had, in terms of the amount of data needed to how much training has to be done.
-
-The last quadrant of quantum computing handling quantum data includes quantum machine learning from for example quantum experiments or machine learning when the data is inherently quantum states.
-With NISQ hardware, fully quantum procedures are difficult, so this field is not of immediate interest.
-There is obviously much overlap with CQ as the data is quantum once encoded into the quantum computer, but as will be made clear, the encoding is such a big part of CQ that results thence are not necessarily applicable QQ.
 
 
 \subimport{}{encoding}

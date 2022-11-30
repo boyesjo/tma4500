@@ -2,7 +2,8 @@
 \label{chap:conclusion}
 In this thesis, quantum machine learning has been discussed, coming from the perspective of classical machine learning and neural networks.
 Focus has been paid to various strategies of encoding classical data into quantum states and how to do so in a way that is not easily simulated classically while still being feasible for NISQ hardware.
-Particularly second-order rotations appear to be a good choice for encoding data, potentially with multiple repetitions, but it being hard to simulate classically is so far only conjecture.
+Particularly, second-order rotations appear to be a good choice for encoding data, potentially with multiple repetitions.
+So far it is only a conjecture that these are hard to simulate classically and more research is needed to settle this question.
 
 Designs for VQAs or QNNs inspired by classical NNs were discussed, and several have been explored by simulations.
 The results of \cite{abbas2021}, in which a simple QNN was shown to converge significantly quicker than classical NN of similar parameter count, were reproduced.
@@ -10,8 +11,8 @@ Whether the NN used was a fair comparison is debatable; a simpler logistic regre
 
 Quantum convolutional networks were also studied, where one model included intermediate measurements.
 To what degree the mid-circuit measurements bettered the results is not clear.
-Overall, being limited to models simple enough to be simulated on classical computers, it is hard to draw any conclusions about the performance of quantum neural networks
-At least they seem able to learn.
+Overall, being limited to models simple enough to be simulated on classical computers, it is hard to draw any conclusions about the performance of quantum neural networks.
+At least it is possible to train these networks.
 
 Quantum neural networks can still be studied in much more detail, and there are more models to explore.
 How data encoding affects the performance of quantum neural networks is also an interesting question, and what type of encoding strategy goes best with which model could be studied.

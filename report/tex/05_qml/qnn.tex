@@ -41,7 +41,7 @@ Add to this the problems of noise and vanishing gradients, and it is clear that 
         General structure of quantum neural networks.
         First, some data $\bm{x}$ is encoded into a state $\ket{\psi(\bm{x})}$ using some encoding strategy.
         Then, the state is transformed by a parametrised quantum circuit $U(\theta)$.
-        This variational circuit can often be decomposed into a sequence of gates $U_1,\dots, U_n$, making the QNN structure more akin to the layered classical neural networks.
+        This variational circuit needs to be decomposed into a sequence of gates $U_1,\dots, U_n$, making the QNN structure more akin to the layered classical neural networks.
         These gates or layers do not need to use all qubits, but can be restricted to a subset, mimicking the classical concept of differently sized hidden layers.
         Finally, measurements are made and used to calculate the model output.
     }
@@ -50,6 +50,7 @@ Add to this the problems of noise and vanishing gradients, and it is clear that 
 
 
 \subsection{Architectures and their applications}
+Add 
 \subsubsection{Quantum convolutional neural networks}
 \label{sec:qcnn}
 Originally introduced by \textcite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before an output is made.
@@ -61,14 +62,14 @@ Otherwise, the unused qubits are simply ignored.
 After several iterations, gates can be employed on the remaining qubits, analogous to finishing fully connected layer in classical CNNs, before the final measurement and output.
 
 Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count is only of order logarithm of the network depth, making them easier to train than dense networks of similar input size.
-In \cite{cong2019}, QCNNs were shown to be able to classify topological phases of matter, and since then, it has been shown that they have inherited they classical counterparts' ability to classify images \cite{oh2020}.
-They have shown desirable properties with regard to avoiding barren plateaus \cite{pesah2021}, which could be essential in training at for problems of interesting size.
+QCNNs were shown to be able to classify topological phases of matter\cite{cong2019}. It has also been shown that QCNNS inherit their classical counterparts' ability to classify images\cite{oh2020}.
+QCNNs have desirable properties with regard to avoiding barren plateaus\cite{pesah2021}, which could be essential in training problems of interesting size.
 
 \subsubsection{Quantum generative adversarial networks}
-Quantum generative models have been shown to potentially have an exponential advantage over their peers \cite{gao2018}.
+Quantum generative models have been shown to potentially have an exponential advantage over their classical counterpars\cite{gao2018}.
 Due to the inherent probabilistic nature of quantum machines, it should not be surprising that they more naturally learn difficult distributions than classical computers do.
 Moreover, leveraging a classical model as the adversary ensures that the quantum model can be of reasonable scale.
-Real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images \cite{huang2021}.
+Real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images\cite{huang2021}.
 
 \subsubsection{Hybrid quantum-classical neural networks}
 Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure.

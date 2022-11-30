@@ -9,7 +9,7 @@ The four methods that will be discussed in this section are summarised in \cref{
     \centering
     \caption{
         Properties of different data encodings.
-        Given $N$-dimensional data set of $M$ data points, qubits needed is a lower bound for qubits required to represent the data, and circuit depth is the number of gates needed for the encoding algorithm.
+        Given an $N$-dimensional data set of $M$ data points, the qubits needed is a lower bound for qubits required to represent the data, and circuit depth is the number of gates needed for the encoding algorithm.
         For basis encoding, $b(N) \geq N$ is the number of bits needed to represent an $N$-dimensional data point, for instance by using floating point representations of continuous data.
     }
     \label{tab:data_encoding}
@@ -19,9 +19,9 @@ The four methods that will be discussed in this section are summarised in \cref{
         }
         \toprule
         \textbf{Encoding strategy}    & \textbf{Qubits needed}  & \textbf{Circuit depth} & \textbf{Hard to simulate classically} \\ \midrule
-        Basis encoding                & $b(N)$                  & $O(b(N))$              & No                                    \\ \cmidrule{1-4}
-        Amplitude encoding            & $\lceil\log_2{N}\rceil$ & $O(N)$                 & Yes                                   \\ \cmidrule{1-4}
-        Angle encoding                & $N$                     & $O(N)$                 & No                                    \\ \cmidrule{1-4}
+        Basis encoding                & $b(N)$                  & $O(b(N))$              & No                                    \\ %\cmidrule{1-4}
+        Amplitude encoding            & $\lceil\log_2{N}\rceil$ & $O(N)$                 & Yes                                   \\ %\cmidrule{1-4}
+        Angle encoding                & $N$                     & $O(N)$                 & No                                    \\ %\cmidrule{1-4}
         {Second order angle encoding} & $N$                     & $O(N^2)$               & {Yes? (Conjectured)}                  \\ \bottomrule
     \end{tblr}
 \end{table}
@@ -29,10 +29,10 @@ The four methods that will be discussed in this section are summarised in \cref{
 
 \subsection{Basis encoding}
 The perhaps simplest way to encode data is to use the computational basis states of the qubits.
-This is done in much the way that classical computers use binary numbers.
+This is done in the same way that classical computers use binary numbers.
 For example, some data $x$ can be expressed as a bit-string $x = \{x_1, x_2, \dots, x_n\}$, where each $x_i$ is either 0 or 1, where any continuous variables are encoded as floating point numbers.
 For multidimensional data, the bit-strings are simply concatenated.
-
+% 
 If for instance the data point $010101$ is to be encoded in a quantum computer, it is simply mapped to the computational basis state $\ket{010101}$.
 This allows for multiple data points to be encoded in parallel as
 \begin{equation}
@@ -57,19 +57,19 @@ This has the advantage of being able to encode any numeric type natively, and pe
 For $N$-dimensional data points, only $\lceil \log_2 N \rceil$ qubits are needed.
 This is a significant improvement over the basis encoding, which requires $N$ qubits (or more if integers and floats are to be binarised).
 
-An insignificant drawback is that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant.
-Also, some padding may be needed if the number of qubits is not a power of two.
-
-Furthermore, amplitude encoding can easily be extended to cover the entire dataset.
+Amplitude encoding can easily be extended to cover the entire dataset.
 This is done by concatenating the data points, and then normalising the resulting state at the low cost of a single additional bit.
 Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
 \begin{equation}
-    \ket{\mathcal{D}} = \sum_{m=1}^M \sum_{i=1}^{N} x_i^{(m)} \ket{i} \ket{m}
+    \ket{\mathcal{D}} = \sum_{m=1}^M \sum_{i=1}^{N} x_i^{(m)} \ket{i} \ket{m},
 \end{equation}
 where $x_i^{(m)}$ is the $i$th component of the $m$th data point.
 For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.
 
-The main drawback of amplitude encoding is the practical difficulties of preparing such states.
+There are two main drawbacks of amplitude encoding.
+The first is that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant.
+Also, some padding may be needed if the number of qubits is not a power of two.
+The second drawback is the practical difficulties of preparing such states.
 Any state of the form
 \begin{equation}
     \ket{\psi} = \sum_{i} a_i \ket{i},
@@ -79,21 +79,19 @@ Unless some very specific assumptions are made, this is not possible in polynomi
 In general, for classical data, circuits must be linearly deep in the size of the data and ergo exponentially deep in the amount of qubits, which makes it beyond the reach of NISQ hardware.
 
 \subsection{Angle encoding}
-A third option is angle encoding.
+A third option is to encode data into the angles of rotations.
 Here, the potentially continuous components of the data are mapped to rotations of the qubits.
 For the rotations to be meaningful angles and not loop around, the data needs be normalised.
 An $N$-dimensional data point $\bm{x}$ is then encoded as
-\begin{align}
-    \ket{\psi(\bm{x})} & = \bigotimes_{i=1}^{N} R_X(x) \ket{0},   \\
-    \ket{\psi(\bm{x})} & = \bigotimes_{i=1}^{N} R_Y(x) \ket{0}    \\
-    \intertext{or}
-    \ket{\psi(\bm{x})} & = \bigotimes_{i=1}^{N} R_Z(x) H \ket{0},
-\end{align}
-depending on which rotation is used.
+\begin{equation}
+    \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_\sigma(x) \ket{0},
+\end{equation}
+where $\sigma$ can be chose to be either $X$, $Y$ or $Z$.
 For $Z$-rotations, a Hadamard gate is needed for the operation to have an effect.
 $N$ qubits are still required, but with native support for continuous variables, angle encoding can be more efficient than basis encoding.
 A constant number of gates are needed to prepare the state, which is a significant advantage over amplitude encoding.
 Still, being a product state, it offers no inherent quantum advantage.
+A possible way to improve this is a second order version.
 
 \subsection{Second order angle encoding}
 \label{sec:second_order_angle_encoding}
