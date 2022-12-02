@@ -2,10 +2,10 @@
 \label{sec:quantum_operations}
 \subsection{Single-qubit gates}
 To operate on one or more qubits, a unitary operation is applied to the state.
-As they are unitary, a pure state remains a pure state.
-With finite number of qubits, these operations can be expressed as matrices.
+This is a computational interpretation of the unitary time evolution resulting from a Hamiltonian acting on the quantum system.
+As the operations are unitary, a pure state remains pure.
 These operations are often thought of as gates, paralleling the classical gates in digital logic.
-Mathematically, a unitary gate $U$ can be expressed as matrices acting on the state vector, $\ket{\psi}$, as
+Mathematically, with a finite number of qubits, a unitary gate $U$ can be expressed as matrices acting on the state vector, $\ket{\psi}$, as
 \begin{equation}
     \ket{\psi'} = U\ket{\psi},
 \end{equation}
@@ -23,7 +23,7 @@ The Hadamard gate,
 is a rotation around the line between the $x$- and $z$-axes by $\pi/2$.
 It is an important gate in quantum computing, as it is used to create superpositions of the computational basis states.
 Applied on the initial $\ket{0}$ state, it creates the entangled state $\frac{1}{\sqrt{2}}(\ket{0} + \ket{1})$.
-Two consecutive applications thereof is a no-op, the second returns the state to the initial state, as can be seen from the matrix squaring to the identity.
+Two consecutive applications thereof returns the state to the initial state, as can be seen from the matrix squaring to the identity.
 
 The $R_X$-, $R_Y$- and $R_Z$-gates are rotations around the $x$-, $y$- and $z$-axes, respectively, by an arbitrary angle $\theta$:
 \begin{align*}
@@ -34,17 +34,18 @@ The $R_X$-, $R_Y$- and $R_Z$-gates are rotations around the $x$-, $y$- and $z$-a
 These parametrised gates will be useful in \cref{sec:vqa}.
 
 \subsection{Multi-qubit gates}
-Multi qubit gates are gates acting non-trivially on more than on qubit.
+Multi-qubit gates are gates that act non-trivially on more than one qubit.
 The most used multi-qubit gate is the controlled $X$-gate, also known as the CNOT.
 Being controlled means that it only acts on the second qubit if the first qubit is in the state $\ket{1}$.
 Of course, the first qubit may be in a superposition, and the CNOT this way allows for the creation of entanglement between the two qubits.
 If the first qubit has probability amplitude $\alpha$ of being in the state $\ket{1}$, the second qubit will have probability amplitude $\alpha$ of being flipped.
-The CNOT gate can be expressed in matrix form as
+The CNOT-gate, acting on the leftmost qubit in the tensored two-qubit system can be expressed in matrix form as
 \begin{equation}
     \text{CNOT} = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 0 & 1 \\ 0 & 0 & 1 & 0 \end{pmatrix}.
 \end{equation}
 
 In theory, any unitary single-qubit operation can be controlled.
+However, it is often only the CNOT that is used is implemented in the hardware.
 Another interesting two-qubit gate is the controlled $Z$-gate, CZ, expressible as the matrix
 \begin{equation}
     \text{CZ} = \begin{pmatrix} 1 & 0 & 0 & 0 \\ 0 & 1 & 0 & 0 \\ 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & -1 \end{pmatrix}.
@@ -62,14 +63,16 @@ Therefore, many measurements are performed.
 Usually, these results are averaged to obtain an estimate, but more complicated post-processing methods are also possible.
 For instance, neural networks have shown useful properties in regard of reducing variance in the estimates, though at the cost of some bias \cite{torlai2020}.
 
-The $Z$-basis is the canonical basis for measurements, but any other basis can be used, at least in theory.
-Often, only canonical basis measurements are implemented in the hardware.
-Using another basis can be done by properly modifying the state before the measurement; a change of basis can simply be implemented by a unitary operation.
+Canonically, the $Z$-basis is used for measurements, and it is usually the only basis for which measurements are physically implemented.
+To virtually measure in another basis, a change of basis is performed.
+This is achieved by applying a unitary transformation before measurement.
+% The $Z$-basis is the canonical basis for measurements, but any other basis can be used, at least in theory.
+% Often, only canonical basis measurements are implemented in the hardware.
+% Using another basis can be done by properly modifying the state before the measurement; a change of basis can simply be implemented by a unitary operation.
 
-Measurements may be done in the middle of operations and be used to control the operations.
+Measurements may be done in the middle of a computation and be used to control gates.
 If the qubits are entangled, measuring one will affect the measurement probabilities of others.
 Using such intermediate measurements is a way of introducing non-linearities in the otherwise unitary nature of the quantum world.
-
 
 \subsection{Quantum circuits}
 The operations on qubits are often described using quantum circuits, which are a graphical representation of the operations on the qubits, the quantum algorithms.
@@ -84,7 +87,20 @@ A simple example is the circuit
         \lstick{$\ket{0}$} & \gate{H} & \qw
     \end{quantikz},
 \end{equation}
-which prepares the state $\frac{1}{2}(\ket{00} + \ket{01} + \ket{10} + \ket{11})$.
+which prepares the state
+$
+    \frac{1}{2}(\ket{00} + \ket{01} + \ket{10} + \ket{11})
+    =
+    \frac{1}{\sqrt{2}}
+    \left(
+    \ket{0} + \ket{1}
+    \right)
+    \otimes
+    \frac{1}{\sqrt{2}}
+    \left(
+    \ket{0} + \ket{1}
+    \right)
+$.
 This is a pure state with no entanglement, and so the measurement probabilities of the two qubits are independent.
 
 Slightly more interesting is the circuit
@@ -114,18 +130,24 @@ The uncertainty is only classical, and it could therefore not be used to create 
 \subsection{Quantum supremacy}
 Exponential speed-ups do not come for free.
 Quantum computers do only solve certain problems more efficiently than classical computers, and finding the algorithms to do so is not trivial.
-Shor's algorithm has time complexity $O((\log N)^3)$ while the most efficient known classical algorithm, the general number field sieve, is sub-exponential with a time complexity on the form $O(\exp(C (\log N)^{1/3}))$ for some constant $C$.
+Shor's algorithm has time complexity $O((\log N)^3)$ while the most efficient known classical algorithm, the general number field sieve, is sub-exponential with a time complexity on the form $\Omega(k^{\frac{1}{3}}\log^{2/3}k)$, where $k=O(2^N)$ \cite{dervovic2018}.
 To solve linear system, there is the HHL algorithm with time complexity $O(\log(N)\kappa^2)$, where $\kappa$ is the condition number.
-This is an exponential speed-up over the fastest known classical algorithm, which has time complexity $O(N \kappa)$.
+This is an exponential speed-up over the fastest known classical algorithm\footnotemark{}, which has time complexity $O(N \kappa)$.
 Still, these are non-trivial algorithms, not yet usable in practice and that were not easily found.
 
-Polynomial speed-ups are more easily found.
-For example, the Grover algorithm which is used to search for an element in an unsorted list has time complexity $O(\sqrt{N})$.
+\footnotetext{
+    Given that the condition number does not grow exponentially.
+    There are also difficulties in loading the data into the quantum computer and extracting the solution that could negate any exponential speed-up.
+    For details, see \cite{aaronson2015}.
+}
+
+Polynomial speed-ups are perhaps more easily found.
+For example, the Grover algorithm which is used to search for an element in an unsorted list has time complexity $O(\sqrt{N})$ \cite{grover1996}.
 Classically, this can not be done in less than $O(N)$ time.
 This algorithm, or the more general amplitude amplification on which it builds, solves a very general problem and is often used a subroutine to achieve quadratic speed-ups in other algorithms.
 Being only a quadratic speed-up, it is not as impressive as the exponential speed-ups, and achieving quantum supremacy in that manner would require larger quantum computers than if the speed-up were exponential.
 
-It is proven that the class of problems quantum computers can solve in polynomial time (with high probability), BQP, contains the complexity class P.
+It is proven that the class of problems quantum computers can solve in polynomial time (with high probability), BQP, contains the complexity class P \cite{nielsen2012}.
 This follows from the fact than quantum computers can do any classical algorithm.
 Since quantum computers can solve problems like integer factorisation and discrete logarithms efficiently, it is believed that BQP is strictly greater than P, but as whether P = NP remains unknown, these problems could actually be in P.
 In a similar vein, NP-complete problems are believed to lie outside BQP.
