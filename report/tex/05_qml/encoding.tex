@@ -1,11 +1,5 @@
 \section{Data encoding}
-\label{sec:data_encoding}
-In order for quantum computers to use classical data, it must first be encoded in a way that is compatible with the quantum hardware.
-How this is done has major implications on both the computational performance and the model expressibility.
-While naïve techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance.
-The four methods that will be discussed in this section are summarised in \cref{tab:data_encoding}.
-
-\begin{table}
+\begin{table}[b]
     \centering
     \caption{
         Properties of different data encodings.
@@ -25,6 +19,13 @@ The four methods that will be discussed in this section are summarised in \cref{
         {Second order angle encoding} & $N$                     & $O(N^2)$               & {Yes? (Conjectured)}                  \\ \bottomrule
     \end{tblr}
 \end{table}
+\label{sec:data_encoding}
+In order for quantum computers to use classical data, it must first be encoded in a way that is compatible with the quantum hardware.
+How this is done has major implications on both the computational performance and the model expressibility.
+While naïve techniques like basis encoding are possible and easy to understand, more complex procedures are often needed to achieve good performance.
+The four methods that will be discussed in this section are summarised in \cref{tab:data_encoding}.
+
+
 
 
 \subsection{Basis encoding}
@@ -57,7 +58,7 @@ This has the advantage of being able to encode any numeric type natively, and pe
 For $N$-dimensional data points, only $\lceil \log_2 N \rceil$ qubits are needed.
 This is a significant improvement over the basis encoding, which requires $N$ qubits (or more if integers and floats are to be binarised).
 
-Amplitude encoding can easily be extended to cover the entire dataset.
+Amplitude encoding can easily be extended to cover the entire data set.
 This is done by concatenating the data points, and then normalising the resulting state at the low cost of a single additional bit.
 Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
 \begin{equation}
@@ -66,10 +67,10 @@ Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
 where $x_i^{(m)}$ is the $i$th component of the $m$th data point.
 For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.
 
-There are two main drawbacks of amplitude encoding.
-The first is that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant.
-Also, some padding may be needed if the number of qubits is not a power of two.
-The second drawback is the practical difficulties of preparing such states.
+There are two main drawbacks of amplitude encoding:
+First, that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant.
+Also, some padding may be needed if the dimension of the data is not a power of two.
+Second, there are significant practical difficulties with preparing such states.
 Any state of the form
 \begin{equation}
     \ket{\psi} = \sum_{i} a_i \ket{i},
@@ -86,17 +87,17 @@ An $N$-dimensional data point $\bm{x}$ is then encoded as
 \begin{equation}
     \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_\sigma(x) \ket{0},
 \end{equation}
-where $\sigma$ can be chose to be either $X$, $Y$ or $Z$.
-For $Z$-rotations, a Hadamard gate is needed for the operation to have an effect.
-$N$ qubits are still required, but with native support for continuous variables, angle encoding can be more efficient than basis encoding.
+where $\sigma$ can be chosen to be either $X$, $Y$ or $Z$.
+For $Z$-rotations, a Hadamard gate is prepended for the rotation to have an effect.
+$N$ qubits are still required, but with native support for continuous variables, angle encoding can require fewer qubits than basis encoding.
 A constant number of gates are needed to prepare the state, which is a significant advantage over amplitude encoding.
 Still, being a product state, it offers no inherent quantum advantage.
 A possible way to improve this is a second order version.
 
 \subsection{Second order angle encoding}
 \label{sec:second_order_angle_encoding}
-\textcite{havlicek2019} propose a second-order angle encoding, which they conjecture to be hard to simulate classically.
-First, angles are encoded as above, but then the qubits are entangled and rotated further based on second order terms.
+In \cite{havlicek2019}, a second-order angle encoding is proposed, which is conjectured to be hard to simulate classically.
+First, angles are encoded as above, but thereafter the qubits are entangled and rotated further based on second order terms.
 In circuit notation, such an encoding with $Z$-rotations reads
 \begin{equation}
     \begin{quantikz}[column sep=3mm]
@@ -109,11 +110,12 @@ In circuit notation, such an encoding with $Z$-rotations reads
 \end{equation}
 where $R_Z^i = R_Z(x_i)$ and $R_Z^{i,j} = R_Z((\pi-x_i)(\pi-x_j))$ and with the entanglements and second-order rotations being applied pairwise for all $N$ qubits.
 This increases the circuit depth to order $N^2$, and full connectivity is needed.
-Nonetheless, it may be feasible for data of moderate dimensionality on NISQ hardware, and were it indeed classically hard to simulate, it could provide quantum advantage.
+Nonetheless, the increased circuit depth could be compensated for by the extra entanglement and subsequent expressibility, compared to the first order encoding.
+Were it indeed classically hard to simulate, it could provide quantum advantage.
 
 \subsection{Repeats}
 The expressive power of models heavily rely on the encoding strategy.
 For instance, a single qubit rotation only allows the model to learn sine functions, where the frequency is determined by the scaling of the data.
 Generally, quantum models will learn periodic functions, and thus Fourier analysis is a useful tool.
-\textcite{schuld2021} study the implications of this, and they show that simply repeating simple encoding blocks allows for learning of more frequencies and thus more complex functions.
+The implications of this is studied in \cite{schuld2021}, where it is shown that simply repeating simple encoding blocks allows for learning of more frequencies and thus more complicated functions.
 Asymptotically, such repeats lets a quantum model learn arbitrary functions.

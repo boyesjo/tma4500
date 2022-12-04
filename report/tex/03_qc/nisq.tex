@@ -1,8 +1,9 @@
 \section{Limitations of NISQ hardware}
-Quantum hardware have been physically realised and even outperforms classical computers in very contrived situations, but the hardware is still very limited.
+\label{sec:nisq}
+Quantum hardware have been physically realised and even outperforms classical computers in very contrived situations \cite{arute2019, zhong2020, madsen2022}, but the hardware is still very limited.
 The hardware is limited in the number of qubits, the connectivity between the qubits, and the noise and decoherence of the qubits.
 It is believed that quantum hardware will continue to improve and eventually perform demanding algorithms like Shor's for large numbers.
-Once enough qubits are available, error correction can be implemented and truly enable quantum supremacy.
+Once enough qubits are available and error rates low enough, error correction schemes can be implemented, permitting fault-tolerant quantum computing and truly enable quantum supremacy.
 Still, the era dubbed NISQ (Noisy Intermediate-Scale Quantum) is the first step, and to make use of the hardware, the inherent noise and its consequences must be understood, and algorithms must take the following limitations into consideration.
 
 \subsection{Quantum channels and decoherent noise}
@@ -169,7 +170,7 @@ When a gate like the $X$-gate is applied many times, even small errors will add 
         For each number of gates, the measurement is repeated 1000 times.
         The coherent error causes a sinusoidal behaviour, in which 180 rotations causes the overall rotation to be completely opposite.
         The decoherent error causes an exponential dampening, as the state becomes more and more mixed.
-        The wiggly pattern is simply classical randomness stemming from the probabilistic measurement with a finite number of samples.
+        The wiggly pattern stems from the shot noise, simply classical randomness stemming from the probabilistic measurement with a finite number of samples.
     }
     \label{fig:noise_graph}
 \end{figure}
@@ -180,9 +181,23 @@ Even though current hardware suffers much less noise than the figure shows, NISQ
 There are more sources of noise than the two included in the figure, and having to deal with multiple qubits certainly does not help.
 
 \subsection{Qubit counts and connectivity}
+\begin{figure}[b]
+    \centering
+    \includegraphics[width=0.65\textwidth]{connectivity.pdf}
+    \caption{
+        Qubit connectivity and error rates in IBM's 127-qubit Eagle r3 chip \cite{ibm_eagle}.
+        Brighter coloured nodes indicate more $X$-errors, while brighter edges indicate more CNOT-errors.
+        Only the CNOT-, $R_Z$-, $X$- and $\sqrt{X}$-gates are available.
+    }
+    \label{fig:connectivity}
+\end{figure}
 Another limiting factor is the amount of qubits.
 Current hardware has around 10 to 100, which though still may be enough to express states too large for classical computers, is not enough to perform the most demanding algorithms.
-Recent estimates require millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
+Recent estimates find that millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
+
 Another current limitation is the connectivity between the qubits.
-Not all of them are directly linked, which means that applying a multi-qubit gate may require intermediate swapping.
-This increases circuit depth, which in turn increases error rates.
+Consider for example the connectivity graph in \cref{fig:connectivity}.
+Qubits are generally only linked to two neighbouring qubits.
+Moreover, only a basis set of gates will be directly available.
+All this means that qubits may have to be swapped, often many times, and that multiple gates may be needed where only was intended.
+This increases circuit depths, which in turn exacerbates the effects of noise.

@@ -14,26 +14,28 @@ The only requirement is that the state is normalised, $\vert\alpha\vert^2 + \ver
 
 \footnotetext{
     The $\ket{\cdot}$ notation is known as a ket and is used in quantum mechanics to denote a quantum state.
-    It is effectively a column vector.  The inner product may be taken with a bra, $\bra{\cdot}$, to give a scalar.
+    It is effectively a column vector.
+    The inner product may be taken with a bra, $\bra{\cdot}$, to give a scalar.
     These inner products are then denoted by $\bra{\cdot}\ket{\cdot}$.
     Similarly, outer products are well-defined and denoted by $\ketbra{\cdot}{\cdot}$.
 }
 
 Normalisation is required due to the Born rule, as the absolute square of the coefficients is the probability of measuring the qubit in the corresponding basis state.
-It is one of Nature's great mysteries what exactly a measurement is, but in the quantum computational setting, it can be thought of as taking a random sample with the probabilities given by the coefficients, which can be done systematically.
+It is one of Nature's great mysteries what exactly a measurement is, but in the quantum computational setting, it can be thought of as taking a random sample with the probabilities given by the absolute square of the coefficients.
 
 \subsection{The Bloch sphere}
 A useful tool for visualising the state of a qubit is the Bloch sphere.
-First, it should be noted that states on the form \eqref{eq:qubit} are not unique, only the relative complex phase matters.
-There is a global phase which is not measurable, and thus not relevant to the state of the qubit.
+First, it should be noted that states on the form \cref{eq:qubit} are not physically unique, only the relative complex phase matters.
+There is a global phase which is not measurable, it can not be observed, and it is not physically relevant.
 Taking this and the normalisation requirement into account, the state of the qubit can be expressed as
 \begin{equation}
     \ket{\psi} = \cos\left(\frac{\theta}{2}\right) \ket{0} + e^{i\phi} \sin\left(\frac{\theta}{2}\right) \ket{1},
     \label{eq:bloch}
 \end{equation}
 where $\theta, \phi \in \mathbb{R}$.
-Interpreting $\theta$ as the polar angle and $\phi$ the azimuthal angle, the state of the qubit can be identified with a point on a sphere, see Figure~\ref{fig:bloch}.
-The state $\ket{0}$ is typically thought of as the north pole, and $\ket{1}$ as the south pole of this sphere.
+Interpreting $\theta$ as the polar angle and $\phi$ the azimuthal angle, the state of the qubit can be identified with a point on a sphere.
+See \cref{fig:bloch}.
+The state $\ket{0}$ is typically thought of as the north pole of this sphere and $\ket{1}$ the south pole.
 % \Cref{fig:bloch} shows the Bloch sphere with the state of the qubit in \cref{eq:bloch}.
 
 \begin{figure}
@@ -51,32 +53,34 @@ The state $\ket{0}$ is typically thought of as the north pole, and $\ket{1}$ as 
 \end{figure}
 
 \subsection{Mixed states and density operators}
-It is not only the superpositions of states that are important in quantum computing, but also the mixed states in which classical uncertainties manifest.
+It is not only the superpositions of states that are important in quantum computing, but also the mixed states, states that are statistical ensembles of pure states.
+Pure states are those expressible as a single ket like \cref{eq:qubit}, while mixed states arise when the preparation the system is not perfectly known or when the system interacts with the environment.
 For the description of mixed states, the formalism of density operators is more useful than the state vector formalism.
-In a mixed state, some classical probabilities $p_i$ are associated with the different states $\ket{\psi_i}$, and the state of the system is described by the density operator
+If there are no classical uncertainties, the state is pure, and the density operator can be expressed a single ket-bra, $\rho = \ketbra{\psi}{\psi}$.
+In a mixed state, however, some classical probabilities $p_i$ are associated with the different pure states $\ket{\psi_i}$, and the state of the system is described by the density operator
 \begin{equation}
     \rho = \sum_{i=1}^n p_i \ketbra{\psi_i}{\psi_i}
     \label{eq:density}
 \end{equation}
 where $\ket{\psi_i}$ are the states of the system, and $\bra{\psi_i}$ are the corresponding dual vectors.
-The $p_i$ must be non-negative and sum to one.
-Furthermore, the density operator is positive semidefinite.
-If there is no classical uncertainties, the state is called pure, and the density operator can be expressed a single ket-bra, $\rho = \ketbra{\psi}{\psi}$.
+Being probabilities, the $p_i$ must be non-negative and sum to one.
+Given a basis and a finite Hilbert space, the density operator can be expressed as a matrix where the diagonal elements are the probabilities of measuring the system in the corresponding basis state.
+Furthermore, it is easily seen that the density operator must be positive semidefinite and Hermitian.
 
-For a density operator, the diagonal elements are the probabilities of measuring the system in the corresponding basis states, and hence they are positive and the trace one.
-Ergo, for a single qubit, the density operator can be expressed as
-\begin{equation}
-    \rho = \frac{1}{2} \left(I + x \sigma_x + y \sigma_y + z \sigma_z\right).
-\end{equation}
-Here, $x, y, z \in \mathbb{R}$, and $\sigma_x, \sigma_y, \sigma_z$ are the Pauli matrices,
+The Pauli matrices,
 \begin{equation}
     \sigma_x = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}, \quad
     \sigma_y = \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}, \quad
     \sigma_z = \begin{pmatrix} 1 & 0 \\ 0 & -1 \end{pmatrix},
     \label{eq:pauli}
 \end{equation}
-which together with the identity matrix serve as a basis for Hermitian $2\times 2$ matrices.
-Being positive semidefinite, the determinant should be non-negative, and thus it can be showed that $x^2 + y^2 + z^2 \leq 1$.
+together with the identity matrix serve as a basis for the vector-space of real Hermitian $2\times 2$ matrices.
+Since the diagonal elements of a density matrix must sum to one, the density matrix for a single qubit can then be expressed as
+\begin{equation}
+    \rho = \frac{1}{2} \left(I + x \sigma_x + y \sigma_y + z \sigma_z\right),
+\end{equation}
+where $x, y, z \in \mathbb{R}$.
+Being positive semidefinite, the determinant should be non-negative, and thus it can be shown that $x^2 + y^2 + z^2 \leq 1$.
 This allows density operators to be interpreted as points on the Bloch sphere or indeed within it.
 Notably, pure states lie on the surface, while mixed states lie within the sphere (or rather, the Bloch ball).
 A pure quantum superposition of $\ket{0}$ and $\ket{1}$ with equal probabilities would have a complex phase and lie somewhere on the equator, while a statistical mixture with equal classical probabilities of being $\ket{0}$ and $\ket{1}$ would lie in its centre.
@@ -87,7 +91,7 @@ Having multiple qubits enables entanglement, which is a key feature of quantum c
 
 With two qubits, there are four possible states, $\ket{00}, \ket{01}, \ket{10}, \ket{11}$.
 Each of these four states have their own probability amplitude, and thus their own probability of being measured.
-A two-qubit system will therefore operate with four complex numbers.
+A two-qubit system will therefore operate with four complex numbers in the four-dimensional Hilbert space $\mathbb{C}^{4}$.
 
 Generally, the state of multiple qubits can be expressed using the tensor product as
 \begin{equation}

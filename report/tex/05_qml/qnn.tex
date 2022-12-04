@@ -5,15 +5,22 @@ The main goal of QNNs is to do what classical NNs do, but with some quantum adva
 
 The structure of most quantum neural networks follow classical feed-forward networks.
 \Cref{fig:qnn} shows the general circuit layout.
-In the first step or layer, data is encoded into the qubits, typically using a method discussed in \cref{sec:data_encoding}.
-Next, the data is passed through a sequence of parametrised quantum gates which often can be interpreted as layers.
-Lastly, an output is produced, which is typically a measurement of some observable.
-Usually, the observable is a combination of Pauli operators on every qubit.
-Thence, a cost function can be evaluated.
+In the first step (or layer), data is encoded into the qubits, typically using a method discussed in \cref{sec:data_encoding}.
+Next, the data is passed through a sequence of parametrised quantum gates which often can be interpreted as belonging to layers.
+Lastly, an output is produced by measuring the qubits, potentially with some post-processing.
+Thence, a cost function is calculated, and the parameters are updated.
 
-Though methods like the parameter-shift allows for computation of gradients, which makes it possible to train the network using classical methods, it is not as efficient as classical backpropagation.
-This is because the parameter-shift method requires a separate evaluation of the circuit, including numerous shots, for each parameter, whereas backpropagation is easily done after a forward pass through the network.
-Add to this the problems of noise and vanishing gradients, and it is clear that QNNs will not scale in the same manner as classical networks do.
+While the power of classical neural network relies on the non-linear activation functions, the unitary operations in quantum computing are inherently linear.
+However, depending on how the data is encoded, the linear transformations in the Hilbert space may not be linear in the input space.
+With basis encoding, for example, mapping $\ket{b}\ket{0}$ to $\ket{b}\ket{\sigma(b)}$ is doable, where $b$ is a bit-string and $\sigma$ a non-linear function.
+Amplitude encoding, on the other hand, has its input necessarily transformed linearly, and is for this reason (in addition to those mentioned in \cref{sec:data_encoding}) less suitable for QNNs.
+If intermediate measurements are used, the non-linearities can be introduced in the quantum circuit.
+One way of doing this includes controlling gates with measurement results, as in \cite{cong2019}.
+Another way is so-called repeat-until-success schemes \cite{cao2017}, where the circuit is run until the measurement of one qubit is what is desired before the remaining state can be used for further computation.
+
+Though there are methods like the parameter-shift rule that make it possible to find gradients and train the network using classical methods, none are as efficient as classical backpropagation for classical neural networks.
+This is because these methods require separate evaluations of the circuit, including numerous shots, for each parameter, whereas backpropagation is easily done after a forward pass through the network.
+Add to this the problems of noise and vanishing gradients, discussed in \cref{sec:nisq}, and it is clear that NISQ-era QNNs can not be expected to scale as well as classical NNs do.
 
 \begin{figure}
     \centering
@@ -49,37 +56,39 @@ Add to this the problems of noise and vanishing gradients, and it is clear that 
 \end{figure}
 
 
-\subsection{Architectures and their applications}
+\subsection{Architectures}
+Many architectures for QNNs have been proposed, commonly inspired by those for classical NNs.
+Still being in its infancy, it is not clear which (if any) will prove useful.
+Below follow some promising architectures, with a brief description of how they work compared to classical neural networks (see \cref{sec:nn} for more details about them).
+
 \subsubsection{Quantum convolutional neural networks}
 \label{sec:qcnn}
-Originally introduced by \textcite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before an output is made.
-In the quantum convolutional layers, neighbouring qubits are entangled with some parametrised gates.
-After that, pooling layers reduce (usually by half) the active qubit count.
-The pooling may also be parametrised.
-When pooling, the qubits to be discarded could be measured and used to determine the operations on the still active qubits.
-Otherwise, the unused qubits are simply ignored.
-After several iterations, gates can be employed on the remaining qubits, analogous to finishing fully connected layer in classical CNNs, before the final measurement and output.
-
+Originally introduced in \cite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before an output is made.
+In the quantum convolutional layers, neighbouring qubits are entangled by some parametrised gates, after which pooling layers reduce the active qubit count (usually by half).
+By basing the pooling on measurements, controlling a gate based on a neighbouring qubit measurement, non-linearities are introduced.
 Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count is only of order logarithm of the network depth, making them easier to train than dense networks of similar input size.
-QCNNs were shown to be able to classify topological phases of matter\cite{cong2019}. It has also been shown that QCNNS inherit their classical counterparts' ability to classify images\cite{oh2020}.
-QCNNs have desirable properties with regard to avoiding barren plateaus\cite{pesah2021}, which could be essential in training problems of interesting size.
+After several iterations of convolution and pooling, gates can be employed on the remaining qubits, analogous to a finishing fully connected layer in classical CNNs, before the final
+measurement and output.
+
+QCNNs were shown to be able to classify topological phases of matter \cite{cong2019} and that they inherit their classical counterparts' ability to classify images \cite{oh2020}.
+Also, QCNNs have desirable properties with regard to avoiding barren plateaus \cite{pesah2021}, which could prove essential in training for problems of interesting size.
 
 \subsubsection{Quantum generative adversarial networks}
-Quantum generative models have been shown to potentially have an exponential advantage over their classical counterpars\cite{gao2018}.
-Due to the inherent probabilistic nature of quantum machines, it should not be surprising that they more naturally learn difficult distributions than classical computers do.
+Quantum generative models have been shown potentially to have an exponential advantage over their classical counterparts \cite{gao2018}.
+Due to the inherent probabilistic nature of quantum machines, it should not be surprising that they could learn difficult distributions more naturally than classical computers do.
 Moreover, leveraging a classical model as the adversary ensures that the quantum model can be of reasonable scale.
-Real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images\cite{huang2021}.
+Real quantum hardware has been used to generate (admittedly low-resolution) images of handwritten images \cite{huang2021}.
 
 \subsubsection{Hybrid quantum-classical neural networks}
 Another option is to include a quantum layer or node is some larger pipeline or even non-linear graph structure.
-As parametrised quantum circuits are differentiable in their parameters, they can easily be handled using the chain rule when backpropagating a hybrid model.
-\textcite{killoran2019} describe and test several such models.
-They note that for the NISQ-era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial.
+As parametrised quantum circuits are differentiable in their parameters, they can be handled using the chain rule when backpropagating a hybrid model.
+In \cite{killoran2019}, several such models are described and tested.
+The authors note that for the NISQ-era, limiting quantum components of models to very particular tasks to which they are especially suited should be beneficial.
 As quantum hardware develops, they can take over more and more of the hybrid models.
 
-Quanvolutional neural networks, proposed by \textcite{henderson2020}, are a hybrid model in which the convolutional layers are replaced by quantum layers.
+Quanvolutional neural networks, proposed in \cite{henderson2020}, are a hybrid model in which the convolutional layers of a classical CNN are replaced by quantum layers.
 As the quantum part is restrained to a single layer and a small convolutional kernel, the design can be implemented with small quantum circuits with little requirements for error-mitigation, still being able to process high-dimensional data, thereby making it a good candidate for NISQ-era hardware.
 
-More recently, \textcite{zeng2022} have explored using a hybrid model to multi-class classification on real world data sets using a CNN-inspired structure.
-In their model, the quantum part is placed in the middle, after classical convolutions and pooling and before a classical fully connected layer.
-There, it is shown that the hybrid model outperforms a classical CNN of similar parameter size.
+More recently, in \cite{zeng2022}, using a hybrid model for multi-class classification on real world data sets using a CNN-inspired structure was explored.
+In the model used, the quantum part was placed in the middle, after classical convolutions and pooling and before a classical fully connected layer.
+There, it was shown that the hybrid model outperforms a classical CNN of similar parameter size.
