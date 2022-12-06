@@ -20,7 +20,7 @@ Another way is so-called repeat-until-success schemes \cite{cao2017}, where the 
 
 Though there are methods like the parameter-shift rule that make it possible to find gradients and train the network using classical methods, none are as efficient as classical backpropagation for classical neural networks.
 This is because these methods require separate evaluations of the circuit, including numerous shots, for each parameter, whereas backpropagation is easily done after a forward pass through the network.
-Add to this the problems of noise and vanishing gradients, discussed in \cref{sec:nisq}, and it is clear that NISQ-era QNNs can not be expected to scale as well as classical NNs do.
+Add to this the problems of noise and vanishing gradients, discussed in \cref{sec:nisq,sec:vqa}, and it is clear that NISQ-era QNNs can not be expected to scale as well as classical NNs do.
 
 \begin{figure}
     \centering
