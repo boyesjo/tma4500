@@ -56,7 +56,7 @@ Because it only alters the amplitude of $\ket{11}$, it does not actually matter 
 For an output to be obtained from a quantum computer, a measurement must be performed.
 This is typically done at the end of all operations and of all qubits, thus yielding a single output of zeros and ones, a bit-string.
 
-As described by the third postulate of quantum mechanics, any observable quantity has a corresponding Hermitian operator $A$, spectrally decomposeable as $A = \sum_{i} \lambda_i P_i$, where $\lambda_i$ are the (necessarily real) eigenvalues and $P_i$ are the corresponding projectors onto the eigenspaces.
+As described by the third postulate of quantum mechanics, any observable quantity has a corresponding Hermitian operator $A$, spectrally decomposable as $A = \sum_{i} \lambda_i P_i$, where $\lambda_i$ are the (necessarily real) eigenvalues and $P_i$ are the corresponding projectors onto the eigenspaces.
 When measuring, the probability of obtaining the outcome $\lambda_i$ is given by
 \begin{equation}
     p_i = \bra{\psi} P_i \ket{\psi},
@@ -64,9 +64,11 @@ When measuring, the probability of obtaining the outcome $\lambda_i$ is given by
 where $\ket{\psi}$ is the state before the measurement.
 The state after the measurement is then given by
 \begin{equation}
-    \ket{\psi'} = \frac{1}{\sqrt{p_i}} P_i \ket{\psi}.
+    \ket{\psi} \mapsto \frac{P_i \ket{\psi}}{\sqrt{\bra{\psi} P_i \ket{\psi}}},
 \end{equation}
-It is one of Nature's great mysteries what exactly a measurement is and how and why it is different from the unitary evolution described by the second postulate, but in the quantum computational setting, it can be thought of as taking a random sample with the probabilities as given by the above equation.
+where $P_i$ is randomly chosen according to the probabilities $p_i$.
+It is one of Nature's great mysteries what exactly a measurement is and even more so how and why it is different from the unitary evolution described by the second postulate.
+In the quantum computational setting, it can be thought of as taking a random sample with the probabilities as given by the above equation.
 
 In this probabilistic settings, it is often the underlying probabilities are what is of interest.
 Therefore, many measurements will be performed.
@@ -74,7 +76,7 @@ Usually, these results are averaged to obtain an estimate, but more complicated 
 For instance, neural networks have shown useful properties in regard of reducing variance in the estimates, though at the cost of some bias \cite{torlai2020}.
 
 Canonically, the computational $Z$-basis is used for measurements, and it is usually the only basis for which measurements are physically implemented in a quantum computer.
-When measureing in the computational basis in which a state is expressed, as \cref{eq:superposition}, the probabilities are simply given by the absolute square of the coefficients.
+When measuring in the computational basis in which a state is expressed, as \cref{eq:superposition}, the probabilities are simply given by the absolute square of the coefficients.
 To virtually measure another observable, a change of basis is performed.
 This is achieved by applying a unitary transformation before measurement.
 

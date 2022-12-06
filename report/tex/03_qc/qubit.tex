@@ -2,8 +2,8 @@
 \subsection{The qubit}
 The quantum bit, the qubit, is the building block of quantum computing.
 Like the classical binary digit, it can be either 0 or 1.
-But being quantum, these are quantum states, $\ket{0}$ and $\ket{1}$\footnotemark{}, and the qubit can be in any superposition of these states.
-This follows from the first postulate of quantum mechanics, which states that an isolated system is entirely described by a normalised vector in a Hilbert space.
+But being quantum, these are quantum states, $\ket{0}$ and $\ket{1}$\footnotemark[1]{}, and the qubit can be in any superposition of these states.
+This follows from the first postulate of quantum mechanics\footnotemark[2], which states that an isolated system is entirely described by a normalised vector in a Hilbert space.
 For the qubit, this is the two-dimensional space where the states $\ket{0}$ and $\ket{1}$ are basis vectors, known as the computational basis states.
 Thus, the state of a qubit can be expressed as
 \begin{equation}
@@ -14,12 +14,16 @@ where $\alpha$ and $\beta$ are any numbers, even complex.
 The only requirement is that the state is normalised, $\vert\alpha\vert^2 + \vert\beta\vert^2 = 1$.
 Normalisation is required due to the Born rule, as the absolute square of the coefficients is the probability of measuring the qubit in the corresponding basis state.
 
-\footnotetext{
+\footnotetext[1]{
     The $\ket{\cdot}$ notation is known as a ket and is used in quantum mechanics to denote a quantum state.
     It is effectively a column vector.
     The inner product may be taken with a bra, $\bra{\cdot}$, to give a scalar.
     These inner products are then denoted by $\bra{\cdot}\ket{\cdot}$.
     Similarly, outer products are well-defined and denoted by $\ketbra{\cdot}{\cdot}$.
+}
+
+\footnotetext[2]{
+    As they are laid out in \cite{nielsen2012}.
 }
 
 \subsection{The Bloch sphere}
