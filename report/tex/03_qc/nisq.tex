@@ -2,9 +2,10 @@
 \label{sec:nisq}
 Quantum hardware have been physically realised and even outperforms classical computers in very contrived situations \cite{arute2019, zhong2020, madsen2022}, but the hardware is still very limited.
 The hardware is limited in the number of qubits, the connectivity between the qubits, and the noise and decoherence of the qubits.
-It is believed that quantum hardware will continue to improve and eventually perform demanding algorithms like Shor's for large numbers.
+It is believed that quantum hardware will continue to improve and eventually perform demanding algorithms like Shor's with large number to be factored.
 Once enough qubits are available and error rates low enough, error correction schemes can be implemented, permitting fault-tolerant quantum computing and truly enable quantum supremacy.
-Still, the era dubbed NISQ (Noisy Intermediate-Scale Quantum) is the first step, and to make use of the hardware, the inherent noise and its consequences must be understood, and algorithms must take the following limitations into consideration.
+Still, the era dubbed NISQ (Noisy Intermediate-Scale Quantum) is the first step, and to make use of the hardware, the inherent noise and its consequences must be understood.
+Algorithms must take the following limitations into consideration.
 
 \subsection{Quantum channels and decoherent noise}
 The unitary gates from \cref{sec:quantum_operations} are an idealisation, and in reality, the gates are not perfect.
@@ -181,7 +182,7 @@ Even though current hardware suffers much less noise than the figure shows, NISQ
 There are more sources of noise than the two included in the figure, and having to deal with multiple qubits certainly does not help.
 
 \subsection{Qubit counts and connectivity}
-\begin{figure}[b]
+\begin{figure}
     \centering
     \includegraphics[width=0.65\textwidth]{connectivity.pdf}
     \caption{

@@ -170,6 +170,15 @@ The reduction of dimensionality is important because it reduces the number of pa
 Furthermore, the convolutional approach forces the model to learn local features.
 This is very beneficial for tasks such as image classification, where local features, such as edges, are more important than global ones, such as the position of the subject.
 
+\subsubsection{Recurrent neural networks}
+\label{sec:rnn}
+Recurrent neural networks (RNNs) are a special type of neural network wherein cycles are allowed.
+This enables a temporal quality, which makes them particularly suited for tasks such as time-series prediction, speech recognition and machine translation.
+RNNs' flexibility permits them to take inputs of varying length, which is not natively supported by feed-forward NNs.
+However, this flexibility comes at a cost.
+As the network is allowed to have cycles, the gradient of the node parameters can vanish or explode exponentially, which makes training more difficult.
+Therefore, more advanced variants of RNNs are used, such as long short-term memory (LSTM) and gated recurrent units (GRU).
+
 
 \subsubsection{Generative adversarial networks}
 Generative adversarial networks (GANs) refer to special kind of design where two different networks are trained by competing against each other.

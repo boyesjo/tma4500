@@ -8,6 +8,7 @@ The data is assumed to be drawn from a joint distribution $p(\bm{x}, y)$.
 Given a new, unseen input $\bm{x}$, the goal predict its corresponding label $y$.
 
 The input domain $\mathcal{X}$ is usually assumed to be the vector space $\mathbb{R}^N$ for some integer $N$, though some dimensions may be discrete and even binary.
+The elements of $\mathcal{X}$ need not be of constant length, such as with time-series, but the methods to handle such data are generally different from those for fixed-length data.
 Some preprocessing is often done to the data, such rescaling the features or using the data to calculate new features.
 While preprocessing can be essential to the performance of a machine learning model, it does not matter for this theoretical discussion; any preprocessed data can be assumed to be drawn from the distribution of the transformed variable.
 

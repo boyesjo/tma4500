@@ -3,7 +3,8 @@
 The quantum bit, the qubit, is the building block of quantum computing.
 Like the classical binary digit, it can be either 0 or 1.
 But being quantum, these are quantum states, $\ket{0}$ and $\ket{1}$\footnotemark{}, and the qubit can be in any superposition of these states.
-The state of the qubit lies in a two-dimensional Hilbert space, and the states $\ket{0}$ and $\ket{1}$ are basis vectors, known as the computational basis states.
+This follows from the first postulate of quantum mechanics, which states that an isolated system is entirely described by a normalised vector in a Hilbert space.
+For the qubit, this is the two-dimensional space where the states $\ket{0}$ and $\ket{1}$ are basis vectors, known as the computational basis states.
 Thus, the state of a qubit can be expressed as
 \begin{equation}
     \ket{\psi} = \alpha \ket{0} + \beta \ket{1} = \begin{pmatrix} \alpha \\ \beta \end{pmatrix},
@@ -11,6 +12,7 @@ Thus, the state of a qubit can be expressed as
 \end{equation}
 where $\alpha$ and $\beta$ are any numbers, even complex.
 The only requirement is that the state is normalised, $\vert\alpha\vert^2 + \vert\beta\vert^2 = 1$.
+Normalisation is required due to the Born rule, as the absolute square of the coefficients is the probability of measuring the qubit in the corresponding basis state.
 
 \footnotetext{
     The $\ket{\cdot}$ notation is known as a ket and is used in quantum mechanics to denote a quantum state.
@@ -20,13 +22,10 @@ The only requirement is that the state is normalised, $\vert\alpha\vert^2 + \ver
     Similarly, outer products are well-defined and denoted by $\ketbra{\cdot}{\cdot}$.
 }
 
-Normalisation is required due to the Born rule, as the absolute square of the coefficients is the probability of measuring the qubit in the corresponding basis state.
-It is one of Nature's great mysteries what exactly a measurement is, but in the quantum computational setting, it can be thought of as taking a random sample with the probabilities given by the absolute square of the coefficients.
-
 \subsection{The Bloch sphere}
 A useful tool for visualising the state of a qubit is the Bloch sphere.
 First, it should be noted that states on the form \cref{eq:qubit} are not physically unique, only the relative complex phase matters.
-There is a global phase which is not measurable, it can not be observed, and it is not physically relevant.
+There is a global phase which is not measurable, it can not be observed, and so it is not physically relevant.
 Taking this and the normalisation requirement into account, the state of the qubit can be expressed as
 \begin{equation}
     \ket{\psi} = \cos\left(\frac{\theta}{2}\right) \ket{0} + e^{i\phi} \sin\left(\frac{\theta}{2}\right) \ket{1},
@@ -112,4 +111,4 @@ What makes this so powerful is that the state of a multi-qubit system has the ge
 \end{equation}
 which means that with $n$ qubits, the system can be in any superposition of the $2^n$ basis states.
 Operating on several qubits then, one can do linear algebra in an exponentially large space.
-This is the origin of the exponential speed-up of quantum computers.
+This is a key part of the exponential speed-ups possible with quantum computers.
