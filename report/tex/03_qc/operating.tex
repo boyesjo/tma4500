@@ -62,15 +62,15 @@ When measuring, the probability of obtaining the outcome $\lambda_i$ is given by
     p_i = \bra{\psi} P_i \ket{\psi},
 \end{equation}
 where $\ket{\psi}$ is the state before the measurement.
-The state after the measurement is then given by
-\begin{equation}
-    \ket{\psi} \mapsto \frac{P_i \ket{\psi}}{\sqrt{\bra{\psi} P_i \ket{\psi}}},
-\end{equation}
-where $P_i$ is randomly chosen according to the probabilities $p_i$.
+% The state after the measurement is then given by
+% \begin{equation}
+%     \ket{\psi} \mapsto \frac{P_i \ket{\psi}}{\sqrt{\bra{\psi} P_i \ket{\psi}}},
+% \end{equation}
+% where $P_i$ is randomly chosen according to the probabilities $p_i$.
 It is one of Nature's great mysteries what exactly a measurement is and even more so how and why it is different from the unitary evolution described by the second postulate.
 In the quantum computational setting, it can be thought of as taking a random sample with the probabilities as given by the above equation.
 
-In this probabilistic settings, it is often the underlying probabilities are what is of interest.
+In the quantum computing setting, it is often the underlying probabilities that are of interest.
 Therefore, many measurements will be performed.
 Usually, these results are averaged to obtain an estimate, but more complicated post-processing methods are also possible.
 For instance, neural networks have shown useful properties in regard of reducing variance in the estimates, though at the cost of some bias \cite{torlai2020}.
@@ -120,7 +120,7 @@ Slightly more interesting is the circuit
         \lstick{$\ket{0}$} & \qw & \targ{} & \qw
     \end{quantikz}
 \end{equation}
-in which the first qubit is put into a superposition using the Hadamard gate before a CNOT gate is applied to the second, controlled on the first.
+in which the first qubit is put into a superposition using the Hadamard gate before a CNOT gate is applied to the second, controlled by the first.
 This creates the state $\frac{1}{\sqrt{2}}\left(\ket{00} + \ket{11}\right)$.
 The measurement probabilities of the two qubits are now correlated; if the first qubit is measured to be $\ket{1}$, the second will always be $\ket{1}$ and vice versa.
 The probability of measuring the qubits to be different is nil.
@@ -139,6 +139,7 @@ The uncertainty is only classical, and it could therefore not be used to create 
 
 \subsection{Quantum supremacy}
 Exponential speed-ups do not come for free.
+Although the states spaces are exponentially large, with only a limited set of operations available, states can not be created and manipulated arbitrarily; the problem must have some structure to be exploited for a speed-up to be possible.
 Quantum computers do only solve certain problems more efficiently than classical computers, and finding the algorithms to do so is not trivial.
 Shor's algorithm has time complexity $O((\log N)^3)$ while the most efficient known classical algorithm, the general number field sieve, is sub-exponential with a time complexity on the form $\Omega(k^{\frac{1}{3}}\log^{2/3}k)$, where $k=O(2^N)$ \cite{dervovic2018}.
 To solve linear system, there is the HHL algorithm with time complexity $O(\log(N)\kappa^2)$, where $\kappa$ is the condition number.

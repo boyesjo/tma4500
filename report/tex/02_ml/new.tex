@@ -114,7 +114,7 @@ Probabilistic models have the benefit of being able to provide a measure of unce
 With simpler settings, statistical arguments can be made about the relationship between the input and output, which can be used to make inferences about the data.
 However, the simpler design of deterministic models makes them more suitable for computationally demanding tasks, such as deep learning, and in automated settings, where decisions need to be made quickly and uncertainty is not a concern.
 
-\subsection{Measuring and optimising performance}
+\subsection{Quantifying and optimising performance}
 A loss function, $L(y', \hat{y})$ for deterministic models or $L(y', p(y|\bm{x}))$ for probabilistic models, is used to optimise a model by comparing its predictions to the true labels $y'$.
 By convention, the loss should be positive, and lower values indicate better predictions, zero indicating exact agreement.
 Its main purpose is to optimise the model, so it need not be the most useful metric of performance.

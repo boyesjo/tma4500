@@ -2,15 +2,16 @@
 \label{sec:nisq}
 Quantum hardware have been physically realised and even outperforms classical computers in very contrived situations \cite{arute2019, zhong2020, madsen2022}, but the hardware is still very limited.
 The hardware is limited in the number of qubits, the connectivity between the qubits, and the noise and decoherence of the qubits.
-It is believed that quantum hardware will continue to improve and eventually perform demanding algorithms like Shor's with large number to be factored.
-Once enough qubits are available and error rates low enough, error correction schemes can be implemented, permitting fault-tolerant quantum computing and truly enable quantum supremacy.
-Still, the era dubbed NISQ (Noisy Intermediate-Scale Quantum) is the first step, and to make use of the hardware, the inherent noise and its consequences must be understood.
+It is believed that quantum hardware will continue to improve and eventually perform demanding algorithms like Shor's algorithm on numbers too great for classical computers to factorise.
+Once enough qubits are available and error rates low enough, error correction schemes can be implemented.
+Then, the hardware will be able to perform these provably faster algorithms.
+Still, the era dubbed NISQ (noisy intermediate-scale quantum) is the first step, and to make use of the hardware, the inherent noise and its consequences must be understood.
 Algorithms must take the following limitations into consideration.
 
 \subsection{Quantum channels and decoherent noise}
 The unitary gates from \cref{sec:quantum_operations} are an idealisation, and in reality, the gates are not perfect.
 A more realistic description of the gates is given by quantum channels, which can take noise into account.
-In an unmeasured, ideal quantum system, the state evolution is veritably unitary, but as the system in practice does interact with the environment, this can be modelled as a quantum channel in which traditionally probabilistic noise is introduced.
+In an unmeasured, ideal quantum system, the state evolution is veritably unitary, but as the system in practice does interact with the environment, this can be modelled as a quantum channel in which classical probabilistic noise is introduced.
 
 Take the $X$-gate as an example.
 If the fails to apply with probability $p$, the resulting density operator $\rho'$ can be expressed as
@@ -93,11 +94,11 @@ Geometrically, this can be interpreted as contraction of states on the Bloch sph
 \end{figure}
 
 Any physical gate will suffer some such noise, and so the tendency will be for states to degenerate towards the mixed centre of the Bloch sphere (or its higher-dimensional analogue).
-Furthermore, measurements, letting a qubit idle when operating on others and even the preparation of the initial state $\ket{0}^{\otimes n}$ will suffer from decoherence.
+Furthermore, measurements, letting a qubit idle when operating on others and even the preparation of the initial state will suffer from decoherence.
 
 This noise is very hard to avoid, as controlling the qubits necessarily requires some interaction with the environment.
-Additionally, to operate on multiple qubits, a connection between them is required, which too will suffer from noise.
-Nature tends to work against large quantum systems, made evident by the absence of quantum effects in regular life.
+Additionally, to operate on multiple qubits, a connection between them is required, which too will introduce noise.
+Nature tends to work against large-scale quantum systems, made evident by the absence of quantum effects in regular life.
 
 Due to the multiplicative effect of noise, the overall degeneracy will increase exponentially with the number of operations.
 This means that there will be limits to the number of operations that can be performed before the system becomes unusable, assuming no error-correction is done.
@@ -107,8 +108,7 @@ There may also be systematic errors in the unitary gates applied.
 This kind of noise, known as coherent noise does not need quantum channels to be modelled, but may rather be modelled simply by slightly different unitary gates.
 Here too, the $X$-gate can serve as an example.
 Such a gate is typically implemented by applying a Hamiltonian for some time, requiring calibration of said time.
-%
-If it is not calibrated correctly, the effective operation will be a rotation that slightly deviates from the intended half turn.
+If it is not calibrated correctly, the effective operation will be a rotation that slightly deviates from the intended half turn around the Bloch sphere.
 When a gate like the $X$-gate is applied many times, even small errors will add up, which could cause an overall rotation of the state by a significant angle.
 
 \begin{figure}
@@ -178,7 +178,7 @@ When a gate like the $X$-gate is applied many times, even small errors will add 
 
 \Cref{fig:noise_graph} shows the effects of both coherent and decoherent noise on the measurement of a qubit after applying several noisy $X$-gates.
 Clearly, information is quickly lost as the quantum state ends up different from what is expected and as the system becomes more and more mixed, losing quantum properties and instead obeying classical probabilities.
-Even though current hardware suffers much less noise than the figure shows, NISQ algorithms must nonetheless be shallow, meaning that the amount of gates applied before measurement is small.
+Even though current hardware suffers much less noise than the figure shows, NISQ algorithms must nonetheless be shallow, meaning that the number of gates applied before measurement must be low.
 There are more sources of noise than the two included in the figure, and having to deal with multiple qubits certainly does not help.
 
 \subsection{Qubit counts and connectivity}
@@ -186,19 +186,19 @@ There are more sources of noise than the two included in the figure, and having 
     \centering
     \includegraphics[width=0.65\textwidth]{connectivity.pdf}
     \caption{
-        Qubit connectivity and error rates in IBM's 127-qubit Eagle r3 chip \cite{ibm_eagle}.
-        Brighter coloured nodes indicate more $X$-errors, while brighter edges indicate more CNOT-errors.
-        Only the CNOT-, $R_Z$-, $X$- and $\sqrt{X}$-gates are available.
+        Qubit connectivity and error rates in IBM's 33-qubit Falcon r10 chip \cite{connectivity}.
+        Brighter coloured nodes indicate higher read-out error rates, while brighter edges indicate higher gate CZ-error rates.
     }
     \label{fig:connectivity}
 \end{figure}
+
 Another limiting factor is the amount of qubits.
 Current hardware has around 10 to 100, which though still may be enough to express states too large for classical computers, is not enough to perform the most demanding algorithms.
 Recent estimates find that millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
 
-Another current limitation is the connectivity between the qubits.
-Consider for example the connectivity graph in \cref{fig:connectivity}.
-Qubits are generally only linked to two neighbouring qubits.
-Moreover, only a basis set of gates will be directly available.
+The transpiling of the circuit to what the hardware can actually do is also an important factor.
+Consider for example the state-of-the-art IBM Falcon r10 chip, which has 33 qubits and a connectivity graph as shown in \cref{fig:connectivity}.
+Qubits are generally only linked to two other qubits.
+Moreover, only a basis set of gates is available, which in this case are the CZ-, $R_Z$-, $X$- and $\sqrt{X}$-gates.
 All this means that qubits may have to be swapped, often many times, and that multiple gates may be needed where only was intended.
 This increases circuit depths, which in turn exacerbates the effects of noise.
