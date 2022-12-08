@@ -49,11 +49,11 @@ However, depending on how the data is encoded, the linear transformations in the
 With basis encoding, for example, mapping $\ket{b}\ket{0}$ to $\ket{b}\ket{\sigma(b)}$ is doable, where $b$ is a bit-string and $\sigma$ some function.
 Amplitude encoding, on the other hand, has its input necessarily transformed linearly, and is for this reason (in addition to those mentioned in \cref{sec:data_encoding}) less suitable for QNNs.
 
-If intermediate measurements are used, the non-linearities can be introduced in the quantum circuit.
+If intermediate measurements are used, non-linearities can be introduced in the quantum circuit.
 One way of doing this includes controlling gates with measurement results, as in \cite{cong2019}.
 Another way is so-called repeat-until-success schemes \cite{cao2017}, where the circuit is run until the measurement of one qubit is what is desired before the remaining state can be used for further computation.
 Mid-circuit measurements can be used to define non-linear quantum neurons \cite{yan2020}.
-There, qubits are grouped together to represent one neuron, and the measurements can be used to approximate activation functions by piecewise constant functions.
+There, qubits are grouped together to represent one neuron, and intermediate measurements are used to approximate activation functions with piecewise constant functions.
 
 Though there are methods like the parameter-shift rule that make it possible to find gradients and train the network using classical methods, none are as efficient as classical backpropagation for classical neural networks.
 This is because these methods require separate evaluations of the circuit, including numerous shots, for each parameter, whereas backpropagation is easily done after a forward pass through the network.

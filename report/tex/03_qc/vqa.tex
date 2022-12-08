@@ -119,8 +119,8 @@ Furthermore, it may be used recursively to evaluate higher order derivatives, wh
 
 Once the gradient is known, the parameters can be updated with gradient descent methods.
 This leverages the well-developed tool-box of classical optimisation methods.
-These can be adapted to the quantum setting, for example by adjusting the number of circuit evaluations rather than the step-sizes \cite{cerezo2021}.
-However, the loss landscape will generally not be convex \cite{huembeli2021}, so convergence guarantees are not given.
+These can be adapted to the quantum setting, for example by adjusting the number of circuit evaluations rather than the step-sizes \cite{sweke2020}.
+However, the loss landscape will generally not be convex \cite{huembeli2021}, so convergence is not necessarily guaranteed.
 
 A major obstacle with VQAs is that the gradients of the cost function can be exponentially small, a phenomenon known as barren plateaus.
 Barren plateaus prohibit the optimisation from converging, as evaluating the gradient would need exponentially many function calls.
