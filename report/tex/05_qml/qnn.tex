@@ -43,11 +43,17 @@ Thence, a cost function is calculated, and the parameters are updated.
     \label{fig:qnn}
 \end{figure}
 
+In \cite{abbas2021}, it was shown that QNNs can have higher expressibility and be easier to train than comparable classical NNs.
+What is more, several particular architectures inspired by classical NNs have evinced advantages over their classical forerunners, as will be seen in \cref{sec:qnn_arch}.
+Withal, any intrinsic quantum advantage is still to be proven, and there are challenges that must be overcome for QNNs to be useful in practice.
+
 \subsection{Challenges}
 While the power of classical neural network relies on the non-linear activation functions, the unitary operations in quantum computing are inherently linear.
 However, depending on how the data is encoded, the linear transformations in the Hilbert space may not be linear in the input space.
 With basis encoding, for example, mapping $\ket{b}\ket{0}$ to $\ket{b}\ket{\sigma(b)}$ is doable, where $b$ is a bit-string and $\sigma$ some function.
 Amplitude encoding, on the other hand, has its input necessarily transformed linearly, and is for this reason (in addition to those mentioned in \cref{sec:data_encoding}) less suitable for QNNs.
+Such linear transformations in an embedding space can indeed be useful, both in the classical and quantum settings, but they may not be sufficient to make QNNs as powerful as classical NNs.
+It may make more sense to consider those models as kernel methods instead of neural networks, for which some quantum advantage has been indicated \cite{schuld2019a}, but is beyond the scope of this report.
 
 If intermediate measurements are used, non-linearities can be introduced in the quantum circuit.
 One way of doing this includes controlling gates with measurement results, as in \cite{cong2019}.
@@ -61,6 +67,7 @@ Add to this the problems of noise and vanishing gradients, discussed in \cref{se
 
 
 \subsection{Architectures}
+\label{sec:qnn_arch}
 Many architectures for QNNs have been proposed, commonly inspired by those for classical NNs.
 Still being in its infancy, it is not clear which (if any) will prove useful.
 Below follow some promising architectures, with a brief description of how they work compared to classical neural networks (see \cref{sec:nn} for more details about them).

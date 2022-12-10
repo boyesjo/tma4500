@@ -174,9 +174,9 @@ This is very beneficial for tasks such as image classification, where local feat
 \label{sec:rnn}
 Recurrent neural networks (RNNs) are a special type of neural network wherein cycles are allowed.
 This enables a temporal quality, which makes them particularly suited for tasks such as time-series prediction, speech recognition and machine translation.
-RNNs' flexibility permits them to take inputs of varying length, which is not natively supported by feed-forward NNs.
+RNNs' flexibility permits them to take inputs of varying length, which is not natively supported by regular feed-forward networks.
 However, this flexibility comes at a cost.
-As the network is allowed to have cycles, the gradient of the node parameters can vanish or explode exponentially, which makes training more difficult.
+As the network is allowed to have cycles, gradients of parameters can compound and either vanish or explode exponentially, which makes training difficult.
 Therefore, more advanced variants of RNNs are used, such as long short-term memory (LSTM) and gated recurrent units (GRU).
 
 
