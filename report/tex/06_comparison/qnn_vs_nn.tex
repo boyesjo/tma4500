@@ -1,8 +1,8 @@
 \section{Quantum NNs versus classical NNs}
 \label{sec:qnn-vs-nn}
 
-In order to compare the performance of the QNN and the NN, architectures suited for binary classification with exactly 8 parameters are used, following approach in \citetitle{abbas2021}.
-In the paper, the effective dimension of QNNs and NNs is studied, and it is found that the effective dimension of QNNs is much higher than that of NNs, which is argued to lead to better trainability of QNNs.
+In order to compare the performance of the QNN and the NN, architectures suited for binary classification with exactly 8 parameters are used, following approach in \cite{abbas2021}.
+In that paper, the effective dimensions of QNNs and NNs are studied, and it is found that the effective dimension of QNNs is significantly higher than that of NNs, which is argued to lead to better trainability of QNNs.
 The goal of this section is to reproduce the results, but also to shed some light on whether the NN used is a fair comparison to the QNN.
 
 \subsection{Data}
@@ -17,7 +17,7 @@ Then, it is encoded into a quantum state a second order angle encoding with $Z$-
 In the Qiskit framework, this is implemented in the \texttt{ZZFeatureMap} class, which unlike \cref{eq:second_order_encoding} uses $U_1$-gates.
 These are equivalent to $R_Z$-gates up to a phase factor,
 \begin{equation}
-    U_1(\theta) 
+    U_1(\theta)
     = e^{i\theta/2} R_Z(\theta)
     = \begin{pmatrix} 1 & 0 \\ 0 & e^{i\theta} \end{pmatrix}.
 \end{equation}

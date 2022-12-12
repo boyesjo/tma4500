@@ -145,7 +145,7 @@ The QCNN was implemented using the PennyLane framework and trained with the Adam
 With the PennyLane implementation, there were no problems using gradient based optimisation.
 Unlike Qiskit's neural network classes, which use parameter-shift gradients, PennyLane defaults to calculating the gradients analytically using backpropagation.
 Though this is not possible on real quantum hardware, when simulating, the analytic gradients are much faster than the parameter-shift gradients.
-This prompted the reimplementation of the former QCNN, which was here also trained with the same Adam optimiser.
+This prompted the reimplementation of the former QCNN, which was here also trained with the same Adam optimiser and $X$-angle encoding.
 
 \subsection{Results}
 The results are shown in \cref{fig:qcnnm_training}.

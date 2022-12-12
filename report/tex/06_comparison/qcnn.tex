@@ -20,15 +20,15 @@ The task of the QCNN was to classify the images as either vertical or horizontal
 \end{figure}
 
 \subsection{Model}
-First, data is encoded using two repetitions of $Z$-angle encoding, implemented in Qiskit as the \texttt{ZFeatureMap}.
-Each of the eight pixels of the image is mapped to a qubit through two repetitions of the Hadamard gate and $Z$-rotations parametrised by the pixel value being applied, in circuit notation:
+First, data is encoded using two repetitions of $Z$-angle encoding, implemented in Qiskit as the \texttt{ZFeatureMap}, which also uses $U_1$-gates rather than $R_Z$-gates.
+Each of the eight pixels of the image is mapped to a qubit through two repetitions of the Hadamard gate and rotations parametrised by the pixel value being applied, in circuit notation:
 
 \begin{equation}
     \begin{quantikz}
-        \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z(x_1)} & \gate{H} & \gate{R_Z(x_1)}  \\
-        \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z(x_2)} & \gate{H} & \gate{R_Z(x_2)}  \\
+        \lstick{$\ket{0}$} & \gate{H} & \gate{U_1(x_1)} & \gate{H} & \gate{U_1(x_1)}  \\
+        \lstick{$\ket{0}$} & \gate{H} & \gate{U_1(x_2)} & \gate{H} & \gate{U_1(x_2)}  \\
         \lstick{\vdots} \\
-        \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z(x_n)} & \gate{H} & \gate{R_Z(x_n)}  \\
+        \lstick{$\ket{0}$} & \gate{H} & \gate{U_1(x_n)} & \gate{H} & \gate{U_1(x_n)}  \\
     \end{quantikz}.
 \end{equation}
 
