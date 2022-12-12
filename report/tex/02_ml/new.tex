@@ -8,7 +8,8 @@ The data is assumed to be drawn from a joint distribution $p(\bm{x}, y)$.
 Given a new, unseen input $\bm{x}$, the goal predict its corresponding label $y$.
 
 The input domain $\mathcal{X}$ is usually assumed to be the vector space $\mathbb{R}^N$ for some integer $N$, though some dimensions may be discrete and even binary.
-The elements of $\mathcal{X}$ need not be of constant length, such as with time-series, but the methods to handle such data are generally different from those for fixed-length data.
+The elements of $\mathcal{X}$ need not be of constant length, such as with time-series.
+However, the methods to handle such data are generally different from those for fixed-length data, so constant lengths are typically assumed.
 Some preprocessing is often done to the data, such rescaling the features or using the data to calculate new features.
 While preprocessing can be essential to the performance of a machine learning model, it does not matter for this theoretical discussion; any preprocessed data can be assumed to be drawn from the distribution of the transformed variable.
 
@@ -39,7 +40,9 @@ or as a one-hot vector by
         \textit{Virginica} &\mapsto (0, 0, 1)^\top.
     \end{split}
 \end{equation}
-One-hot encoding is better suited for multi-class classification problems like this, allowing probabilistic predictions of the respective classes, but for binary classification problems, ordinal encoding is more convenient, needing only a single to describe both probabilities.
+One-hot encoding is better suited for multi-class classification problems like this, allowing probabilistic predictions of the respective classes, but for binary classification problems, ordinal encoding is more convenient, needing only a single number to describe both probabilities.
+
+
 In Fisher's original paper, linear discriminant analysis was used to classify the flowers.
 Since then, the data set has become a standard benchmark for statistical classification techniques and machine learning methods like support vector machines.
 
@@ -81,7 +84,7 @@ where $\hat{y}$ is the predicted output.
 For instance, a deterministic model for Fisher's \textit{Iris} data set would take in some $\bm{x}=(x_1,x_2,x_3,x_4)\in\mathbb{R}^4$ and output a species $\hat y\in\{0,1,2\}$ as per \cref{eq:iris_encoding}.
 
 A model belongs to some family, a set of models with similar properties, where families often are parametric.
-Parametric models are defined by a finite set of parameters $\bm{\theta}= \{\theta_1, \ldots, \theta_k\}$, where each parameter $\theta_i$ is a real number.
+Parametric models are defined by a finite fixed-length set of parameters $\bm{\theta}= \{\theta_1, \ldots, \theta_k\}$, where each parameter $\theta_i$ is a real number.
 Linear regression, for example, is a parametric model with parameters $\bm{\theta} = \{w_1, \ldots, w_N, b\}$, defining a linear function $f(\bm{x}) = \bm{w}^\top\bm{x} + b$.
 
 \subsubsection{Probabilistic models}

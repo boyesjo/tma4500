@@ -67,13 +67,13 @@ Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
 where $x_i^{(m)}$ is the $i$th component of the $m$th data point.
 For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.
 
-There are two main drawbacks of amplitude encoding:
+There are two main drawbacks of amplitude encoding.
 First, that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant.
 Also, some padding may be needed if the dimension of the data is not a power of two.
 Second, there are significant practical difficulties with preparing such states.
 Any state of the form
 \begin{equation}
-    \ket{\psi} = \sum_{i} a_i \ket{i},
+    \ket{\psi} = \sum_{i} a_i \ket{i}
 \end{equation}
 must be efficiently and correctly prepared, which is not trivial.
 Unless some very specific assumptions are made, this is not possible in polynomial time (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{schuld2018}.
@@ -82,7 +82,7 @@ In general, for classical data, circuits must be linearly deep in the size of th
 \subsection{Angle encoding}
 A third option is to encode data into the angles of rotations.
 Here, the potentially continuous components of the data are mapped to rotations of the qubits.
-For the rotations to be meaningful angles and not loop around, the data needs be normalised.
+For the rotations to be meaningful angles and not loop around, the data need to be normalised.
 An $N$-dimensional data point $\bm{x}$ is then encoded as
 \begin{equation}
     \ket{\psi(\bm{x})} = \bigotimes_{i=1}^{N} R_\sigma(x) \ket{0},
@@ -92,7 +92,7 @@ For $Z$-rotations, a Hadamard gate is prepended for the rotation to have an effe
 $N$ qubits are still required, but with native support for continuous variables, angle encoding can require fewer qubits than basis encoding.
 A constant number of gates are needed to prepare the state, which is a significant advantage over amplitude encoding.
 Still, being a product state, it offers no inherent quantum advantage.
-A possible way to improve this is a second order version.
+A possible way to improve this is a second order variant.
 
 \subsection{Second order angle encoding}
 \label{sec:second_order_angle_encoding}
@@ -107,6 +107,7 @@ In circuit notation, such an encoding with $Z$-rotations reads
         \lstick{\vdots} \\
         \lstick{$\ket{0}$} & \gate{H} & \gate{R_Z^N} & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \qw & \dots
     \end{quantikz},
+    \label{eq:second_order_encoding}
 \end{equation}
 where $R_Z^i = R_Z(x_i)$ and $R_Z^{i,j} = R_Z((\pi-x_i)(\pi-x_j))$ and with the entanglements and second-order rotations being applied pairwise for all $N$ qubits.
 This increases the circuit depth to order $N^2$, and full connectivity is needed.

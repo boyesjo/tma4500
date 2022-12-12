@@ -10,7 +10,7 @@ By cleverly storing intermediate results, the gradients for all parameters can b
 
 How such large models avoid overfitting is not entirely clear.
 Seemingly contradicting the bias-variance trade-off, the double descent phenomenon appears as model complexity increases or as more gradient descent iterations are done.
-This is a phenomenon where, after some point, the variance no longer increase with model complexity.
+This is a phenomenon where, after some point, the variance no longer increases with model complexity.
 Instead, it decreases and converges toward some value.
 This can be seen in \cref{fig:double_descent}, where convolutional networks\footnote{See \cref{sec:cnn}.} were tested with different layer sizes.
 Unlike statistical methods, once past this complexity threshold, there is little reason, other than the increased computational cost, not to increase the model complexity and thereby the performance.
@@ -78,7 +78,7 @@ With the great size and complexity, interpretability is sacrificed.
 The models are deterministic and often black boxes; it is difficult to understand why they make the predictions they do.
 Luckily, there have been some developments, perhaps most notably the universal approximation theorem.
 It states that a neural network with a single hidden layer can approximate any continuous function to arbitrary precision, given enough neurons\footnote{In addition to some easily met requirements regarding the activation function.}.
-This gives some credence to the idea that NNs of other structures could be used to approximate intricate functions.
+This gives some credence to the idea that NNs of other structures could be used to approximate intricate functions well.
 
 
 \subsection{Architectures}
@@ -113,7 +113,7 @@ Some commonly used activation functions are listed in \cref{tab:activations}.
 
 The output layer is similar to the hidden layers, though perhaps with different activation functions and fewer nodes.
 For instance, if the goal is to classify the data into $k$ classes, the output layer could have $k$ nodes with an activation function that ensures the sum of the outputs is one.
-In that way, the output can be interpreted as probabilities of the data belonging to the respective classes.
+In that way, the output can be interpreted as probabilities of the sample belonging to the respective classes.
 
 \begin{table}
     \centering
@@ -142,7 +142,7 @@ In that way, the output can be interpreted as probabilities of the data belongin
 \end{table}
 
 Models being dense mean that each node in one layer depends on all nodes in the previous layer.
-It is feed-forward, because the data flows in one direction; the perceptrons in a layer depends only on those in the former.
+It is feed-forward, because the data flows in one direction; the perceptrons in a layer depends only on those in the former, and there are no cycles.
 
 \subsubsection{Convolutional neural networks}
 \label{sec:cnn}

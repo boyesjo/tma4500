@@ -11,11 +11,11 @@ How actually to construct a quantum computer is still an open question, and perh
 There are several types of hardware being developed and researched, such as superconducting circuits used by IBM, Google and more, trapped ions used by IonQ and Honeywell, photonic quantum computers developed by Xanadu and Psi Quantum in addition to many other types.
 Although some of these have already claimed quantum supremacy, that is they have solved a problem believed to be intractable for classical computers, supremacy has only been shown in very particular settings with no practical use.
 Common for all current approaches are difficulties with noise and decoherence.
-Theoretically, with computers of great enough scale, errors can be mitigated, but in the near future, the systematic errors of quantum computers will be a limiting factor and something to be taken into account when designing algorithms.
+Theoretically, with computers of great enough scale, errors can be corrected, but in the near future, the systematic errors of quantum computers will be a limiting factor and something to be taken into account when designing algorithms.
 Hence, the focus of much current quantum computing research considers noisy intermediate scale quantum (NISQ) devices.
 How to overcome the difficulties of NISQ hardware and be able to extract the full potential of quantum computers is a current research topic.
 
-Variational quantum algorithms (VQAs) have been seen as a promising approach to use NISQ devices to solve problems with actual practical use.
+Variational quantum algorithms (VQAs) are seen as a promising approach to use NISQ devices to solve problems with actual practical use.
 Such algorithms use a classical optimiser to find the best parameters for a general algorithm.
 In this way, the quantum hardware is only used for a small part of the algorithm, and the rest is done classically.
 Consequently, there is less time for noise and decoherence to compound, which would ruin the computation, and the efficiency of classical hardware can still be utilised.
@@ -36,7 +36,7 @@ With gate-based quantum computers, the quantum model can show some similarities 
 QNNs are a promising approach to machine learning on quantum hardware, for which ideas from classical neural networks can be applied, but the lack of backpropagation and potentially vanishing gradients are challenges.
 % Moreover, the idea of encoding data into to high-dimensional quantum state is reminiscent of classical kernel methods.
 Research indicate some advantages of using quantum machine learning models over classical ones, such as requiring fewer training iterations, but the field of quantum machine learning (QML) is still in its infancy, and much work remains to be done.
-In particular, whether any quantum advantage for ML can be achieved with NISQ devices is not certain, and no exponential speed-up has yet been demonstrated.
+In particular, whether any quantum advantage for ML can be achieved with NISQ devices is not certain.
 
 The study of quantum machine learning is not an easy one.
 A lot of machine learning's success is anecdotal; it is often difficult to prove correctness and convergence, so some trust of ML relies on empirical testing.
@@ -44,11 +44,12 @@ Obviously, quantum computing does not simplify matters.
 Being restrained to current day hardware, there is little chance that any advantage for quantum hardware can be shown empirically, and so arguments for quantum advantage must be made theoretically or by extrapolation of simple tests.
 Most research thus far can only be seen as proof of concepts, showing some benefits on trivial problems.
 
-This thesis serves as an introduction to the field of quantum machine learning and quantum neural networks.
+This thesis serves as an introduction to the field of quantum machine learning and quantum neural networks specifically.
 The two next chapters give a theoretical background.
-\Cref{chap:ml} reviews the basics of machine learning and neural networks in particular.
-Thereafter, \cref{chap:qc} introduces the basics of quantum computing and the limitations of NISQ devices in addition to an introduction to variational quantum algorithms.
-In \cref{chap:qml}, how data is encoded into quantum hardware is first discussed. Next, quantum neural networks are introduced.
+\Cref{chap:ml} reviews the basics of machine learning and neural networks.
+Thereafter, \cref{chap:qc} introduces the basics of quantum computing, the limitations of NISQ devices and variational quantum algorithms.
+In \cref{chap:qml}, how data is encoded into quantum hardware is first discussed. 
+Next, quantum neural networks are introduced.
 The penultimate \cref{chap:comparison} presents various simulations of quantum classical neural networks and a comparison with classical neural networks.
 Finally, \cref{chap:conclusion} concludes the thesis and discusses future work.
 % \section{Relevant work}
