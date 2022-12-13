@@ -186,8 +186,8 @@ There are more sources of noise than the two included in the figure, and having 
     \centering
     \includegraphics[width=0.65\textwidth]{connectivity.pdf}
     \caption{
-        Qubit connectivity and error rates in IBM's 33-qubit Falcon r10 chip \cite{connectivity}.
-        Brighter coloured nodes indicate higher read-out error rates, while brighter edges indicate higher gate CZ-error rates.
+        Qubit connectivity and error rates in IBM's Montreal 27-qubit Falcon r4 chip \cite{connectivity}.
+        Brighter coloured nodes indicate higher $X$-error rates, while brighter edges indicate higher CNOT-error rates.
     }
     \label{fig:connectivity}
 \end{figure}
@@ -197,8 +197,8 @@ Current hardware has around 10 to 100, which though still may be enough to expre
 Recent estimates find that millions of noisy qubits would be needed to break RSA encryption \cite{gidney2021}.
 
 The transpiling of the circuit to what the hardware can actually do is also an important factor.
-Consider for example the state-of-the-art IBM Falcon r10 chip, which has 33 qubits and a connectivity graph as shown in \cref{fig:connectivity}.
+Consider for example IBM's Falcon r4 chip, which has 27 qubits and a connectivity graph as shown in \cref{fig:connectivity}.
 Qubits are generally only linked to two other qubits.
-Moreover, only a basis set of gates is available, which in this case are the CZ-, $R_Z$-, $X$- and $\sqrt{X}$-gates.
+Moreover, only a basis set of gates is available, which in this case are the CNOT-, $R_Z$-, $X$- and $\sqrt{X}$-gates.
 All this means that qubits may have to be swapped, often many times, and that multiple gates may be needed where only was intended.
 This increases circuit depths, which in turn exacerbates the effects of noise.

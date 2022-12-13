@@ -1,13 +1,13 @@
 \section{QCNN with mid-circuit measurements}
 \label{sec:qcnn2}
-A more intricate QCNN structure was described by \textcite{pesah2021}, where the pooling modules measure a qubit and use the result to control a unitary gate on its neighbour.
+A more intricate QCNN structure was described in \cite{pesah2021}, where the pooling modules measure a qubit and use the result to control a unitary gate on its neighbour.
 The use of mid-circuit measurements complicates the circuit and its implementation, but allows for a non-linear and potentially more powerful model.
 With the aim of seeing if this provides any benefit, such a QCNN was implemented and compared with that of \cref{sec:qcnn1} on the data thence.
 
 \subsection{Model}
-First, the data was encoded using angle encoding in the $X$-direction.
+First, data were encoded using angle encoding in the $X$-direction.
 The convolutional layers consisted of pairwise $W$-gates, a mix of parametrised rotations and CNOTs, with total of 15 parameters
-As circuits, they appear as
+As circuits, the $W$-gates appear as
 \begin{equation}
     \begin{quantikz}[column sep=0.5em]
         \qw
@@ -56,16 +56,17 @@ As circuits, they appear as
     \end{quantikz},
     \label{eq:w_gate}
 \end{equation}
-where $R_G$ are general rotations around all three axes and so have three parameters.
+where $R_G$ are general rotations around all three axes and therefore each take three parameters.
 
 The pooling layers consisted of a measurement and a conditional single-qubit unitary gate.
-Without any particular recommendation in the original paper, a simple $X$-gate was used.
+Without any particular recommendation in the original paper, a simple, unparametrised $X$-gate was used.
 Combined, the convolution and pooling modules appear as in \cref{fig:qcnnm}.
 
 Like in \cref{sec:qcnn}, the network used 8 qubits to handle the 8-dimensional data.
 Three convolutional and pooling layers were used, reducing the data from 8 to 2 dimensions
-Lastly, a final general two-qubit ansatz was used, and a single qubit was measured and interpreted as a prediction.
-This was a simple parametrised entangler, similar to the \texttt{RealAmplitudes} in \cref{sec:qnn-vs-nn}, but with $X$-rotations.
+Lastly, a final general two-qubit ansatz was used.
+It was a simple parametrised entangler, similar to the \texttt{RealAmplitudes} in \cref{sec:qnn-vs-nn}, but with $X$-rotations.
+Also for this model, a single qubit was measured and interpreted as a prediction.
 In total, the network had 154 parameters.
 
 \begin{figure}
@@ -142,13 +143,14 @@ In total, the network had 154 parameters.
 
 \subsection{Implementation}
 The QCNN was implemented using the PennyLane framework and trained with the Adam optimiser with a learning rate of 0.01.
+PennyLane was used instead of Qiskit for its native support for finding gradients despite the presence of intermediate measurements.
 With the PennyLane implementation, there were no problems using gradient based optimisation.
 Unlike Qiskit's neural network classes, which use parameter-shift gradients, PennyLane defaults to calculating the gradients analytically using backpropagation.
 Though this is not possible on real quantum hardware, when simulating, the analytic gradients are much faster than the parameter-shift gradients.
-This prompted the reimplementation of the former QCNN, which was here also trained with the same Adam optimiser and $X$-angle encoding.
+This prompted the reimplementation of the former QCNN from \cref{sec:qcnn1}, which was here also trained with the same Adam optimiser and adapted to use the same $X$-angle encoding.
 
 \subsection{Results}
-The results are shown in \cref{fig:qcnnm_training}.
+The results from the training of the quantum convolutional networks are shown in \cref{fig:qcnnm_training}.
 The training loss was lower than for the QCNN in \cref{sec:qcnn}, despite the fewer iterations, showing expected advantages of using gradient based optimisation.
 Furthermore, the new model with intermediate measurements achieves a perfect accuracy on both the training and test sets in only 10 iterations.
 Looking at the loss curves, the model with intermediate measurements seems only to converge slightly faster than the model without intermediate measurements.

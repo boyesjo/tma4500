@@ -4,9 +4,9 @@ As quantum CNNs have been studied and shown to have favourable properties (as di
 To do so, Qiskit's online tutorials \cite{qiskit_qcnn} were closely followed.
 
 \subsection{Data}
-Being limited to few qubits, images with resolution $2\times4$ were generated, containing either vertical or horizontal with some Gaussian noise.
+Being limited to only few qubits, images with resolution $2\times4$ were generated, containing either vertical or horizontal with some Gaussian noise.
 \Cref{fig:qcnn_data} shows examples thereof.
-The task of the QCNN was to classify the images as either vertical or horizontal lines.
+The task of the QCNN was to classify the images as either vertical or horizontal lines, given an 8-diemnsional input vector of brightness values.
 
 \begin{figure}
     \centering
@@ -159,16 +159,16 @@ In total, the circuit appears as in \cref{fig:qcnn_circuit} with a total of 63 p
 \subsection{Implementation}
 As in Qiskit's guide, training was done using the COBYLA optimiser\footnote{Constrained Optimisation BY Linear Approximation.} which does not use gradients.
 Why this optimiser was chosen is not clear, but testing shows that simulations using gradient based methods such as Adam or simple gradient descent was significantly slower.
-However, as will be seen in \cref{sec:qcnn2}, that seems to have more to do with Qiskit's implementation than the optimiser itself.
+However, as will be seen in \cref{sec:qcnn2}, that seems to have more to do with the Qiskit implementation than the optimiser itself.
 
 \subsection{Results}
-The accuracies and mean square error during training are shown in \cref{fig:qcnn_training}.
+The accuracies and mean square errors during training are shown in \cref{fig:qcnn_training}.
 As in \cref{sec:qnn-vs-nn}, noise is modelled after the 27-qubit IBM Montreal hardware.
-The networks were trained for 1000 iterations, and while neither reached full accuracy, the losses shrunk, indicating at least increased certainty in the predictions.
+The networks were trained for 1000 iterations, and while neither reached full accuracy, the losses did go down, indicating at least increased certainty in their predictions.
 Interestingly, the noisy simulation appears to yield better predictions, despite suffering from higher losses during training.
 It seems that the noiseless QCNN is overfitting to the training data, while the noisy QCNN generalises better.
 
-Although both the exact and noisy simulations do converge and yield reasonable results, for such an easy problem, one would expect a 63-parameter network to be able to achieve perfect accuracy.
+Although both the exact and noisy simulations did appear to converge during training and yield reasonable results, for such an easy problem, one would expect a 63-parameter network to be able to achieve perfect accuracy.
 This is not the case, and the reason for this is not clear.
 A more expressive feature map could improve matters, and the COBYLA optimiser is certainly suboptimal.
 
