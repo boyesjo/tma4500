@@ -9,11 +9,11 @@ Given a new, unseen input $\bm{x}$, the goal predict its corresponding label $y$
 
 The input domain $\mathcal{X}$ is usually assumed to be the vector space $\mathbb{R}^N$ for some integer $N$, though some dimensions may be discrete and even binary.
 The elements of $\mathcal{X}$ need not be of constant length, such as with time-series.
-However, the methods to handle such data are generally different from those for fixed-length data, so constant lengths are typically assumed.
+However, the methods to handle such data are generally different from those for fixed-length data, so constant lengths are typically assumed, and will be assumed here.
 Some preprocessing is often done to the data, such rescaling the features or using the data to calculate new features.
 While preprocessing can be essential to the performance of a machine learning model, it does not matter for this theoretical discussion; any preprocessed data can be assumed to be drawn from the distribution of the transformed variable.
 
-The output domain $\mathcal{Y}$ is assumed to be single-dimensional, as a multidimensional prediction can be decomposed into multiple one-dimensional prediction problems.
+The output domain $\mathcal{Y}$ is often assumed to be single-dimensional, as a multidimensional prediction can be decomposed into multiple one-dimensional prediction problems.
 It may be finite, in which case the problem is called classification, or continuous, in which case it is called regression.
 Regression methods may easily be applied to classification problems through simple thresholds.
 
@@ -40,7 +40,7 @@ or as a one-hot vector by
         \textit{Virginica} &\mapsto (0, 0, 1)^\top.
     \end{split}
 \end{equation}
-One-hot encoding is better suited for multi-class classification problems like this, allowing probabilistic predictions of the respective classes, but for binary classification problems, ordinal encoding is more convenient, needing only a single number to describe both probabilities.
+One-hot encoding is better suited for multi-class classification problems like this, allowing probabilistic predictions of the respective classes with an output vector $(p_1, p_2, p_3)^\top$, but for binary classification problems, ordinal encoding is more convenient, needing only a single number to describe both probabilities.
 
 
 In Fisher's original paper, linear discriminant analysis was used to classify the flowers.
@@ -156,8 +156,8 @@ Of course, this is only possible if the joint distribution $p(\bm{x}, y)$ is kno
     \hat{R}(f) = \frac{1}{n} \sum_{i=1}^n L(y^{(i)}, f(\bm{x}^{(i)})).
 \end{equation}
 This can be assumed to converge to the true risk as $n\to\infty$ by the law of large numbers.
-More data is certainly better, but it may be expensive to collect, and the deviance between the empirical and true risk may not decrease monotonically with $n$.
-It is therefore desirable to find models and training methods that can minimise the true risk with as few samples as possible.
+More data is certainly better, but it may be expensive to collect, and the deviance between the empirical and true risk may not decrease sufficiently with greater $n$.
+It is therefore desirable to find models and training methods that can minimise the true risk with as few samples as possible; sample-efficiency can be as important as accuracy in some applications.
 
 These empirical risks that depend on the whole data set defines cost functions that are used to train the model.
 For instance, square loss leads to the mean squared error (MSE),
@@ -174,7 +174,7 @@ For a chosen parametric model family, the supervised learning problem can be for
     \bm{\theta}^* = \argmin_{\bm{\theta}} C(\bm{\theta; \mathcal{D}}),
 \end{equation}
 where the cost function is parametrised by the model parameters $\bm{\theta}$.
-Since the loss function and models are often designed to be differentiable, giving differentiable costs, this can be solved using gradient descent methods.
+Since the loss function and models are often designed to be differentiable, giving differentiable costs, the optimisation problems can be solved using gradient descent methods.
 In the simplest case, that means that the parameters are updated until some convergence criterion is met by
 \begin{equation}
     \bm{\theta}^{(t+1)} = \bm{\theta}^{(t)} - \eta \nabla_{\bm{\theta}} C(\bm{\theta}^{(t)}, \mathcal{D}),
@@ -182,7 +182,7 @@ In the simplest case, that means that the parameters are updated until some conv
 where $\eta>0$ is a learning rate and $\bm{\theta}^{(t)}$ the parameters at iteration $t$.
 In practice, more sophisticated gradient methods are often used, such as the Adam optimiser \cite{adamoptimiser}.
 
-The process of optimising the cost function is called training.
+The process of optimising the cost function is called training the model.
 As the model improves, it is said to learn.
 
 \subsection{Generalisation: the bias-variance trade-off}
@@ -198,7 +198,7 @@ The main goal is of course to generalise, that is to have a model that truly cap
 There may be mismatch between the true risk in \cref{eq:risk} and the empirical risk in \cref{eq:empirical_risk}.
 Minimising the empirical risk may not be the same as minimising the true risk.
 Generally, there is some uncertainty or noise that is inherent to the data.
-Consequently, one must choose a model that is flexible enough to capture the underlying structure of the data, but not so flexible that it captures the noise.
+Consequently, one must choose a model that is flexible enough to capture the underlying structure of the data, but not so flexible that it captures the arbitrary noise.
 When a model is too simple to capture the underlying structure, it is said to have high bias or be underfitted, while a model complex enough to capture the noise is said to have high variance or be overfitted.
 An overfitted model will have small or no errors on the data used for training, but may be wildly inaccurate on new data.
 This is captured in \cref{fig:over_under_fit}.

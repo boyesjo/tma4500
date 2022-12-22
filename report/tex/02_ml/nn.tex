@@ -12,7 +12,7 @@ How such large models avoid overfitting is not entirely clear.
 Seemingly contradicting the bias-variance trade-off, the double descent phenomenon appears as model complexity increases or as more gradient descent iterations are done.
 This is a phenomenon where, after some point, the variance no longer increases with model complexity.
 Instead, it decreases and converges toward some value.
-This can be seen in \cref{fig:double_descent}, where convolutional networks\footnote{See \cref{sec:cnn}.} were tested with different layer sizes.
+This can be seen in \cref{fig:double_descent}, where convolutional networks\footnote{Q.v. \cref{sec:cnn}.} were tested with different layer sizes.
 Unlike statistical methods, once past this complexity threshold, there is little reason, other than the increased computational cost, not to increase the model complexity and thereby the performance.
 Double descent have been shown to appear for a variety of models \cite{nakkiran2021}.
 
@@ -78,8 +78,7 @@ With the great size and complexity, interpretability is sacrificed.
 The models are deterministic and often black boxes; it is difficult to understand why they make the predictions they do.
 Luckily, there have been some developments, perhaps most notably the universal approximation theorem.
 It states that a neural network with a single hidden layer can approximate any continuous function to arbitrary precision, given enough neurons\footnote{In addition to some easily met requirements regarding the activation function.}.
-This gives some credence to the idea that NNs of other structures could be used to approximate intricate functions well.
-
+This gives some credence to the idea that NNs with any kind of structure could be used to approximate intricate functions well.
 
 \subsection{Architectures}
 \subsubsection{Dense feed-forward neural networks}

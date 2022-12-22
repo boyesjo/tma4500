@@ -70,18 +70,18 @@ Add to this the problems of noise and vanishing gradients, discussed in \cref{se
 \label{sec:qnn_arch}
 Many architectures for QNNs have been proposed, commonly inspired by those for classical NNs.
 Still being in its infancy, it is not clear which (if any) will prove useful.
-Below follow some promising architectures, with a brief description of how they work compared to classical neural networks (see \cref{sec:nn} for more details about them).
+Below follow some promising architectures, with a brief description of how they work compared to classical neural networks\footnote{Q.v. \cref{sec:nn}.}
 
 \subsubsection{Quantum convolutional neural networks}
 \label{sec:qcnn}
 Originally introduced in \cite{cong2019}, quantum convolutional neural networks (QCNNs) take inspiration from classical convolutional neural networks in that a sequence of convolutional and pooling layers are used to extract features and reduce the dimension before an output is made.
 In the quantum convolutional layers, neighbouring qubits are entangled by some parametrised gates, after which pooling layers reduce the active qubit count (usually by half).
 By basing the pooling on measurements, controlling a gate based on a neighbouring qubit measurement, non-linearities are introduced.
-Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count is only of order logarithm of the network depth, making them easier to train than dense networks of similar input size.
+Because of the constant reduction of layer sizes in (Q)CNNs, the total parameter count can be reduced to only logarithmic order of the network depth, making them easier to train than dense networks of similar input size.
 After several iterations of convolution and pooling, gates can be employed on the remaining qubits, analogous to a finishing fully connected layer in classical CNNs, before the final
 measurement and output.
 
-QCNNs were shown to be able to classify topological phases of matter \cite{cong2019} and that they inherit their classical counterparts' ability to classify images \cite{oh2020}.
+QCNNs have been shown to be able to classify topological phases of matter \cite{cong2019} and that they inherit their classical counterparts' ability to classify images \cite{oh2020}.
 Also, QCNNs have desirable properties with regard to avoiding barren plateaus \cite{pesah2021}, which could prove essential in training for problems of interesting size.
 
 \subsubsection{Quantum generative adversarial networks}

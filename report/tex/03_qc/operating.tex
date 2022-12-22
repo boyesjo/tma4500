@@ -22,7 +22,7 @@ The Hadamard gate,
 \end{equation}
 is a rotation around the line between the $x$- and $z$-axes by $\pi/2$.
 It is an important gate in quantum computing, as it is used to create superpositions of the computational basis states.
-Applied on the initial $\ket{0}$ state, it creates the entangled state $\frac{1}{\sqrt{2}}(\ket{0} + \ket{1})$.
+Applied on an initial $\ket{0}$ state, it creates the entangled state $\frac{1}{\sqrt{2}}(\ket{0} + \ket{1})$.
 Two consecutive applications thereof returns the state to the initial state, as can be seen from the matrix squaring to the identity.
 
 The $R_X$-, $R_Y$- and $R_Z$-gates are rotations around the $x$-, $y$- and $z$-axes, respectively, by an arbitrary angle $\theta$:
@@ -54,7 +54,7 @@ Because it only alters the amplitude of $\ket{11}$, it does not actually matter 
 
 \subsection{Observables and measurements}
 For an output to be obtained from a quantum computer, a measurement must be performed.
-This is typically done at the end of all operations and of all qubits, thus yielding a single output of zeros and ones, a bit-string.
+This is typically done at the end of all operations and of all qubits, where each qubit is measured in the computational basis to yield a string of bits.
 
 As described by the third postulate of quantum mechanics, any observable quantity has a corresponding Hermitian operator $A$, spectrally decomposable as $A = \sum_{i} \lambda_i P_i$, where $\lambda_i$ are the (necessarily real) eigenvalues and $P_i$ are the corresponding projectors onto the eigenspaces.
 When measuring, the probability of obtaining the outcome $\lambda_i$ is given by
@@ -70,7 +70,7 @@ where $\ket{\psi}$ is the state before the measurement.
 It is one of Nature's great mysteries what exactly a measurement is and even more so how and why it is different from the unitary evolution described by the second postulate.
 In the quantum computational setting, it can be thought of as taking a random sample with the probabilities as given by the above equation.
 
-In the quantum computing setting, it is often the underlying probabilities that are of interest.
+Often, the underlying probabilities are what is of interest.
 Therefore, many measurements will be performed.
 Usually, these results are averaged to obtain an estimate, but more complicated post-processing methods are also possible.
 For instance, neural networks have shown useful properties in regard of reducing variance in the estimates, though at the cost of some bias \cite{torlai2020}.
@@ -82,7 +82,7 @@ This is achieved by applying a unitary transformation before measurement.
 
 Measurements may be done in the middle of a computation and be used to control gates.
 If the qubits are entangled, measuring one will affect the measurement probabilities of others.
-Using such intermediate measurements is a way of introducing non-linearities in the otherwise unitary nature of the quantum world.
+Using such intermediate measurements is a way of introducing non-linearities in the otherwise unitary nature of the unmeasured quantum world.
 
 \subsection{Quantum circuits}
 The operations on qubits are often described using quantum circuits, which are a graphical representation of the operations on the qubits, the quantum algorithms.
@@ -112,6 +112,7 @@ $
     \right)
 $.
 This is a pure state with no entanglement, and so the measurement probabilities of the two qubits are independent.
+When measured, all four outcomes are equally likely.
 
 Slightly more interesting is the circuit
 \begin{equation}
@@ -149,7 +150,7 @@ Still, these are non-trivial algorithms, not yet usable in practice and that wer
 \footnotetext{
     Given that the condition number does not grow exponentially.
     There are also difficulties in loading the data into the quantum computer and extracting the solution that could negate any exponential speed-up.
-    For details, see \cite{aaronson2015}.
+    C.f. \cite{aaronson2015}.
 }
 
 Polynomial speed-ups are perhaps more easily found.
@@ -160,6 +161,6 @@ This algorithm and the more general amplitude amplification on which it builds s
 Being only a quadratic speed-up, it is not as impressive as the exponential speed-ups, and achieving quantum supremacy in that manner would require larger quantum computers than if the speed-up were exponential.
 
 It is proven that the class of problems quantum computers can solve in polynomial time (with high probability), BQP, contains the complexity class P \cite{nielsen2012}.
-This follows from the fact than quantum computers can do any classical algorithm.
+This follows from the fact than quantum computers run do any classical algorithm.
 Since quantum computers can solve problems like integer factorisation and discrete logarithms efficiently, it is believed that BQP is strictly greater than P, but as whether P = NP remains unknown, these problems could actually be in P.
 In a similar vein, NP-complete problems are believed to lie outside BQP.

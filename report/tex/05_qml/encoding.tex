@@ -59,8 +59,7 @@ For $N$-dimensional data points, only $\lceil \log_2 N \rceil$ qubits are needed
 This is a significant improvement over the basis encoding, which requires $N$ qubits (or more if integers and floats are to be binarised).
 
 Amplitude encoding can easily be extended to cover the entire data set.
-This is done by concatenating the data points, and then normalising the resulting state at the low cost of a single additional bit.
-Then, the data set $\mathcal{D}$ with $M$ data points can be encoded as
+This is done by concatenating the data points, after which the data set $\mathcal{D}$ with $M$ data points can be encoded as
 \begin{equation}
     \ket{\mathcal{D}} = \sum_{m=1}^M \sum_{i=1}^{N} x_i^{(m)} \ket{i} \ket{m},
 \end{equation}
@@ -70,13 +69,13 @@ For such encodings, only $\lceil \log_2 (N M) \rceil$ qubits are needed.
 There are two main drawbacks of amplitude encoding.
 First, that the data must be normalised, which can be done without loss of information by requiring an additional bit to encode the normalisation constant.
 Also, some padding may be needed if the dimension of the data is not a power of two.
-Second, there are significant practical difficulties with preparing such states.
+Secondly and more severly, there are significant practical difficulties with preparing such states.
 Any state of the form
 \begin{equation}
     \ket{\psi} = \sum_{i} a_i \ket{i}
 \end{equation}
 must be efficiently and correctly prepared, which is not trivial.
-Unless some very specific assumptions are made, this is not possible in polynomial time (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{schuld2018}.
+Unless some very specific assumptions are made, this is not possible with polynomially many gates (as a function of the number of qubits), which limits the potential for exponential speed-ups \cite{schuld2018}.
 In general, for classical data, circuits must be linearly deep in the size of the data and ergo exponentially deep in the amount of qubits, which makes it beyond the reach of NISQ hardware.
 
 \subsection{Angle encoding}

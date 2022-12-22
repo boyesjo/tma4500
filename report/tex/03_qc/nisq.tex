@@ -107,7 +107,7 @@ This means that there will be limits to the number of operations that can be per
 There may also be systematic errors in the unitary gates applied.
 This kind of noise, known as coherent noise does not need quantum channels to be modelled, but may rather be modelled simply by slightly different unitary gates.
 Here too, the $X$-gate can serve as an example.
-Such a gate is typically implemented by applying a Hamiltonian for some time, requiring calibration of said time.
+As gates are unitary evolutions resulting from a Hamiltonian acting on the system, any deviance in the energies of the Hamiltonian or length of the time interval will cause a different evolution.
 If it is not calibrated correctly, the effective operation will be a rotation that slightly deviates from the intended half turn around the Bloch sphere.
 When a gate like the $X$-gate is applied many times, even small errors will add up, which could cause an overall rotation of the state by a significant angle.
 
@@ -182,6 +182,7 @@ Even though current hardware suffers much less noise than the figure shows, NISQ
 There are more sources of noise than the two included in the figure, and having to deal with multiple qubits certainly does not help.
 
 \subsection{Qubit counts and connectivity}
+\label{sec:qubit_counts}
 \begin{figure}
     \centering
     \includegraphics[width=0.65\textwidth]{connectivity.pdf}
